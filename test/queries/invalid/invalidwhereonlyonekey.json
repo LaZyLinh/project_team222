@@ -1,0 +1,22 @@
+{
+    "title": "Invalid, where can only have one key",
+    "query": {
+        "WHERE": {
+            "GT": {
+                "courses_avg":97
+            },
+            "LT": {
+                "courses_avg":20
+            }
+        },
+        "OPTIONS": {
+            "COLUMNS": [
+                "courses_dept",
+                "courses_avg"
+            ],
+            "ORDER": "courses_avg"
+        }
+    },
+    "isQueryValid": false,
+    "result": "InsightError"
+}

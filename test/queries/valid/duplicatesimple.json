@@ -1,0 +1,69 @@
+{
+    "title": "SELECT dept, avg WHERE avg > 97 from duplicatecourses",
+    "query": {
+        "WHERE": {
+            "GT": {
+                "coursesduplicate_avg":97
+            }
+        },
+        "OPTIONS": {
+            "COLUMNS": [
+                "coursesduplicate_dept",
+                "coursesduplicate_avg"
+            ],
+            "ORDER": "coursesduplicate_avg"
+        }
+    },
+    "isQueryValid": true,
+    "result": [
+        { "coursesduplicate_dept": "epse", "coursesduplicate_avg": 97.09 },
+        { "coursesduplicate_dept": "math", "coursesduplicate_avg": 97.09 },
+        { "coursesduplicate_dept": "math", "coursesduplicate_avg": 97.09 },
+        { "coursesduplicate_dept": "epse", "coursesduplicate_avg": 97.09 },
+        { "coursesduplicate_dept": "math", "coursesduplicate_avg": 97.25 },
+        { "coursesduplicate_dept": "math", "coursesduplicate_avg": 97.25 },
+        { "coursesduplicate_dept": "epse", "coursesduplicate_avg": 97.29 },
+        { "coursesduplicate_dept": "epse", "coursesduplicate_avg": 97.29 },
+        { "coursesduplicate_dept": "nurs", "coursesduplicate_avg": 97.33 },
+        { "coursesduplicate_dept": "nurs", "coursesduplicate_avg": 97.33 },
+        { "coursesduplicate_dept": "epse", "coursesduplicate_avg": 97.41 },
+        { "coursesduplicate_dept": "epse", "coursesduplicate_avg": 97.41 },
+        { "coursesduplicate_dept": "cnps", "coursesduplicate_avg": 97.47 },
+        { "coursesduplicate_dept": "cnps", "coursesduplicate_avg": 97.47 },
+        { "coursesduplicate_dept": "math", "coursesduplicate_avg": 97.48 },
+        { "coursesduplicate_dept": "math", "coursesduplicate_avg": 97.48 },
+        { "coursesduplicate_dept": "educ", "coursesduplicate_avg": 97.5 },
+        { "coursesduplicate_dept": "nurs", "coursesduplicate_avg": 97.53 },
+        { "coursesduplicate_dept": "nurs", "coursesduplicate_avg": 97.53 },
+        { "coursesduplicate_dept": "epse", "coursesduplicate_avg": 97.67 },
+        { "coursesduplicate_dept": "epse", "coursesduplicate_avg": 97.69 },
+        { "coursesduplicate_dept": "epse", "coursesduplicate_avg": 97.78 },
+        { "coursesduplicate_dept": "crwr", "coursesduplicate_avg": 98 },
+        { "coursesduplicate_dept": "crwr", "coursesduplicate_avg": 98 },
+        { "coursesduplicate_dept": "epse", "coursesduplicate_avg": 98.08 },
+        { "coursesduplicate_dept": "nurs", "coursesduplicate_avg": 98.21 },
+        { "coursesduplicate_dept": "nurs", "coursesduplicate_avg": 98.21 },
+        { "coursesduplicate_dept": "epse", "coursesduplicate_avg": 98.36 },
+        { "coursesduplicate_dept": "epse", "coursesduplicate_avg": 98.45 },
+        { "coursesduplicate_dept": "epse", "coursesduplicate_avg": 98.45 },
+        { "coursesduplicate_dept": "nurs", "coursesduplicate_avg": 98.5 },
+        { "coursesduplicate_dept": "nurs", "coursesduplicate_avg": 98.5 },
+        { "coursesduplicate_dept": "epse", "coursesduplicate_avg": 98.58 },
+        { "coursesduplicate_dept": "nurs", "coursesduplicate_avg": 98.58 },
+        { "coursesduplicate_dept": "nurs", "coursesduplicate_avg": 98.58 },
+        { "coursesduplicate_dept": "epse", "coursesduplicate_avg": 98.58 },
+        { "coursesduplicate_dept": "epse", "coursesduplicate_avg": 98.7 },
+        { "coursesduplicate_dept": "nurs", "coursesduplicate_avg": 98.71 },
+        { "coursesduplicate_dept": "nurs", "coursesduplicate_avg": 98.71 },
+        { "coursesduplicate_dept": "eece", "coursesduplicate_avg": 98.75 },
+        { "coursesduplicate_dept": "eece", "coursesduplicate_avg": 98.75 },
+        { "coursesduplicate_dept": "epse", "coursesduplicate_avg": 98.76 },
+        { "coursesduplicate_dept": "epse", "coursesduplicate_avg": 98.76 },
+        { "coursesduplicate_dept": "epse", "coursesduplicate_avg": 98.8 },
+        { "coursesduplicate_dept": "spph", "coursesduplicate_avg": 98.98 },
+        { "coursesduplicate_dept": "spph", "coursesduplicate_avg": 98.98 },
+        { "coursesduplicate_dept": "cnps", "coursesduplicate_avg": 99.19 },
+        { "coursesduplicate_dept": "math", "coursesduplicate_avg": 99.78 },
+        { "coursesduplicate_dept": "math", "coursesduplicate_avg": 99.78 }
+    ]
+}

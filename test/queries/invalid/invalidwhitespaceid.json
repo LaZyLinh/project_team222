@@ -1,0 +1,19 @@
+{
+    "title": "SELECT dept, avg WHERE avg > 97, invalid because id string is whitespace only",
+    "query": {
+        "WHERE": {
+            "GT": {
+                "   _avg":97
+            }
+        },
+        "OPTIONS": {
+            "COLUMNS": [
+                "   _dept",
+                "   _avg"
+            ],
+            "ORDER": "   _avg"
+        }
+    },
+    "isQueryValid": false,
+    "result": "InsightError"
+}

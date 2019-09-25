@@ -1,0 +1,19 @@
+{
+    "title": "Invalid, order must use an existing columnkey",
+    "query": {
+        "WHERE": {
+            "GT": {
+                "courses_avg":97
+            }
+        },
+        "OPTIONS": {
+            "COLUMNS": [
+                "courses_dept",
+                "courses_avg"
+            ],
+            "ORDER": "courses_avocadotoastsperyear"
+        }
+    },
+    "isQueryValid": false,
+    "result": "InsightError"
+}

@@ -1,0 +1,68 @@
+{
+    "title": "SELECT dept, avg WHERE avg < 40, order by year",
+    "query": {
+        "WHERE": {
+            "LT": {
+                "courses_avg": 40
+            }
+        },
+        "OPTIONS": {
+            "COLUMNS": [
+                "courses_dept",
+                "courses_year"
+            ],
+            "ORDER": "courses_year"
+        }
+    },
+    "isQueryValid": true,
+    "result": [
+        {
+            "courses_dept": "wood",
+            "courses_year": 1900
+        },
+        {
+            "courses_dept": "lfs",
+            "courses_year": 1900
+        },
+        {
+            "courses_dept": "busi",
+            "courses_year": 1900
+        },
+        {
+            "courses_dept": "educ",
+            "courses_year": 1900
+        },
+        {
+            "courses_dept": "frst",
+            "courses_year": 1900
+        },
+        {
+            "courses_dept": "phil",
+            "courses_year": 2008
+        },
+        {
+            "courses_dept": "hist",
+            "courses_year": 2009
+        },
+        {
+            "courses_dept": "lfs",
+            "courses_year": 2009
+        },
+        {
+            "courses_dept": "civl",
+            "courses_year": 2010
+        },
+        {
+            "courses_dept": "fopr",
+            "courses_year": 2013
+        },
+        {
+            "courses_dept": "educ",
+            "courses_year": 2015
+        },
+        {
+            "courses_dept": "busi",
+            "courses_year": 2016
+        }
+    ]
+}

@@ -1,0 +1,68 @@
+{
+    "title": "SELECT dept, avg WHERE avg < 40, order by pass",
+    "query": {
+        "WHERE": {
+            "LT": {
+                "courses_avg": 40
+            }
+        },
+        "OPTIONS": {
+            "COLUMNS": [
+                "courses_dept",
+                "courses_pass"
+            ],
+            "ORDER": "courses_pass"
+        }
+    },
+    "isQueryValid": true,
+    "result": [
+        {
+            "courses_dept": "busi",
+            "courses_pass": 0
+        },
+        {
+            "courses_dept": "lfs",
+            "courses_pass": 0
+        },
+        {
+            "courses_dept": "lfs",
+            "courses_pass": 0
+        },
+        {
+            "courses_dept": "busi",
+            "courses_pass": 0
+        },
+        {
+            "courses_dept": "fopr",
+            "courses_pass": 0
+        },
+        {
+            "courses_dept": "wood",
+            "courses_pass": 0
+        },
+        {
+            "courses_dept": "frst",
+            "courses_pass": 0
+        },
+        {
+            "courses_dept": "hist",
+            "courses_pass": 1
+        },
+        {
+            "courses_dept": "civl",
+            "courses_pass": 1
+        },
+        {
+            "courses_dept": "phil",
+            "courses_pass": 5
+        },
+        {
+            "courses_dept": "educ",
+            "courses_pass": 39
+        },
+        {
+            "courses_dept": "educ",
+            "courses_pass": 39
+        }
+    ]
+}

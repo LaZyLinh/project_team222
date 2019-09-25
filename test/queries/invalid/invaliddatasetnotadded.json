@@ -1,0 +1,19 @@
+{
+    "title": "Invalid, references dataset not added yet",
+    "query": {
+        "WHERE": {
+            "LT": {
+                "co_avg": 40
+            }
+        },
+        "OPTIONS": {
+            "COLUMNS": [
+                "co_dept",
+                "co_uuid"
+            ],
+            "ORDER": "co_uuid"
+        }
+    },
+    "isQueryValid": false,
+    "result": "InsightError"
+}

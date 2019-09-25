@@ -1,0 +1,43 @@
+{
+    "title": "Testing 'is' with three wildcards",
+    "query": {
+        "WHERE": {
+            "AND": [
+                {
+                    "OR": [
+                        {
+                            "IS": {
+                                "courses_dept": "cpsc*"
+                            }
+                        },
+                        {
+                            "IS": {
+                                "courses_dept": "***"
+                            }
+                        },
+                        {
+                            "IS": {
+                                "courses_dept": "w*"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "GT": {
+                        "courses_avg": 85
+                    }
+                }
+            ]
+        },
+        "OPTIONS": {
+            "COLUMNS": [
+                "courses_dept",
+                "courses_id",
+                "courses_avg"
+            ],
+            "ORDER": "courses_avg"
+        }
+    },
+    "isQueryValid": false,
+    "result": "InsightError"
+}

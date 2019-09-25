@@ -1,0 +1,19 @@
+{
+    "title": "SELECT dept, avg WHERE avg > 97, invalid because id string contains underscores",
+    "query": {
+        "WHERE": {
+            "GT": {
+                "courses_ubc_avg":97
+            }
+        },
+        "OPTIONS": {
+            "COLUMNS": [
+                "courses_ubc_dept",
+                "courses_ubc_avg"
+            ],
+            "ORDER": "courses_ubc_avg"
+        }
+    },
+    "isQueryValid": false,
+    "result": "InsightError"
+}

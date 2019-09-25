@@ -1,0 +1,68 @@
+{
+    "title": "SELECT dept, avg WHERE avg < 40, order by title",
+    "query": {
+        "WHERE": {
+            "LT": {
+                "courses_avg": 40
+            }
+        },
+        "OPTIONS": {
+            "COLUMNS": [
+                "courses_dept",
+                "courses_title"
+            ],
+            "ORDER": "courses_title"
+        }
+    },
+    "isQueryValid": true,
+    "result": [
+        {
+            "courses_dept": "civl",
+            "courses_title": "engr econ anlys"
+        },
+        {
+            "courses_dept": "frst",
+            "courses_title": "forest ecology"
+        },
+        {
+            "courses_dept": "busi",
+            "courses_title": "found re apprai"
+        },
+        {
+            "courses_dept": "busi",
+            "courses_title": "found re apprai"
+        },
+        {
+            "courses_dept": "hist",
+            "courses_title": "hist 1500 - 20 c"
+        },
+        {
+            "courses_dept": "lfs",
+            "courses_title": "in land food com"
+        },
+        {
+            "courses_dept": "lfs",
+            "courses_title": "in land food com"
+        },
+        {
+            "courses_dept": "educ",
+            "courses_title": "language & curr"
+        },
+        {
+            "courses_dept": "educ",
+            "courses_title": "language & curr"
+        },
+        {
+            "courses_dept": "phil",
+            "courses_title": "log & crit think"
+        },
+        {
+            "courses_dept": "wood",
+            "courses_title": "prpty,ident&uses"
+        },
+        {
+            "courses_dept": "fopr",
+            "courses_title": "sustnbt&frst ops"
+        }
+    ]
+}
