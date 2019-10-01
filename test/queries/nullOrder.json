@@ -1,0 +1,26 @@
+{
+    "title": "Very invalid query",
+    "query": {
+        "WHERE": {
+            "GT": {
+                "courses_avg": 101
+            }
+        },
+        "OPTIONS": {
+            "COLUMNS": [
+                "courses_dept",
+                "courses_instructor",
+                "courses_title",
+                "courses_fail",
+                "courses_uuid",
+                "courses_avg",
+                "courses_pass",
+                "courses_audit",
+                "courses_year"
+            ],
+            "ORDER": null
+        }
+    },
+    "isQueryValid": false,
+    "result": "InsightError"
+}

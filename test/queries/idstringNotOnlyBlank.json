@@ -1,0 +1,19 @@
+{
+    "title": "SELECT dept, avg WHERE avg > 97",
+    "query": {
+        "WHERE": {
+            "GT": {
+                "u b c_avg":97
+            }
+        },
+        "OPTIONS": {
+            "COLUMNS": [
+                "u b c_dept",
+                "u b c_avg"
+            ],
+            "ORDER": "u b c_avg"
+        }
+    },
+    "isQueryValid": true,
+    "result": []
+}
