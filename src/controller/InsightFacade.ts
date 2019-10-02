@@ -11,8 +11,8 @@ import * as fs from "fs";
  *
  */
 export default class InsightFacade implements IInsightFacade {
-    public code: number;
-    public val: any;
+    // public code: number;
+    // public val: any;
 
     constructor() {
         Log.trace("InsightFacadeImpl::init()");
