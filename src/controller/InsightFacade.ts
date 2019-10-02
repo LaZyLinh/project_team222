@@ -101,14 +101,12 @@ export default class InsightFacade implements IInsightFacade {
 
     }
 
-    // tslint:disable-next-line:max-func-body-length
     public whereHandler(item: any): number {
         const mult = ["AND", "OR"];
         const mSingle = ["GT", "LT", "EQ"];
         const sSingle = ["IS"];
         const neg = "NOT";
         let anyFalse = 0;
-
         if (item !== null && typeof item === "object") {
             if (Array.isArray(Object.keys(item))) {
                 for (const[key, more] of Object.entries(item)) {
@@ -144,8 +142,7 @@ export default class InsightFacade implements IInsightFacade {
                                 if (this.typeOfKey(field) !== "string" && !this.valueMatchKey([field, value])) {
                                     anyFalse++;
                                     break;
-                                }
-                            }
+                                }}
                         }
                     }
                     }
