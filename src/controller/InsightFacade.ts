@@ -11,6 +11,8 @@ import * as fs from "fs";
  *
  */
 export default class InsightFacade implements IInsightFacade {
+    public code: number;
+    public val: any;
 
     constructor() {
         Log.trace("InsightFacadeImpl::init()");
@@ -43,7 +45,8 @@ export default class InsightFacade implements IInsightFacade {
 
     public performQuery(query: any): Promise <any[]> {
         if (!this.validateQuery(query)) {
-            return Promise.reject("Invalid Query");
+            const error = new InsightError("Invalid Query");
+            return Promise.reject(error);
         }
         return Promise.reject("Not implemented.");
     }
@@ -53,94 +56,119 @@ export default class InsightFacade implements IInsightFacade {
     }
 
     // tslint:disable-next-line:max-func-body-length
-    private validateQuery(query: any): boolean {
+    public validateQuery(query: any): boolean {
         const mField = ["year", "avg", "pass", "fail", "audit"];
         const sField = ["dept", "id", "instructor", "title", "uuid"];
 
         if (!query.hasOwnProperty("WHERE")) {
             return false;
-        } else if (!query.hasOwnProperty("OPTION")) {
+        } else if (!query.hasOwnProperty("OPTIONS")) {
             return false;
-        } else if (!query["OPTION"].hasOwnProperty("COLUMNS")) {
+        } else if (!query["OPTIONS"].hasOwnProperty("COLUMNS")) {
             return false;
         }
 
         const whereCont = query["WHERE"];   // make sure where only takes 1 FILTER and is the right type
-        const optionCont = query["OPTION"];
+        const optionCont = query["OPTIONS"];
         const columnCont = optionCont["COLUMNS"];   // should be string[]
 
         // dealing with OPTION section
-        if (columnCont === []) {
+        if (Array.isArray(columnCont) && columnCont.length === 0) {
             return false;
         }
-        for (const value in columnCont) {
-            if (this.typeOfKey(value) !== "string" || "number") {
+        for (const value of columnCont) {
+            if (this.typeOfKey(value) !== "string" && this.typeOfKey(value) !== "number") {
                 return false;
             }
         }
         if (optionCont.hasOwnProperty("ORDER")) {
             if (Array.isArray(optionCont["ORDER"])) {
                 return false;
-            } else if (this.typeOfKey(optionCont["ORDER"]) !== "string" || "number") {
+            }
+            if (this.typeOfKey(optionCont["ORDER"]) !== "string"
+                && this.typeOfKey(optionCont["ORDER"]) !== "number") {
                 return false;
             }
         }
 
         // dealing with WHERE section
-        if (whereCont !== {}) {            // if WHERE: {}, all good!
-            return this.whereHandler(whereCont);
-        }
-
-    }
-
-    private whereHandler(item: any): boolean {
-        const mult = ["AND", "OR"];
-        const mSingle = ["GT", "LT", "EQ"];
-        const sSingle = ["IS", "NOT"];
-
-        if (item !== null && typeof item === "object") {
-            if (Array.isArray(Object.entries(item))) {
-                for (const key of Object.keys(item)) {
-                    if (!mSingle.includes(key) || !sSingle.includes(key) || !mult.includes(key)) {
-                        return false;
-                    }
-                    if (mult.includes(key)) {
-                        if (!this.whereHandler(key)) { return false; }
-                    } else {
-                        if (item[key] === null || Array.isArray(item[key])) {
-                            return false;
-                        }
-                        if (mSingle.includes(key)) {
-                            if (this.typeOfKey(key) !== "number" || !this.valueMatchKey([key, item[key]])) {
-                                return false;
-                            }
-                        } else {
-                            if (this.typeOfKey(key) !== "string" || !this.valueMatchKey([key, item[key]])) {
-                                return false;
-                            }
-                        }
-                    }
-                }
-            }
+        if (Object.keys(whereCont).length !== 0) {            // if WHERE: {}, all good!
+            if (this.whereHandler(whereCont) > 0) {
+                return false;
+            } else {return true; }
         }
         return true;
+
     }
 
-    private valueMatchKey([key, value]: [string, any]) {
+    // tslint:disable-next-line:max-func-body-length
+    public whereHandler(item: any): number {
+        const mult = ["AND", "OR"];
+        const mSingle = ["GT", "LT", "EQ"];
+        const sSingle = ["IS"];
+        const neg = "NOT";
+        let anyFalse = 0;
+
+        if (item !== null && typeof item === "object") {
+            if (Array.isArray(Object.keys(item))) {
+                for (const[key, more] of Object.entries(item)) {
+                    if (!mSingle.includes(key) && !sSingle.includes(key) && !mult.includes(key)) {
+                        anyFalse++;
+                        break;
+                    }
+                    if (more === null || Object.entries(more).length === 0) {
+                        anyFalse++;
+                        break;
+                    }
+                    if (key === neg) {
+                        if (Array.isArray(more)) {
+                            anyFalse++;
+                            break;
+                        }
+                        anyFalse += this.whereHandler(more);
+                    }
+                    if (mult.includes(key)) {
+                        if (Array.isArray(more)) {
+                            for (const clause of more) {
+                                anyFalse += this.whereHandler(clause);
+                            }
+                        } else {anyFalse += this.whereHandler(more); }
+                    } else {
+                        for (const [field, value] of Object.entries(item[key])) {
+                            if (mSingle.includes(key)) {
+                                if (this.typeOfKey(field) !== "number" && !this.valueMatchKey([field, value])) {
+                                    anyFalse++;
+                                    break;
+                                }
+                            } else {
+                                if (this.typeOfKey(field) !== "string" && !this.valueMatchKey([field, value])) {
+                                    anyFalse++;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                    }
+                }
+             }
+        return anyFalse;
+    }
+
+    public valueMatchKey([key, value]: [string, any]) {
         if (this.typeOfKey(key) === "string") {
             if (value !== null && typeof value === "string") {
                 return true;
+            } else {
+                return false;
             }
         } else if (this.typeOfKey(key) === "number") {
             if (value !== null && typeof value === "number") {
                 return true;
-            }
-        } else {
-            return false;
-        }
+            } else {return false; }
+        } else {return false; }
     }
 
-    private typeOfKey(key: string): string | null {
+    public typeOfKey(key: string): string | null {
         let mRegex = [/_year$/, /_avg$/, /_pass$/, /_fail$/, /_audit$/];
         let sRegex = [/_dept$/, /_id$/, /_instructor$/, /_title$/, /_uuid$/];
 

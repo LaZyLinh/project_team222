@@ -458,6 +458,118 @@ describe("InsightFacade Add/Remove Dataset", function () {
         });
     });
 
+    // Test for validateQueries and helpers
+    it("typeOfKey return correct type on number", function () {
+        const expected = "number";
+        const actual = insightFacade.typeOfKey("courses_year");
+        expect(actual).to.deep.equal(expected);
+    });
+
+    it("typeOfKey return correct type on string", function () {
+        const expected = false;
+        const actual = insightFacade.typeOfKey("courses_dept") !== ("string" || "number");
+        expect(actual).to.deep.equal(expected);
+    });
+
+    it("typeOfKey return correct type on wrong keys", function () {
+        let expected = null;
+        const actual = insightFacade.typeOfKey("courses_instructorst");
+        expect(actual).to.deep.equal(expected);
+    });
+
+    it("valueMatchKey should work for string", function () {
+        const expected = true;
+        const actual = insightFacade.valueMatchKey(["course_id", "420C"]);
+        expect(actual).to.deep.equal(expected);
+    });
+
+    it("valueMatchKey should work for number", function () {
+        const expected = true;
+        const actual = insightFacade.valueMatchKey(["course_pass", 20]);
+        expect(actual).to.deep.equal(expected);
+    });
+
+    it("valueMatchKey should reject unmatched set", function () {
+        const expected = false;
+        const actual = insightFacade.valueMatchKey(["course_pass", "lol"]);
+        expect(actual).to.deep.equal(expected);
+    });
+
+    it("valueMatchKey should reject unmatched set reversed", function () {
+        const expected = false;
+        const actual = insightFacade.valueMatchKey(["course_title", 600]);
+        expect(actual).to.deep.equal(expected);
+    });
+
+    it("valueMatchKey should reject null value", function () {
+        const expected = false;
+        const actual = insightFacade.valueMatchKey(["course_pass", null]);
+        expect(actual).to.deep.equal(expected);
+    });
+
+    it("valueMatchKey should reject all null", function () {
+        const expected = false;
+        const actual = insightFacade.valueMatchKey([null, null]);
+        expect(actual).to.deep.equal(expected);
+    });
+
+    it("Test simple object with empty WHERE", function () {
+        let obj = {
+            WHERE: {},
+            OPTIONS: {
+                COLUMNS: [
+                    "courses_dept",
+                    "courses_avg"
+                ],
+                ORDER: "courses_avg"
+            }
+        };
+        const expected = true;
+        const actual = insightFacade.validateQuery(obj);
+        expect(actual).to.equal(expected);
+    });
+
+    it("Test simple object with complex WHERE", function () {
+        let obj = {
+            OR: [
+                {
+                    AND: [
+                        {
+                            GT: {
+                                courses_avg: 90
+                            }
+                        },
+                        {
+                            IS: {
+                                courses_dept: "adhe"
+                            }
+                        }
+                    ]
+                },
+                {
+                    EQ: {
+                        courses_avg: 95
+                    }
+                }
+            ]
+        };
+
+        const expected = 0;
+        const actual = insightFacade.whereHandler(obj);
+        expect(actual).to.equal(expected);
+    });
+
+    it("Test simple object with single WHERE", function () {
+        let obj = {
+            GT: {
+                courses_avg: 97
+            }
+        };
+
+        const expected = 0;
+        const actual = insightFacade.whereHandler(obj);
+        expect(actual).to.equal(expected);
+    });
 });
 
 /*

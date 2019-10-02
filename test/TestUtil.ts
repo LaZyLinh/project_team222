@@ -1,6 +1,6 @@
 import * as fs from "fs";
 import Log from "../src/Util";
-import { ITestQuery } from "./InsightFacade.spec";
+import { ITestQuery } from "./InsightFacadeLinh.spec";
 import {expect} from "chai";
 import {InsightError, ResultTooLargeError} from "../src/controller/IInsightFacade";
 
