@@ -570,6 +570,52 @@ describe("InsightFacade Add/Remove Dataset", function () {
         const actual = insightFacade.whereHandler(obj);
         expect(actual).to.equal(expected);
     });
+
+    it("Test VERY Complex structures", function () {
+        let obj = {
+            OR: [
+                    {
+                        AND: [
+                            {
+                                GT: {
+                                    courses_avg: 97
+                                }
+                            },
+                            {
+                                NOT: {
+                                    IS: {
+                                        courses_dept: "adhe"
+                                    }
+                                }
+                            },
+                            {
+                                NOT: {
+                                    LT: {
+                                        courses_year: 2008
+                                    }
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        EQ: {
+                            courses_avg: 95
+                        }
+                    },
+                    {
+                        AND: {
+                            LT: {
+                                courses_avg: 96
+                            }
+                        }
+                    }
+                    ]
+        };
+
+        const expected = 0;
+        const actual = insightFacade.whereHandler(obj);
+        expect(actual).to.deep.equal(expected);
+    });
 });
 
 /*

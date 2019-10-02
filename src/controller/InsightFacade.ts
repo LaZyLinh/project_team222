@@ -72,6 +72,8 @@ export default class InsightFacade implements IInsightFacade {
         const optionCont = query["OPTIONS"];
         const columnCont = optionCont["COLUMNS"];   // should be string[]
 
+        if (whereCont === null || optionCont === null || columnCont === null) {return false; }
+
         // dealing with OPTION section
         if (Array.isArray(columnCont) && columnCont.length === 0) {
             return false;
@@ -110,7 +112,7 @@ export default class InsightFacade implements IInsightFacade {
         if (item !== null && typeof item === "object") {
             if (Array.isArray(Object.keys(item))) {
                 for (const[key, more] of Object.entries(item)) {
-                    if (!mSingle.includes(key) && !sSingle.includes(key) && !mult.includes(key)) {
+                    if (!mSingle.includes(key) && !sSingle.includes(key) && !mult.includes(key) && key !== neg) {
                         anyFalse++;
                         break;
                     }
@@ -131,7 +133,8 @@ export default class InsightFacade implements IInsightFacade {
                                 anyFalse += this.whereHandler(clause);
                             }
                         } else {anyFalse += this.whereHandler(more); }
-                    } else {
+                    }
+                    if (mSingle.includes(key) || sSingle.includes(key)) {
                         for (const [field, value] of Object.entries(item[key])) {
                             if (mSingle.includes(key)) {
                                 if (this.typeOfKey(field) !== "number" && !this.valueMatchKey([field, value])) {
@@ -142,11 +145,11 @@ export default class InsightFacade implements IInsightFacade {
                                 if (this.typeOfKey(field) !== "string" && !this.valueMatchKey([field, value])) {
                                     anyFalse++;
                                     break;
-                                }}
+                                }
+                            }
                         }
                     }
-                    }
-                }
+                }}
              }
         return anyFalse;
     }
@@ -155,14 +158,15 @@ export default class InsightFacade implements IInsightFacade {
         if (this.typeOfKey(key) === "string") {
             if (value !== null && typeof value === "string") {
                 return true;
-            } else {
-                return false;
             }
-        } else if (this.typeOfKey(key) === "number") {
+        }
+
+        if (this.typeOfKey(key) === "number") {
             if (value !== null && typeof value === "number") {
                 return true;
-            } else {return false; }
-        } else {return false; }
+            }
+        }
+        return false;
     }
 
     public typeOfKey(key: string): string | null {
