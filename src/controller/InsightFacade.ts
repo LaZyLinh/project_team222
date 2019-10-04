@@ -1,5 +1,5 @@
 import Log from "../Util";
-import {IInsightFacade, InsightDataset, InsightDatasetKind, InsightError} from "./IInsightFacade";
+import {IInsightFacade, InsightDataset, InsightDatasetKind, InsightError, NotFoundError} from "./IInsightFacade";
 import * as JSZip from "jszip";
 import {JSZipObject} from "jszip";
 
@@ -18,7 +18,6 @@ export default class InsightFacade implements IInsightFacade {
         Log.trace("InsightFacadeImpl::init()");
     }
 
-    // tslint:disable-next-line:max-func-body-length
     public addDataset(id: string, content: string, kind: InsightDatasetKind): Promise<string[]> {
         let validatedId: string | InsightError = this.validateIDString(id);
         if (validatedId instanceof InsightError) {
@@ -35,22 +34,7 @@ export default class InsightFacade implements IInsightFacade {
                 return Promise.all(filePromises);
             }).then((res: string[]) => {
                 // do something with the string body of each file. parse it! (or not)
-                let newDataset: ICourseDataset = {
-                    audit: [],
-                    avg: [],
-                    course_ids: [],
-                    courses: [],
-                    dept: [],
-                    fail: [],
-                    instructor: [],
-                    pass: [],
-                    title: [],
-                    uuid: [],
-                    year: [],
-                    kind: InsightDatasetKind.Courses,
-                    numRows: 0,
-                    id: id,
-                };
+                let newDataset: ICourseDataset = InsightFacade.newDatasetHelper(id, InsightDatasetKind.Courses);
                 for (content of res) {
                     try {
                         let course = JSON.parse(content);
@@ -77,13 +61,35 @@ export default class InsightFacade implements IInsightFacade {
         // return Promise.reject("Shouldn't have made it to here.");
     }
 
+    private static newDatasetHelper(newID: string, newKind: InsightDatasetKind): ICourseDataset {
+        return {
+            audit: [],
+            avg: [],
+            course_ids: [],
+            courses: [],
+            dept: [],
+            fail: [],
+            instructor: [],
+            pass: [],
+            title: [],
+            uuid: [],
+            year: [],
+            kind: newKind,
+            numRows: 0,
+            id: newID,
+        };
+    }
+
+    // TODO: write tests for me!
     private addCoursesToDataset(courses: ICourse[], dataset: ICourseDataset) {
         for (let course of courses) {
             let index = dataset.courses.push(course) - 1;
             // TODO: Add the key/val pairs to all of the other arrays in the dataset
         }
+        dataset.numRows += courses.length;
     }
 
+    // TODO: write tests for me!
     // returns a string array of the ID's of currently-added datasets
     private idListHelper(): string[] {
         let res: string[] = [];
@@ -93,6 +99,7 @@ export default class InsightFacade implements IInsightFacade {
         return res;
     }
 
+    // TODO: write tests for me!
     // given a course json file, generates an array of ICourse corresponding to it.
     public ICourseHelper(course: any): ICourse[] {
         let result: ICourse[] = [];
@@ -144,7 +151,15 @@ export default class InsightFacade implements IInsightFacade {
         if (validatedId instanceof InsightError) {
             return Promise.reject(validatedId);
         }
-        return Promise.reject("Not implemented.");
+        let idIndex: number = this.idListHelper().indexOf(id);
+        if (idIndex > -1) {
+            // remove the dataset
+            let foundId: string = this.database.datasets[idIndex].id;
+            this.database.datasets.splice(idIndex);
+            return Promise.resolve(foundId);
+        } else {
+            return Promise.reject(new NotFoundError("dataset id not found"));
+        }
     }
 
     public performQuery(query: any): Promise <any[]> {
@@ -152,7 +167,16 @@ export default class InsightFacade implements IInsightFacade {
     }
 
     public listDatasets(): Promise<InsightDataset[]> {
-        return Promise.reject("Not implemented.");
+        return new Promise((resolve, reject) => {
+            let result: InsightDataset[] = [];
+            for (let dataset of this.database.datasets) {
+                let newObj: InsightDataset = {
+                    id: dataset.id, kind: dataset.kind, numRows: dataset.numRows
+                };
+                result.push(newObj);
+            }
+            resolve(result);
+        });
     }
 
     private validateIDString(id: string): string | InsightError {
