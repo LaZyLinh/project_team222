@@ -1,5 +1,12 @@
 import Log from "../Util";
-import {IInsightFacade, InsightDataset, InsightDatasetKind, InsightError, NotFoundError} from "./IInsightFacade";
+import {
+    IInsightFacade,
+    InsightDataset,
+    InsightDatasetKind,
+    InsightError,
+    NotFoundError,
+    ResultTooLargeError
+} from "./IInsightFacade";
 import * as JSZip from "jszip";
 import {queryParser} from "restify";
 import * as fs from "fs";
@@ -117,10 +124,16 @@ export default class InsightFacade implements IInsightFacade {
 
         let dataset: ICourseDataset = this.database.datasets[0];    // TODO: find dataset
         const whereCont = query["WHERE"];
-        const array = performValidQuery(whereCont, dataset); // return array of index
+        const array = performValidQuery(whereCont, dataset);
+        if (array === []) {
+            return Promise.resolve(array);
+        }
+
+        if (array.length > 5000) {
+            return Promise.reject(new ResultTooLargeError());
+        } // return array of index
 
         // TODO: turn index array into actual result array of courses, then return
-
         return Promise.resolve(array);
 
     }
