@@ -6,6 +6,13 @@ import * as fs from "fs";
 import PerformQuery from "./PerformQuery";
 import {JSZipObject} from "jszip";
 import {ICourse, ICourseDataset, IDatabase} from "./ICourseDataset";
+import {
+    addCoursesToDataset,
+    ICourseHelper,
+    idListHelper, loadFromDiskIfNecessary,
+    newDatasetHelper,
+    saveDatasetToDisk
+} from "./AddDatasetHelpers";
 
 /**
  * This is the main programmatic entry point for the project.
@@ -28,6 +35,11 @@ export default class InsightFacade extends PerformQuery implements IInsightFacad
         if (validatedId instanceof InsightError) {
             return Promise.reject(validatedId);
         }
+        for (let dataset of this.database.datasets) {
+            if (dataset.id === id) {
+                return Promise.reject(new InsightError("Invalid ID: id already in database"));
+            }
+        }
         // by here we know the id string is valid
         let newZip = new JSZip(); // more files !
         return newZip.loadAsync(content, {base64: true})
@@ -39,12 +51,12 @@ export default class InsightFacade extends PerformQuery implements IInsightFacad
                 return Promise.all(filePromises);
             }).then((res: string[]) => {
                 // do something with the string body of each file. parse it! (or not)
-                let newDataset: ICourseDataset = InsightFacade.newDatasetHelper(id, InsightDatasetKind.Courses);
+                let newDataset: ICourseDataset = newDatasetHelper(id, InsightDatasetKind.Courses);
                 for (content of res) {
                     try {
                         let course = JSON.parse(content);
-                        let coursesData: ICourse[] = this.ICourseHelper(course);
-                        this.addCoursesToDataset(coursesData, newDataset);
+                        let coursesData: ICourse[] = ICourseHelper(course);
+                        addCoursesToDataset(coursesData, newDataset);
                     } catch (err) {
                         // parsing the json failed!
                         // but this is fine so long as not *all* of the json files fail. We'll see later.
@@ -52,12 +64,13 @@ export default class InsightFacade extends PerformQuery implements IInsightFacad
                 }
                 if (newDataset.courses.length !== 0) {
                     this.database.datasets.push(newDataset);
+                    saveDatasetToDisk(newDataset);
                     return Promise.resolve();
                 } else {
                     return Promise.reject(new InsightError("No valid courses in zip file."));
                 }
             }).then((res) => {
-                return this.idListHelper();
+                return idListHelper(this.database);
             }).catch((err) => {
                 // okay what happened?
                 return Promise.reject(new InsightError(err));
@@ -66,97 +79,13 @@ export default class InsightFacade extends PerformQuery implements IInsightFacad
         // return Promise.reject("Shouldn't have made it to here.");
     }
 
-    private static newDatasetHelper(newID: string, newKind: InsightDatasetKind): ICourseDataset {
-        return {
-            audit: [],
-            avg: [],
-            course_ids: [],
-            courses: [],
-            dept: [],
-            fail: [],
-            instructor: [],
-            pass: [],
-            title: [],
-            uuid: [],
-            year: [],
-            kind: newKind,
-            numRows: 0,
-            id: newID,
-        };
-    }
-
-    // TODO: write tests for me!
-    private addCoursesToDataset(courses: ICourse[], dataset: ICourseDataset) {
-        for (let course of courses) {
-            let index = dataset.courses.push(course) - 1;
-            // TODO: Add the key/val pairs to all of the other arrays in the dataset
-        }
-        dataset.numRows += courses.length;
-    }
-
-    // TODO: write tests for me!
-    // returns a string array of the ID's of currently-added datasets
-    private idListHelper(): string[] {
-        let res: string[] = [];
-        for (let item of this.database.datasets) {
-            res.push(item.id);
-        }
-        return res;
-    }
-
-    // TODO: write tests for me!
-    // given a course json file, generates an array of ICourse corresponding to it.
-    public ICourseHelper(course: any): ICourse[] {
-        let result: ICourse[] = [];
-        if (!course.hasOwnProperty("result") || !Array.isArray(course.result)) {
-            return result; // just skip it!
-        }
-        let neededKeys: { [index: string]: any; } = {
-            Year: "string", // year -> Year
-            Avg: "number", // avg -> Avg
-            Pass: "number", // pass -> Pass
-            Fail: "number", // fail -> Fail
-            Audit: "number", // audit -> Audit
-            Subject: "string", // dept -> Subject
-            Course: "string", // id -> Course
-            Professor: "string", // instructor -> Professor
-            Title: "string", // title -> Title
-            id: "number", // uuid -> id
-        };
-        for (let item of course.result) {
-            let allValid: boolean = true;
-            for (let key in neededKeys) {
-                if (!item.hasOwnProperty(key) || typeof item[key] !== neededKeys[key]) {
-                    allValid = false;
-                }
-            }
-            if (!allValid) {
-                continue;
-            }
-            // so now we know that we have all the parameters that we need to do this... So let's do it.
-            let newCourse: ICourse = {
-                year: Number(item.Year),
-                avg: item.Avg,
-                pass: item.Pass,
-                fail: item.Fail,
-                audit: item.Audit,
-                dept: item.Subject,
-                id: item.Course,
-                instructor: item.Professor,
-                title: item.Title,
-                uuid: String(item.id),
-            };
-            result.push(newCourse);
-        }
-        return result;
-    }
-
     public removeDataset(id: string): Promise<string> {
         let validatedId: string | InsightError = this.validateIDString(id);
         if (validatedId instanceof InsightError) {
             return Promise.reject(validatedId);
         }
-        let idIndex: number = this.idListHelper().indexOf(id);
+        loadFromDiskIfNecessary(this, id);
+        let idIndex: number = idListHelper(this.database).indexOf(id);
         if (idIndex > -1) {
             // remove the dataset
             let foundId: string = this.database.datasets[idIndex].id;

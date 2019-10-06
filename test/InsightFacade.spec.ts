@@ -666,12 +666,13 @@ describe("InsightFacade Add/Remove Dataset from Linh's d0", function () {
         });
     });
 
-    it("Should reject dataset with nested directories", function () {
+    it("Should (not?) reject dataset with nested directories", function () {
         const id: string = "multDirectories";
+        const expected: string[] = [id];
         return insightFacade.addDataset(id, datasets[id], InsightDatasetKind.Courses).then((result: string[]) => {
-            expect.fail();
+            expect(result).to.deep.equal(expected);
         }).catch((err) => {
-            expect(err).to.be.instanceOf(InsightError);
+            expect.fail();
         });
     });
     // Tests for removeDataSet
@@ -693,7 +694,7 @@ describe("InsightFacade Add/Remove Dataset from Linh's d0", function () {
         }).then((response: string) => { // Note: response here comes from methodToRunSecond.
             return insightFacade.listDatasets();
         }).then((array: InsightDataset[]) => {
-            expect(array).to.equal([]);
+            expect(array).to.deep.equal([]);
         }).catch((error: any) => {
             expect.fail(error, id, "Should not have rejected");
         });
@@ -717,8 +718,7 @@ describe("InsightFacade Add/Remove Dataset from Linh's d0", function () {
         return insightFacade.removeDataset(id).then((result: string) => {
             expect.fail();
         }).catch((err) => {
-            const error = new InsightError("Invalid ID with whitespace");
-            expect(err).to.deep.equal(error);
+            expect(err).to.be.instanceOf(InsightError);
         });
     });
 
@@ -727,8 +727,7 @@ describe("InsightFacade Add/Remove Dataset from Linh's d0", function () {
         return insightFacade.removeDataset(id).then((result: string) => {
             expect.fail();
         }).catch((err) => {
-            const error = new InsightError("Invalid null ID");
-            expect(err).to.deep.equal(error);
+            expect(err).to.be.instanceOf(InsightError);
         });
     });
 
@@ -737,8 +736,7 @@ describe("InsightFacade Add/Remove Dataset from Linh's d0", function () {
         return insightFacade.removeDataset(id).then((result: string) => {
             expect.fail();
         }).catch((err) => {
-            const error = new InsightError("Invalid ID with empty string");
-            expect(err).to.deep.equal(error);
+            expect(err).to.be.instanceOf(InsightError);
         });
     });
 
@@ -747,8 +745,7 @@ describe("InsightFacade Add/Remove Dataset from Linh's d0", function () {
         return insightFacade.removeDataset(undefined).then((result: string) => {
             expect.fail();
         }).catch((err) => {
-            const error = new InsightError("Invalid undefined ID");
-            expect(err).to.deep.equal(error);
+            expect(err).to.be.instanceOf(InsightError);
         });
     });
 
@@ -757,8 +754,7 @@ describe("InsightFacade Add/Remove Dataset from Linh's d0", function () {
         return insightFacade.removeDataset(id).then((result: string) => {
             expect.fail();
         }).catch((err) => {
-            const error = new InsightError("Invalid ID with underscore");
-            expect(err).to.deep.equal(error);
+            expect(err).to.be.instanceOf(InsightError);
         });
     });
 
@@ -780,8 +776,7 @@ describe("InsightFacade Add/Remove Dataset from Linh's d0", function () {
         return insightFacade.addDataset(fakeId, datasets[id], InsightDatasetKind.Courses).then((response: string[]) => {
             expect.fail(); // Depending if it was supposed to resolve or reject
         }).catch((err: any) => {
-            const error = new InsightError("Invalid ID with underscore");
-            expect(err).to.deep.equal(error);
+            expect(err).to.be.instanceOf(InsightError);
         });
     });
 
@@ -827,7 +822,7 @@ describe("InsightFacade Add/Remove Dataset from Linh's d0", function () {
         let set: InsightDataset = {
             id: id,
             kind: InsightDatasetKind.Courses,
-            numRows: 1
+            numRows: 24
         };
         const expected: InsightDataset[] = [set];
         return insightFacade.addDataset(id, datasets[id], InsightDatasetKind.Courses).then((result: string[]) => {
@@ -845,12 +840,12 @@ describe("InsightFacade Add/Remove Dataset from Linh's d0", function () {
         let set: InsightDataset = {
             id: id,
             kind: InsightDatasetKind.Courses,
-            numRows: 1
+            numRows: 24
         };
         let set2: InsightDataset = {
             id: id2,
             kind: InsightDatasetKind.Courses,
-            numRows: 5
+            numRows: 117
         };
         const expected: InsightDataset[] = [set, set2];
         return insightFacade.addDataset(id, datasets[id], InsightDatasetKind.Courses).then((result: string[]) => {
