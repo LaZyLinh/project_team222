@@ -17,7 +17,8 @@ export default class PerformQuery {
         const optionCont = query["OPTIONS"];
         const columnCont = optionCont["COLUMNS"];   // should be string[]
 
-        if (whereCont === null || optionCont === null || columnCont === null) {return false; }
+        if (whereCont === null || optionCont === null || columnCont === null) {
+            return false; }
 
         // dealing with OPTION section
         if (Array.isArray(columnCont) && columnCont.length === 0) {
