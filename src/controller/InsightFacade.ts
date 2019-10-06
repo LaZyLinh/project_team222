@@ -10,9 +10,10 @@ import {
     ICourseHelper,
     idListHelper, idsInMemory, loadAllFromDisk, loadFromDiskIfNecessary,
     newDatasetHelper,
-    saveDatasetToDisk,
+    saveDatasetToDisk, validateIDString,
 } from "./AddDatasetHelpers";
 import {validateQuery, performValidQuery} from "./PerformQuery";
+import {sortHelperArrays} from "./SortHelperArrays";
 
 /**
  * This is the main programmatic entry point for the project.
@@ -30,7 +31,7 @@ export default class InsightFacade implements IInsightFacade {
     }
 
     public addDataset(id: string, content: string, kind: InsightDatasetKind): Promise<string[]> {
-        let validatedId: string | InsightError = this.validateIDString(id);
+        let validatedId: string | InsightError = validateIDString(id);
         if (validatedId instanceof InsightError) {
             return Promise.reject(validatedId);
         }
@@ -63,7 +64,7 @@ export default class InsightFacade implements IInsightFacade {
                 }
                 if (newDataset.courses.length !== 0) {
                     this.database.datasets.push(newDataset);
-                    // sortHelperArrays(newDataset);
+                    sortHelperArrays(newDataset);
                     saveDatasetToDisk(newDataset);
                     return Promise.resolve();
                 } else {
@@ -80,7 +81,7 @@ export default class InsightFacade implements IInsightFacade {
     }
 
     public removeDataset(id: string): Promise<string> {
-        let validatedId: string | InsightError = this.validateIDString(id);
+        let validatedId: string | InsightError = validateIDString(id);
         if (validatedId instanceof InsightError) {
             return Promise.reject(validatedId);
         }
@@ -110,7 +111,6 @@ export default class InsightFacade implements IInsightFacade {
             return Promise.reject(new InsightError("No Dataset added"));
         }
         loadFromDiskIfNecessary(this, datasetID);
-
         if (!idsInMemory(this.database).includes(datasetID)) {
             return Promise.reject(new InsightError());
         }
@@ -137,20 +137,5 @@ export default class InsightFacade implements IInsightFacade {
             }
             resolve(result);
         });
-    }
-
-    public validateIDString(id: string): string | InsightError {
-        if (id === null) {
-            return new InsightError("ID String cannot be null");
-        } else if (id === undefined) {
-            return new InsightError("ID String cannot be undefined");
-        } else if (id === "") {
-            return new InsightError("ID String cannot be an empty string");
-        } else if (/^\s*$/.test(id)) {
-            return new InsightError("ID String cannot be all whitespace");
-        } else if ( !/^[^_]*$/.test(id)) {
-            return new InsightError("ID String cannot contain underscores");
-        }
-        return id;
     }
 }

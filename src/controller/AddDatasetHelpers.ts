@@ -1,4 +1,4 @@
-import {InsightDatasetKind} from "./IInsightFacade";
+import {InsightDatasetKind, InsightError} from "./IInsightFacade";
 import {ICourse, ICourseDataset, IDatabase, ImKeyEntry, IsKeyEntry} from "./ICourseDataset";
 import InsightFacade from "./InsightFacade";
 import * as fs from "fs";
@@ -31,7 +31,6 @@ export function addCoursesToDataset(courses: ICourse[], dataset: ICourseDataset)
         dataset.pass.push({courseIndex: index, mKey: course.pass});
         dataset.fail.push({courseIndex: index, mKey: course.fail});
         dataset.audit.push({courseIndex: index, mKey: course.audit});
-        dataset.dept.push({courseIndex: index, sKey: course.dept});
         dataset.course_ids.push({courseIndex: index, sKey: course.id});
         dataset.dept.push({courseIndex: index, sKey: course.dept});
         dataset.instructor.push({courseIndex: index, sKey: course.instructor});
@@ -40,35 +39,6 @@ export function addCoursesToDataset(courses: ICourse[], dataset: ICourseDataset)
     }
     dataset.numRows += courses.length;
 }
-
-/*
-// Sorts the 'helper arrays' of the dataset after all entries have been added
-export function sortHelperArrays(dataset: ICourseDataset) {
-    Object.entries(dataset).forEach((pair) => {
-        let key: string = pair[0];
-        let value: IsKeyEntry[] | ImKeyEntry[] = pair[1];
-        if (key.toString() === "courses") {return; }
-        if (Array.isArray(value)) {
-            // sort the array
-            // if it's an array of sKeys, we do:
-            if (value[0] !== null && typeof value[0] === "IsKeyEntry" && value[0].sKey !== null) {
-                value.sort((a, b) => {
-                    let ask: IsKeyEntry = a;
-                    let bsk: IsKeyEntry = b;
-                    return ask.sKey > bsk.sKey ? -1 : 1;
-                });
-            } else if (value[0] !== null && typeof value[0] === "object" && value[0].mKey !== null) {
-                value.sort((a, b) => {
-                    let ask: ImKeyEntry = a;
-                    let bsk: ImKeyEntry = b;
-                    return ask.mKey - bsk.mKey;
-                });
-            }
-        }
-    });
-}
-
-*/
 
 // TODO: write tests for me!
 // returns a string array of the ID's of currently-added datasets, given an IDatabase
@@ -137,7 +107,7 @@ export function saveDatasetToDisk(dataset: ICourseDataset) {
 // If the insightFacade doesn't already have a dataset with the given ID loaded,
 // check the disk for it. If it's there, try to load it into memory.
 export function loadFromDiskIfNecessary(infa: InsightFacade, id: string) {
-    if (idsInMemory(infa.database).indexOf(id) === -1) {
+    if (!idsInMemory(infa.database).includes(id)) {
         loadDatasetFromDisk(infa, id);
     }
 }
@@ -163,7 +133,7 @@ export function loadAllFromDisk(infa: InsightFacade) {
     try {
         let fnames: string[] = fs.readdirSync("data/");
         for (let fname of fnames) {
-            if (idsInMemory(infa.database).indexOf(fname) > -1) {continue; }
+            if (idsInMemory(infa.database).includes(fname)) {continue;}
             loadDatasetFromDisk(infa, fname);
         }
     } catch {
@@ -218,10 +188,26 @@ export function idsInDisk(): string[] {
 function arrayUnion(a: string[], b: string[]): string[] {
     let res: string[] = [];
     for (let valA of a) {
-        if (b.indexOf(valA) === -1) {
+        if (!b.includes(valA)) {
             res.push(valA);
         }
     }
     res = res.concat(b);
     return res;
+}
+
+// return the validated string if it's valid, return an InsightError otherwise.
+export function validateIDString(id: string): string | InsightError {
+    if (id === null) {
+        return new InsightError("ID String cannot be null");
+    } else if (id === undefined) {
+        return new InsightError("ID String cannot be undefined");
+    } else if (id === "") {
+        return new InsightError("ID String cannot be an empty string");
+    } else if (/^\s*$/.test(id)) {
+        return new InsightError("ID String cannot be all whitespace");
+    } else if ( !/^[^_]*$/.test(id)) {
+        return new InsightError("ID String cannot contain underscores");
+    }
+    return id;
 }

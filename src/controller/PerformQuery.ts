@@ -1,6 +1,7 @@
 import {InsightDataset, InsightDatasetKind, InsightError} from "./IInsightFacade";
 import InsightFacade from "./InsightFacade";
 import {ICourseDataset} from "./ICourseDataset";
+import {validateIDString} from "./AddDatasetHelpers";
 
 export function performValidQuery(query: any, dataset: ICourseDataset): number[] {
     const mult = ["AND", "OR"];
@@ -49,6 +50,7 @@ function findArray(compared: string, comparison: string, value: any, dataset: IC
     // By the time this function is reached, any = string for IS, else number
     return [];
 }
+
 export function validateQuery(query: any): null | string {
     let dataID: string;
     if (!query.hasOwnProperty("WHERE")) {
@@ -230,20 +232,4 @@ export function typeMatchValidID(key: string): string[] | null {        // retur
         }
     }
     return null;
-}
-
-function validateIDString(id: string): string | InsightError {
-    // TODO: make it stop yelling on duplicate code...? :)))
-    if (id === null) {
-        return new InsightError("ID String cannot be null");
-    } else if (id === undefined) {
-        return new InsightError("ID String cannot be undefined");
-    } else if (id === "") {
-        return new InsightError("ID String cannot be an empty string");
-    } else if (/^\s*$/.test(id)) {
-        return new InsightError("ID String cannot be all whitespace");
-    } else if ( !/^[^_]*$/.test(id)) {
-        return new InsightError("ID String cannot contain underscores");
-    }
-    return id;
 }
