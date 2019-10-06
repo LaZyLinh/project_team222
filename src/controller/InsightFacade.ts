@@ -7,11 +7,11 @@ import PerformQuery from "./PerformQuery";
 import {JSZipObject} from "jszip";
 import {ICourse, ICourseDataset, IDatabase} from "./ICourseDataset";
 import {
-    addCoursesToDataset,
+    addCoursesToDataset, deleteDatasetFromDisk,
     ICourseHelper,
-    idListHelper, loadFromDiskIfNecessary,
+    idListHelper, idsInMemory, loadAllFromDisk, loadFromDiskIfNecessary,
     newDatasetHelper,
-    saveDatasetToDisk
+    saveDatasetToDisk,
 } from "./AddDatasetHelpers";
 
 /**
@@ -64,6 +64,7 @@ export default class InsightFacade extends PerformQuery implements IInsightFacad
                 }
                 if (newDataset.courses.length !== 0) {
                     this.database.datasets.push(newDataset);
+                    // sortHelperArrays(newDataset);
                     saveDatasetToDisk(newDataset);
                     return Promise.resolve();
                 } else {
@@ -84,20 +85,23 @@ export default class InsightFacade extends PerformQuery implements IInsightFacad
         if (validatedId instanceof InsightError) {
             return Promise.reject(validatedId);
         }
-        loadFromDiskIfNecessary(this, id);
-        let idIndex: number = idListHelper(this.database).indexOf(id);
+        let idIndex: number = idsInMemory(this.database).indexOf(id);
         if (idIndex > -1) {
             // remove the dataset
             let foundId: string = this.database.datasets[idIndex].id;
             this.database.datasets.splice(idIndex);
+            deleteDatasetFromDisk(id); // because we still need to clear the disk!
             return Promise.resolve(foundId);
-        } else {
+            // what if the dataset is on the disk? Just in case...
+        } else if (deleteDatasetFromDisk(id)) {
+                return Promise.resolve(id);
+            } else {
             return Promise.reject(new NotFoundError("dataset id not found"));
         }
     }
 
     public performQuery(query: any): Promise <any[]> {
-        let datasetID: string;
+        let datasetID: string = "";
 
         // TODO: find datasetID
         if (!this.validateQuery(query)) {
@@ -106,7 +110,7 @@ export default class InsightFacade extends PerformQuery implements IInsightFacad
         if (this.database.datasets === []) {
             return Promise.reject(new InsightError("No Dataset added"));
         }
-
+        loadFromDiskIfNecessary(this, datasetID);
         const whereCont = query["WHERE"];   // make sure where only takes 1 FILTER and is the right type
         const optionCont = query["OPTIONS"];
         const columnCont = optionCont["COLUMNS"];
@@ -117,6 +121,7 @@ export default class InsightFacade extends PerformQuery implements IInsightFacad
 
     public listDatasets(): Promise<InsightDataset[]> {
         return new Promise((resolve, reject) => {
+            loadAllFromDisk(this);
             let result: InsightDataset[] = [];
             for (let dataset of this.database.datasets) {
                 let newObj: InsightDataset = {
