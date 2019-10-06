@@ -1,7 +1,8 @@
 import {InsightDataset, InsightDatasetKind, InsightError} from "./IInsightFacade";
 import InsightFacade from "./InsightFacade";
+import {ICourseDataset} from "./ICourseDataset";
 
-export function performValidQuery(query: any, dataset: InsightDataset): number[] {
+export function performValidQuery(query: any, dataset: ICourseDataset): number[] {
     const mult = ["AND", "OR"];
     const mSingle = ["GT", "LT", "EQ"];
     const sSingle = ["IS"];
@@ -30,19 +31,12 @@ export function performValidQuery(query: any, dataset: InsightDataset): number[]
                                 result = [...new Set(result)];
                             }
                         }
-                    } else {result.concat(this.performQueryHelper(more, dataset)); }
+                    } else {result.concat(performValidQuery(more, dataset)); }
                 }
                 if (mSingle.includes(key) || sSingle.includes(key)) {
                     for (const [field, value] of Object.entries(query[key])) {
-                        if (mSingle.includes(key)) {
-                            if (typeMatchValidID(field)[0] !== "number" && !this.valueMatchKey([field, value])) {
-                                break;
-                            }
-                        } else {
-                            if (typeMatchValidID(field)[0] !== "string" && !this.valueMatchKey([field, value])) {
-                                break;
-                            }
-                        }
+                        const compared = typeMatchValidID(field)[2];
+                        result = [...new Set(result.concat(findArray(compared, key, value, dataset)))];
                     }
                 }
             }}
@@ -50,6 +44,11 @@ export function performValidQuery(query: any, dataset: InsightDataset): number[]
     return result;
 }
 
+function findArray(compared: string, comparison: string, value: any, dataset: ICourseDataset): number[] {
+    // TODO: compared: year/instructor etc. Comparison in [GT, LT, EQ, IS]. Return index array fit comparison.
+    // By the time this function is reached, any = string for IS, else number
+    return [];
+}
 export function validateQuery(query: any): null | string {
     let dataID: string;
     if (!query.hasOwnProperty("WHERE")) {
@@ -209,15 +208,15 @@ export function valueMatchKey([key, value]: [string, any]) {
     return false;
 }
 
-export function typeMatchValidID(key: string): string[] | null {
+export function typeMatchValidID(key: string): string[] | null {        // returns [type, datasetID, field ie year/etc]
     let mRegex = [/_year$/, /_avg$/, /_pass$/, /_fail$/, /_audit$/];
     let sRegex = [/_dept$/, /_id$/, /_instructor$/, /_title$/, /_uuid$/];
-    let result = [];
     for (const rx of mRegex) {
         if (rx.test(key)) {
             let id = validateIDString(key.replace(rx, ""));
             if (typeof id === "string") {
-                return ["number", id];
+                let comparedKey = key.replace(id + "_", "");
+                return ["number", id, comparedKey];
             }
         }
     }
@@ -225,14 +224,16 @@ export function typeMatchValidID(key: string): string[] | null {
         if (rx.test(key)) {
             let id = validateIDString(key.replace(rx, ""));
             if (typeof id === "string") {
-                return ["string", id];
+                let comparedKey = key.replace(id + "_", "");
+                return ["string", id, comparedKey];
             }
         }
     }
     return null;
 }
 
-export function validateIDString(id: string): string | InsightError {
+function validateIDString(id: string): string | InsightError {
+    // TODO: make it stop yelling on duplicate code...? :)))
     if (id === null) {
         return new InsightError("ID String cannot be null");
     } else if (id === undefined) {

@@ -886,13 +886,13 @@ describe("InsightFacade Add/Remove Dataset from Linh's d0", function () {
     });
 
     it("typeOfKey return correct type on number", function () {
-        const expected = ["number", "courses"];
+        const expected = ["number", "courses", "year"];
         const actual = typeMatchValidID("courses_year");
         expect(actual).to.deep.equal(expected);
     });
 
     it("typeMatchValidID return correct type on string", function () {
-        const expected = ["string", "courses"];
+        const expected = ["string", "courses", "dept"];
         const actual = typeMatchValidID("courses_dept");
         expect(actual).to.deep.equal(expected);
     });

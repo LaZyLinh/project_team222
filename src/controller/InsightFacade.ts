@@ -115,9 +115,12 @@ export default class InsightFacade implements IInsightFacade {
             return Promise.reject(new InsightError());
         }
 
-        let dataset: InsightDataset = this.database.datasets[0];    // TODO: find dataset
+        let dataset: ICourseDataset = this.database.datasets[0];    // TODO: find dataset
         const whereCont = query["WHERE"];
         const array = performValidQuery(whereCont, dataset); // return array of index
+
+        // TODO: turn index array into actual result array of courses, then return
+
         return Promise.resolve(array);
 
     }
