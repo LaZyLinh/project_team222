@@ -950,7 +950,7 @@ describe("InsightFacade Add/Remove Dataset from Linh's d0", function () {
                 ORDER: "courses_avg"
             }
         };
-        const expected = true;
+        const expected = "courses";
         const actual = validateQuery(obj);
         expect(actual).to.equal(expected);
     });

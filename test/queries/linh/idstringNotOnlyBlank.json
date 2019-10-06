@@ -14,6 +14,6 @@
             "ORDER": "u b c_avg"
         }
     },
-    "isQueryValid": true,
-    "result": []
+    "isQueryValid": false,
+    "result": "InsightError"
 }

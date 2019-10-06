@@ -12,7 +12,7 @@ import {
     newDatasetHelper,
     saveDatasetToDisk,
 } from "./AddDatasetHelpers";
-import {validateQuery} from "./PerformQuery";
+import {validateQuery, performValidQuery} from "./PerformQuery";
 
 /**
  * This is the main programmatic entry point for the project.
@@ -100,22 +100,25 @@ export default class InsightFacade implements IInsightFacade {
     }
 
     public performQuery(query: any): Promise <any[]> {
-        let datasetID: string = "";
 
-        // TODO: find datasetID
-        if (!validateQuery(query)) {
+        if (validateQuery(query) === null) {
             return Promise.reject(new InsightError("Invalid Query"));
         }
+        const datasetID: string = validateQuery(query);
+
         if (this.database.datasets === []) {
             return Promise.reject(new InsightError("No Dataset added"));
         }
         loadFromDiskIfNecessary(this, datasetID);
-        const whereCont = query["WHERE"];   // make sure where only takes 1 FILTER and is the right type
-        const optionCont = query["OPTIONS"];
-        const columnCont = optionCont["COLUMNS"];
 
-        return Promise.resolve([]);
-        // let result = this.performQueryHelper(whereCont, datasetID);
+        if (!idsInMemory(this.database).includes(datasetID)) {
+            return Promise.reject(new InsightError());
+        }
+
+        let dataset: InsightDataset = this.database.datasets[0];    // TODO: find dataset
+        const whereCont = query["WHERE"];
+        const array = performValidQuery(whereCont, dataset); // return array of index
+        return Promise.resolve(array);
 
     }
 
