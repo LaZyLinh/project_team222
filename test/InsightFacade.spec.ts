@@ -4,6 +4,7 @@ import {InsightDataset, InsightDatasetKind, InsightError, NotFoundError} from ".
 import InsightFacade from "../src/controller/InsightFacade";
 import Log from "../src/Util";
 import TestUtil from "./TestUtil";
+import {whereHandler, valueMatchKey, typeMatchValidID, validateQuery, validateIS} from "../src/controller/PerformQuery";
 
 // This should match the schema given to TestUtil.validate(..) in TestUtil.readTestQueries(..)
 // except 'filename' which is injected when the file is read.
@@ -860,57 +861,81 @@ describe("InsightFacade Add/Remove Dataset from Linh's d0", function () {
     });
 
     // Test for validateQueries and helpers
-    it("typeOfKey return correct type on number", function () {
-        const expected = "number";
-        const actual = insightFacade.typeOfKey("courses_year");
-        expect(actual).to.deep.equal(expected);
+    it("validateIS on *", function () {
+        const expected = true;
+        const actual = validateIS("*");
+        expect(actual).to.equal(expected);
     });
 
-    it("typeOfKey return correct type on string", function () {
+    it("validateIS on **", function () {
+        const expected = true;
+        const actual = validateIS("**");
+        expect(actual).to.equal(expected);
+    });
+
+    it("validateIS on string", function () {
+        const expected = true;
+        const actual = validateIS("adhe");
+        expect(actual).to.equal(expected);
+    });
+
+    it("validateIS on ***", function () {
         const expected = false;
-        const actual = insightFacade.typeOfKey("courses_dept") !== ("string" || "number");
+        const actual = validateIS("***");
+        expect(actual).to.equal(expected);
+    });
+
+    it("typeOfKey return correct type on number", function () {
+        const expected = ["number", "courses"];
+        const actual = typeMatchValidID("courses_year");
         expect(actual).to.deep.equal(expected);
     });
 
-    it("typeOfKey return correct type on wrong keys", function () {
+    it("typeMatchValidID return correct type on string", function () {
+        const expected = ["string", "courses"];
+        const actual = typeMatchValidID("courses_dept");
+        expect(actual).to.deep.equal(expected);
+    });
+
+    it("typeMatchValidID return correct type on wrong keys", function () {
         let expected = null;
-        const actual = insightFacade.typeOfKey("courses_instructorst");
+        const actual = typeMatchValidID("courses_instructorst");
         expect(actual).to.deep.equal(expected);
     });
 
     it("valueMatchKey should work for string", function () {
         const expected = true;
-        const actual = insightFacade.valueMatchKey(["course_id", "420C"]);
+        const actual = valueMatchKey(["course_id", "420C"]);
         expect(actual).to.deep.equal(expected);
     });
 
     it("valueMatchKey should work for number", function () {
         const expected = true;
-        const actual = insightFacade.valueMatchKey(["course_pass", 20]);
+        const actual = valueMatchKey(["course_pass", 20]);
         expect(actual).to.deep.equal(expected);
     });
 
     it("valueMatchKey should reject unmatched set", function () {
         const expected = false;
-        const actual = insightFacade.valueMatchKey(["course_pass", "lol"]);
+        const actual = valueMatchKey(["course_pass", "lol"]);
         expect(actual).to.deep.equal(expected);
     });
 
     it("valueMatchKey should reject unmatched set reversed", function () {
         const expected = false;
-        const actual = insightFacade.valueMatchKey(["course_title", 600]);
+        const actual = valueMatchKey(["course_title", 600]);
         expect(actual).to.deep.equal(expected);
     });
 
     it("valueMatchKey should reject null value", function () {
         const expected = false;
-        const actual = insightFacade.valueMatchKey(["course_pass", null]);
+        const actual = valueMatchKey(["course_pass", null]);
         expect(actual).to.deep.equal(expected);
     });
 
     it("valueMatchKey should reject all null", function () {
         const expected = false;
-        const actual = insightFacade.valueMatchKey([null, null]);
+        const actual = valueMatchKey([null, null]);
         expect(actual).to.deep.equal(expected);
     });
 
@@ -926,7 +951,7 @@ describe("InsightFacade Add/Remove Dataset from Linh's d0", function () {
             }
         };
         const expected = true;
-        const actual = insightFacade.validateQuery(obj);
+        const actual = validateQuery(obj);
         expect(actual).to.equal(expected);
     });
 
@@ -956,7 +981,7 @@ describe("InsightFacade Add/Remove Dataset from Linh's d0", function () {
         };
 
         const expected = 0;
-        const actual = insightFacade.whereHandler(obj);
+        const actual = whereHandler(obj, "courses");
         expect(actual).to.equal(expected);
     });
 
@@ -968,8 +993,30 @@ describe("InsightFacade Add/Remove Dataset from Linh's d0", function () {
         };
 
         const expected = 0;
-        const actual = insightFacade.whereHandler(obj);
+        const actual = whereHandler(obj, "courses");
         expect(actual).to.equal(expected);
+    });
+
+    it("Test validate with ORDER not in COLUMN", function () {
+        let obj = {
+            WHERE: {
+                GT: {
+                    courses_avg: 97
+                }
+            },
+            OPTIONS: {
+                COLUMNS: [
+                    "courses_dept",
+                    "courses_avg"
+                ],
+                ORDER: "courses_year"
+            }
+        };
+        return insightFacade.performQuery(obj).then((result: any[]) => {
+            expect.fail();
+        }).catch((err: any) => {
+            expect(err).to.be.instanceOf(InsightError);
+        });
     });
 
     it("Test VERY Complex structures", function () {
@@ -1014,7 +1061,7 @@ describe("InsightFacade Add/Remove Dataset from Linh's d0", function () {
         };
 
         const expected = 0;
-        const actual = insightFacade.whereHandler(obj);
+        const actual = whereHandler(obj, "courses");
         expect(actual).to.deep.equal(expected);
     });
 });

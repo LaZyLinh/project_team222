@@ -3,7 +3,6 @@ import {IInsightFacade, InsightDataset, InsightDatasetKind, InsightError, NotFou
 import * as JSZip from "jszip";
 import {queryParser} from "restify";
 import * as fs from "fs";
-import PerformQuery from "./PerformQuery";
 import {JSZipObject} from "jszip";
 import {ICourse, ICourseDataset, IDatabase} from "./ICourseDataset";
 import {
@@ -13,20 +12,20 @@ import {
     newDatasetHelper,
     saveDatasetToDisk,
 } from "./AddDatasetHelpers";
+import {validateQuery} from "./PerformQuery";
 
 /**
  * This is the main programmatic entry point for the project.
  * Method documentation is in IInsightFacade
  *
  */
-export default class InsightFacade extends PerformQuery implements IInsightFacade {
+export default class InsightFacade implements IInsightFacade {
 
     public database: IDatabase = {
         datasets: [],
     };
 
     constructor() {
-        super();
         Log.trace("InsightFacadeImpl::init()");
     }
 
@@ -104,7 +103,7 @@ export default class InsightFacade extends PerformQuery implements IInsightFacad
         let datasetID: string = "";
 
         // TODO: find datasetID
-        if (!this.validateQuery(query)) {
+        if (!validateQuery(query)) {
             return Promise.reject(new InsightError("Invalid Query"));
         }
         if (this.database.datasets === []) {
@@ -115,6 +114,7 @@ export default class InsightFacade extends PerformQuery implements IInsightFacad
         const optionCont = query["OPTIONS"];
         const columnCont = optionCont["COLUMNS"];
 
+        return Promise.resolve([]);
         // let result = this.performQueryHelper(whereCont, datasetID);
 
     }
@@ -133,7 +133,7 @@ export default class InsightFacade extends PerformQuery implements IInsightFacad
         });
     }
 
-    private validateIDString(id: string): string | InsightError {
+    public validateIDString(id: string): string | InsightError {
         if (id === null) {
             return new InsightError("ID String cannot be null");
         } else if (id === undefined) {
