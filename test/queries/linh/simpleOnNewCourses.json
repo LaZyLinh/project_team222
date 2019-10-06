@@ -1,0 +1,69 @@
+{
+    "title": "SELECT dept, avg WHERE avg > 97",
+    "query": {
+        "WHERE": {
+            "GT": {
+                "newCourses_avg":97
+            }
+        },
+        "OPTIONS": {
+            "COLUMNS": [
+                "newCourses_dept",
+                "newCourses_avg"
+            ],
+            "ORDER": "newCourses_avg"
+        }
+    },
+    "isQueryValid": true,
+    "result": [
+        { "newCourses_dept": "epse", "newCourses_avg": 97.09 },
+        { "newCourses_dept": "math", "newCourses_avg": 97.09 },
+        { "newCourses_dept": "math", "newCourses_avg": 97.09 },
+        { "newCourses_dept": "epse", "newCourses_avg": 97.09 },
+        { "newCourses_dept": "math", "newCourses_avg": 97.25 },
+        { "newCourses_dept": "math", "newCourses_avg": 97.25 },
+        { "newCourses_dept": "epse", "newCourses_avg": 97.29 },
+        { "newCourses_dept": "epse", "newCourses_avg": 97.29 },
+        { "newCourses_dept": "nurs", "newCourses_avg": 97.33 },
+        { "newCourses_dept": "nurs", "newCourses_avg": 97.33 },
+        { "newCourses_dept": "epse", "newCourses_avg": 97.41 },
+        { "newCourses_dept": "epse", "newCourses_avg": 97.41 },
+        { "newCourses_dept": "cnps", "newCourses_avg": 97.47 },
+        { "newCourses_dept": "cnps", "newCourses_avg": 97.47 },
+        { "newCourses_dept": "math", "newCourses_avg": 97.48 },
+        { "newCourses_dept": "math", "newCourses_avg": 97.48 },
+        { "newCourses_dept": "educ", "newCourses_avg": 97.5 },
+        { "newCourses_dept": "nurs", "newCourses_avg": 97.53 },
+        { "newCourses_dept": "nurs", "newCourses_avg": 97.53 },
+        { "newCourses_dept": "epse", "newCourses_avg": 97.67 },
+        { "newCourses_dept": "epse", "newCourses_avg": 97.69 },
+        { "newCourses_dept": "epse", "newCourses_avg": 97.78 },
+        { "newCourses_dept": "crwr", "newCourses_avg": 98 },
+        { "newCourses_dept": "crwr", "newCourses_avg": 98 },
+        { "newCourses_dept": "epse", "newCourses_avg": 98.08 },
+        { "newCourses_dept": "nurs", "newCourses_avg": 98.21 },
+        { "newCourses_dept": "nurs", "newCourses_avg": 98.21 },
+        { "newCourses_dept": "epse", "newCourses_avg": 98.36 },
+        { "newCourses_dept": "epse", "newCourses_avg": 98.45 },
+        { "newCourses_dept": "epse", "newCourses_avg": 98.45 },
+        { "newCourses_dept": "nurs", "newCourses_avg": 98.5 },
+        { "newCourses_dept": "nurs", "newCourses_avg": 98.5 },
+        { "newCourses_dept": "epse", "newCourses_avg": 98.58 },
+        { "newCourses_dept": "nurs", "newCourses_avg": 98.58 },
+        { "newCourses_dept": "nurs", "newCourses_avg": 98.58 },
+        { "newCourses_dept": "epse", "newCourses_avg": 98.58 },
+        { "newCourses_dept": "epse", "newCourses_avg": 98.7 },
+        { "newCourses_dept": "nurs", "newCourses_avg": 98.71 },
+        { "newCourses_dept": "nurs", "newCourses_avg": 98.71 },
+        { "newCourses_dept": "eece", "newCourses_avg": 98.75 },
+        { "newCourses_dept": "eece", "newCourses_avg": 98.75 },
+        { "newCourses_dept": "epse", "newCourses_avg": 98.76 },
+        { "newCourses_dept": "epse", "newCourses_avg": 98.76 },
+        { "newCourses_dept": "epse", "newCourses_avg": 98.8 },
+        { "newCourses_dept": "spph", "newCourses_avg": 98.98 },
+        { "newCourses_dept": "spph", "newCourses_avg": 98.98 },
+        { "newCourses_dept": "cnps", "newCourses_avg": 99.19 },
+        { "newCourses_dept": "math", "newCourses_avg": 99.78 },
+        { "newCourses_dept": "math", "newCourses_avg": 99.78 }
+    ]
+}

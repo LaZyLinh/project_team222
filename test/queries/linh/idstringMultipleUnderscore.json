@@ -1,0 +1,19 @@
+{
+    "title": "SELECT dept, avg WHERE avg > 97",
+    "query": {
+        "WHERE": {
+            "GT": {
+                "___avg":97
+            }
+        },
+        "OPTIONS": {
+            "COLUMNS": [
+                "___dept",
+                "___avg"
+            ],
+            "ORDER": "___avg"
+        }
+    },
+    "isQueryValid": false,
+    "result": "InsightError"
+}

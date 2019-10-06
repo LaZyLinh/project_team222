@@ -1,20 +1,25 @@
 import Log from "../Util";
 import {IInsightFacade, InsightDataset, InsightDatasetKind, InsightError, NotFoundError} from "./IInsightFacade";
 import * as JSZip from "jszip";
+import {queryParser} from "restify";
+import * as fs from "fs";
+import PerformQuery from "./PerformQuery";
 import {JSZipObject} from "jszip";
+import {ICourse, ICourseDataset, IDatabase} from "./ICourseDataset";
 
 /**
  * This is the main programmatic entry point for the project.
  * Method documentation is in IInsightFacade
  *
  */
-export default class InsightFacade implements IInsightFacade {
+export default class InsightFacade extends PerformQuery implements IInsightFacade {
 
     private database: IDatabase = {
         datasets: [],
     };
 
     constructor() {
+        super();
         Log.trace("InsightFacadeImpl::init()");
     }
 
@@ -163,6 +168,10 @@ export default class InsightFacade implements IInsightFacade {
     }
 
     public performQuery(query: any): Promise <any[]> {
+        if (!this.validateQuery(query)) {
+            const error = new InsightError("Invalid Query");
+            return Promise.reject(error);
+        }
         return Promise.reject("Not implemented.");
     }
 
@@ -193,45 +202,4 @@ export default class InsightFacade implements IInsightFacade {
         }
         return id;
     }
-}
-
-interface ICourse {
-    year: number;
-    avg: number;
-    pass: number;
-    fail: number;
-    audit: number;
-    dept: string;
-    id: string;
-    instructor: string;
-    title: string;
-    uuid: string;
-}
-
-interface ICourseDataset extends InsightDataset {
-    courses: ICourse[];
-    year: ImKeyEntry[];
-    avg: ImKeyEntry[];
-    pass: ImKeyEntry[];
-    fail: ImKeyEntry[];
-    audit: ImKeyEntry[];
-    dept: IsKeyEntry[];
-    course_ids: IsKeyEntry[];
-    instructor: IsKeyEntry[];
-    title: IsKeyEntry[];
-    uuid: IsKeyEntry[];
-}
-
-interface IDatabase {
-    datasets: ICourseDataset[];
-}
-
-interface ImKeyEntry {
-    courseIndex: number;
-    mKey: number;
-}
-
-interface IsKeyEntry {
-    courseIndex: number;
-    sKey: string;
 }
