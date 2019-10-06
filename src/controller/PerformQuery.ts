@@ -1,10 +1,50 @@
-import {InsightError} from "./IInsightFacade";
+import {InsightDatasetKind, InsightError} from "./IInsightFacade";
+import InsightFacade from "./InsightFacade";
 
 export default class PerformQuery {
-    public validateQuery(query: any): boolean {
-        const mField = ["year", "avg", "pass", "fail", "audit"];
-        const sField = ["dept", "id", "instructor", "title", "uuid"];
 
+    /*
+    public performQueryHelper(query: any, datasetID: string): number[] {
+        const mult = ["AND", "OR"];
+        const mSingle = ["GT", "LT", "EQ"];
+        const sSingle = ["IS"];
+        const neg = "NOT";
+        let result: number[];
+
+        if (query !== null && typeof query === "object") {
+            if (Array.isArray(Object.keys(query))) {
+                for (const[key, more] of Object.entries(query)) {
+                    if (key === neg) {
+                        let fullSet = Array.from(Array(InsightFacade.database.datasets));
+                        result.concat(this.performQueryHelper(more, datasetID));
+                    }
+                    if (mult.includes(key)) {
+                        if (Array.isArray(more)) {
+                            for (const clause of more) {
+                                result.concat(this.performQueryHelper(clause, datasetID));
+                            }
+                        } else {result.concat(this.performQueryHelper(more, datasetID)); }
+                    }
+                    if (mSingle.includes(key) || sSingle.includes(key)) {
+                        for (const [field, value] of Object.entries(query[key])) {
+                            if (mSingle.includes(key)) {
+                                if (this.typeOfKey(field) !== "number" && !this.valueMatchKey([field, value])) {
+                                    break;
+                                }
+                            } else {
+                                if (this.typeOfKey(field) !== "string" && !this.valueMatchKey([field, value])) {
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }}
+        }
+        return result;
+    }
+    */
+
+    public validateQuery(query: any): boolean {
         if (!query.hasOwnProperty("WHERE")) {
             return false;
         } else if (!query.hasOwnProperty("OPTIONS")) {
@@ -12,14 +52,11 @@ export default class PerformQuery {
         } else if (!query["OPTIONS"].hasOwnProperty("COLUMNS")) {
             return false;
         }
-
         const whereCont = query["WHERE"];   // make sure where only takes 1 FILTER and is the right type
         const optionCont = query["OPTIONS"];
         const columnCont = optionCont["COLUMNS"];   // should be string[]
 
-        if (whereCont === null || optionCont === null || columnCont === null) {
-            return false; }
-
+        if (whereCont === null || optionCont === null || columnCont === null) {return false; }
         // dealing with OPTION section
         if (Array.isArray(columnCont) && columnCont.length === 0) {
             return false;
@@ -38,7 +75,6 @@ export default class PerformQuery {
                 return false;
             }
         }
-
         // dealing with WHERE section
         if (Object.keys(whereCont).length !== 0) {            // if WHERE: {}, all good!
             if (this.whereHandler(whereCont) > 0) {
@@ -46,7 +82,6 @@ export default class PerformQuery {
             } else {return true; }
         }
         return true;
-
     }
 
     public whereHandler(item: any): number {

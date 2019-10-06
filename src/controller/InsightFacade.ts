@@ -14,7 +14,7 @@ import {ICourse, ICourseDataset, IDatabase} from "./ICourseDataset";
  */
 export default class InsightFacade extends PerformQuery implements IInsightFacade {
 
-    private database: IDatabase = {
+    public database: IDatabase = {
         datasets: [],
     };
 
@@ -168,11 +168,22 @@ export default class InsightFacade extends PerformQuery implements IInsightFacad
     }
 
     public performQuery(query: any): Promise <any[]> {
+        let datasetID: string;
+
+        // TODO: find datasetID
         if (!this.validateQuery(query)) {
-            const error = new InsightError("Invalid Query");
-            return Promise.reject(error);
+            return Promise.reject(new InsightError("Invalid Query"));
         }
-        return Promise.reject("Not implemented.");
+        if (this.database.datasets === []) {
+            return Promise.reject(new InsightError("No Dataset added"));
+        }
+
+        const whereCont = query["WHERE"];   // make sure where only takes 1 FILTER and is the right type
+        const optionCont = query["OPTIONS"];
+        const columnCont = optionCont["COLUMNS"];
+
+        // let result = this.performQueryHelper(whereCont, datasetID);
+
     }
 
     public listDatasets(): Promise<InsightDataset[]> {
