@@ -57,7 +57,7 @@ export function findArray(compared: string, comparison: string, value: any, data
     } else {
         let datasetArray: IsKeyEntry[] = getIsKeyArray(dataset, compared);
         if (comparison === "IS") {
-            isHelper(datasetArray, value);
+            return isHelper(datasetArray, value);
         } else {
             throw new InsightError("bad 'compared' in findArray");
         }
@@ -72,7 +72,7 @@ function isHelper(comparedArray: IsKeyEntry[], value: string): number[] {
     if (value.replace("*", "") === value) {
         regex = RegExp(value);
     } else {
-        regex = RegExp("^" + value.replace("*", ".*") + "$", "g");
+        regex = RegExp("^" + value.replace(RegExp("[*]", "g"), ".*") + "$");
     }
 
     for (const s of comparedArray) {
