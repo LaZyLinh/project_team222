@@ -15,8 +15,9 @@ export function performValidQuery(query: any, dataset: ICourseDataset): number[]
         if (Array.isArray(Object.keys(query))) {
             for (const[key, more] of Object.entries(query)) {
                 if (key === neg) {
-                    let fullSet = Array.from(Array(dataset.numRows));   // create array [1, 2, .. numRows]
-                    result = fullSet.filter((value) => !performValidQuery(more, dataset).includes(value));
+                    let fullSet = Array.from(Array(dataset.numRows).keys());   // create array [1, 2, .. numRows]
+                    const tmp: number[] = performValidQuery(more, dataset);
+                    result = fullSet.filter((value) => !tmp.includes(value));
                 }
                 if (mult.includes(key)) {
                     if (Array.isArray(more)) {

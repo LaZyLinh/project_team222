@@ -61,6 +61,7 @@ export function ICourseHelper(course: any): ICourse[] {
         Professor: "string", // instructor -> Professor
         Title: "string", // title -> Title
         id: "number", // uuid -> id
+        Section: "string"
     };
     for (let item of course.result) {
         let allValid: boolean = true;
@@ -85,6 +86,9 @@ export function ICourseHelper(course: any): ICourse[] {
             title: item.Title,
             uuid: String(item.id),
         };
+        if (item.Section === "overall") {
+            newCourse.year = 1900;
+        }
         result.push(newCourse);
     }
     return result;
