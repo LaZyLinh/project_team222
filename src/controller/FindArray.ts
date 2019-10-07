@@ -54,90 +54,34 @@ export function findArray(compared: string, comparison: string, value: any, data
         } else {
             throw new InsightError("bad 'comparison' in findArray");
         }
-    } else if (typeof value === "string") {
+    } else {
         let datasetArray: IsKeyEntry[] = getIsKeyArray(dataset, compared);
         if (comparison === "IS") {
-            let valueWithoutWildcards = value.match(/[^*].*[^*]/)[0];
-            if (valueWithoutWildcards === value) {
-                // no wildcards
-                return datasetArray.filter(((s) => s.sKey === value)).map((s: IsKeyEntry) => s.courseIndex);
-            } else if (value.match(/[*].*[^*]/) !== null && value.match(/[*].*[^*]/)[0] === value) {
-                // wildcard at start
-                return datasetArray
-                    .filter((s) => RegExp("^.*" + valueWithoutWildcards + "$").test(s.sKey))
-                    .map((s: IsKeyEntry) => s.courseIndex);
-            } else if (value.match(/[^*].*[*]/) !== null && value.match(/[^*].*[*]/)[0] === value) {
-                // wildcard at end
-                return datasetArray
-                    .filter((s) => RegExp("^" + valueWithoutWildcards + ".*$").test(s.sKey))
-                    .map((s: IsKeyEntry) => s.courseIndex);
-            } else if (value.match(/[*].*[*]/) !== null && value.match(/[*].*[*]/)[0] === value) {
-                // wildcard at both ends
-                return datasetArray
-                    .filter((s) => RegExp("^.*" + valueWithoutWildcards + ".*$").test(s.sKey))
-                    .map((s: IsKeyEntry) => s.courseIndex);
-            }
+            isHelper(datasetArray, value);
         } else {
             throw new InsightError("bad 'compared' in findArray");
         }
-    } else {
-        // impossible?
-        throw new InsightError("bad value in findArray");
     }
     return [];
 }
 
-/*function isHelper(comparedArray: IsKeyEntry[], value: string): number[] {
+function isHelper(comparedArray: IsKeyEntry[], value: string): number[] {
     let result: number[] = [];
-    let valueWithoutWildcards = value.match(/[^*].*[^*]/)[0];
-    let noWild = valueWithoutWildcards === value;
-    const middle = comparedArray[Math.floor(comparedArray.length / 2)].sKey;
-    if (!/^[*]/.test(valueWithoutWildcards)) {
-        // doesn't begin with *
-        if (noWild) {
-            if (value > middle) {
-                for (const s of comparedArray) {
-                    if (s.sKey < value) {
-                        break;
-                    }
-                    if (s.sKey === value) {
-                        result.push(s.courseIndex);
-                    }
-                }
-            } else {
-                for (let i = comparedArray.length - 1; i > -1; i--) {
-                    if (comparedArray[i].sKey > value) {
-                        break;
-                    }
-                    if (comparedArray[i].sKey === value) {
-                        result.push(comparedArray[i].courseIndex);
-                    }
-                }
-            }
-        } else {
-            if (value > middle) {
-            for (const s of comparedArray) {
-                const tempVal = s.sKey.match(valueWithoutWildcards + ".*")[0];
-                if (tempVal === s.sKey) {
-                    break;
-                }
-                if (s.sKey.match(valueWithoutWildcards + ".*")[0] === s.sKey) {
-                    result.push(s.courseIndex);
-                }
-            }
-        } else {
-            for (let i = comparedArray.length - 1; i > -1; i--) {
-                const key = comparedArray[i].sKey;
-                if (key.match(valueWithoutWildcards + ".*")[0] > key) {
-                    break;
-                }
-                if (comparedArray[i].sKey === value) {
-                    result.push(comparedArray[i].courseIndex);
-                }
-            }
-        }}
+    let regex: RegExp;
+    // if value is just string
+    if (value.replace("*", "") === value) {
+        regex = RegExp(value);
+    } else {
+        regex = RegExp("^" + value.replace("*", ".*") + "$", "g");
     }
-} */
+
+    for (const s of comparedArray) {
+        if (regex.test(s.sKey)) {
+            result.push(s.courseIndex);
+        }
+    }
+    return result;
+}
 
 function greatHelper(comparedArray: ImKeyEntry[], value: number): number[] {
     let result: number[] = [];
@@ -163,9 +107,9 @@ function lessHelper(comparedArray: ImKeyEntry[], value: number): number[] {
 
 function equalHelper(comparedArray: ImKeyEntry[], value: number): number[] {
     let result: number[] = [];
-    const middle = comparedArray[Math.floor(comparedArray.length / 2)].mKey;
-    if (value > middle) {
-        for (const m of comparedArray) {
+    // const middle = comparedArray[Math.floor(comparedArray.length / 2)].mKey;
+    // if (value > middle) {
+    for (const m of comparedArray) {
             /*if (m.mKey < value) {
                 break;
             }*/
@@ -173,16 +117,16 @@ function equalHelper(comparedArray: ImKeyEntry[], value: number): number[] {
                 result.push(m.courseIndex);
             }
         }
-    } else {
+    /* } else {
         for (let i = comparedArray.length - 1; i > -1; i--) {
             /*if (comparedArray[i].mKey > value) {
                 break;
-            }*/
+            }
             if (comparedArray[i].mKey === value) {
                 result.push(comparedArray[i].courseIndex);
             }
         }
-    }
+    } */
     return result;
 }
 
