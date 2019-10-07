@@ -239,10 +239,10 @@ export function findDatasetById(database: IDatabase, id: string): ICourseDataset
     // (because this method is only called when we already know the dataset exists and is loaded into memory.)
 }
 
-function buildResultObj(course: ICourse, columns: string[]): IResultObj {
+function buildResultObj(course: ICourse, columns: string[], id: string): IResultObj {
     let res: IResultObj = {};
     for (let key of columns) {
-        res[key] = course[key];
+        res[id + "_" + key] = course[key];
     }
     return res;
 }
@@ -250,7 +250,10 @@ function buildResultObj(course: ICourse, columns: string[]): IResultObj {
 export function formatResults(dataset: ICourseDataset, arr: number[], columns: string[], order: string): IResultObj[] {
     let res: IResultObj[] = [];
     for (let index of arr) {
-        res.push(buildResultObj(dataset.courses[index], columns));
+        res.push(buildResultObj(dataset.courses[index], columns, dataset.id));
+    }
+    if (order === "") {
+        return res;
     }
     if (["year", "avg", "pass", "fail", "audit"].includes(order)) {
         // sort by numerical order of that column:

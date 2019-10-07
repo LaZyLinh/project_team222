@@ -112,16 +112,19 @@ export default class InsightFacade implements IInsightFacade {
         return new Promise((resolve, reject) => {
             let temp = validateQuery(query);
             if (temp === null) {
-                return Promise.reject(new InsightError("Invalid Query"));
+                reject(new InsightError("Invalid Query"));
+                return;
             }
             const datasetID: string = temp;
 
             if (this.database.datasets === []) {
                 reject(new InsightError("No Dataset added"));
+                return;
             }
             loadFromDiskIfNecessary(this, datasetID);
             if (!idsInMemory(this.database).includes(datasetID)) {
                 reject(new InsightError("Dataset not found"));
+                return;
             }
 
             let dataset: ICourseDataset = findDatasetById(this.database, datasetID);
@@ -129,16 +132,21 @@ export default class InsightFacade implements IInsightFacade {
             const optionCont = query["OPTIONS"];
             const columnCont = optionCont["COLUMNS"]
                 .map((str: string) => str.replace(datasetID + "_", "")); // should be string[]
-            const order = optionCont["ORDER"].replace(datasetID + "_", ""); // should be string
+            let order = "";
+            if ( typeof optionCont["ORDER"] === "string") {
+                order = optionCont["ORDER"].replace(datasetID + "_", ""); // should be string
+            }
 
             const array = performValidQuery(whereCont, dataset); // return array of index
 
             if (array === []) {
                 resolve([]);
+                return;
             }
 
             if (array.length > 5000) {
                 reject(new ResultTooLargeError());
+                return;
             }
 
             const finalResultArray = formatResults(dataset, array, columnCont, order);
