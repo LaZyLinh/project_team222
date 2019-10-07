@@ -87,10 +87,62 @@ export function findArray(compared: string, comparison: string, value: any, data
     return [];
 }
 
+/*function isHelper(comparedArray: IsKeyEntry[], value: string): number[] {
+    let result: number[] = [];
+    let valueWithoutWildcards = value.match(/[^*].*[^*]/)[0];
+    let noWild = valueWithoutWildcards === value;
+    const middle = comparedArray[Math.floor(comparedArray.length / 2)].sKey;
+    if (!/^[*]/.test(valueWithoutWildcards)) {
+        // doesn't begin with *
+        if (noWild) {
+            if (value > middle) {
+                for (const s of comparedArray) {
+                    if (s.sKey < value) {
+                        break;
+                    }
+                    if (s.sKey === value) {
+                        result.push(s.courseIndex);
+                    }
+                }
+            } else {
+                for (let i = comparedArray.length - 1; i > -1; i--) {
+                    if (comparedArray[i].sKey > value) {
+                        break;
+                    }
+                    if (comparedArray[i].sKey === value) {
+                        result.push(comparedArray[i].courseIndex);
+                    }
+                }
+            }
+        } else {
+            if (value > middle) {
+            for (const s of comparedArray) {
+                const tempVal = s.sKey.match(valueWithoutWildcards + ".*")[0];
+                if (tempVal === s.sKey) {
+                    break;
+                }
+                if (s.sKey.match(valueWithoutWildcards + ".*")[0] === s.sKey) {
+                    result.push(s.courseIndex);
+                }
+            }
+        } else {
+            for (let i = comparedArray.length - 1; i > -1; i--) {
+                const key = comparedArray[i].sKey;
+                if (key.match(valueWithoutWildcards + ".*")[0] > key) {
+                    break;
+                }
+                if (comparedArray[i].sKey === value) {
+                    result.push(comparedArray[i].courseIndex);
+                }
+            }
+        }}
+    }
+} */
+
 function greatHelper(comparedArray: ImKeyEntry[], value: number): number[] {
     let result: number[] = [];
     for (const m of comparedArray) {
-            if (m.mKey < value) {break; }
+ //           if (m.mKey < value) {break; }
             if (m.mKey > value) {
                 result.push(m.courseIndex);
             }
@@ -101,7 +153,7 @@ function greatHelper(comparedArray: ImKeyEntry[], value: number): number[] {
 function lessHelper(comparedArray: ImKeyEntry[], value: number): number[] {
     let result: number[] = [];
     for (let i = comparedArray.length - 1; i > -1; i--) {
-        if (comparedArray[i].mKey > value) {break; }
+ //       if (comparedArray[i].mKey > value) {break; }
         if (comparedArray[i].mKey < value) {
             result.push(comparedArray[i].courseIndex);
         }
@@ -114,18 +166,18 @@ function equalHelper(comparedArray: ImKeyEntry[], value: number): number[] {
     const middle = comparedArray[Math.floor(comparedArray.length / 2)].mKey;
     if (value > middle) {
         for (const m of comparedArray) {
-            if (m.mKey < value) {
+            /*if (m.mKey < value) {
                 break;
-            }
+            }*/
             if (m.mKey === value) {
                 result.push(m.courseIndex);
             }
         }
     } else {
         for (let i = comparedArray.length - 1; i > -1; i--) {
-            if (comparedArray[i].mKey > value) {
+            /*if (comparedArray[i].mKey > value) {
                 break;
-            }
+            }*/
             if (comparedArray[i].mKey === value) {
                 result.push(comparedArray[i].courseIndex);
             }
