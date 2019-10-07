@@ -84,7 +84,7 @@ export function correctOption(columnCont: string[], optionCont: any): null | str
     }
     let id = null;
     for (const value of columnCont) {
-        if (typeMatchValidID(value) === null) {
+        if (value === null || typeMatchValidID(value) === null) {
             return null;
         } else {
             if (id === null) {

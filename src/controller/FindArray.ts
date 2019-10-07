@@ -46,11 +46,11 @@ export function findArray(compared: string, comparison: string, value: any, data
     if (typeof value === "number") {
         let datasetArray: ImKeyEntry[] = getImKeyArray(dataset, compared);
         if (comparison === "GT") {
-            return datasetArray.filter(((m) => m.mKey > value)).map((m: ImKeyEntry) => m.courseIndex);
+            return greatHelper(datasetArray, value);
         } else if (comparison === "LT") {
-            return datasetArray.filter(((m) => m.mKey < value)).map((m: ImKeyEntry) => m.courseIndex);
+            return lessHelper(datasetArray, value);
         } else if (comparison === "EQ") {
-            return datasetArray.filter(((m) => m.mKey = value)).map((m: ImKeyEntry) => m.courseIndex);
+            return equalHelper(datasetArray, value);
         } else {
             throw new InsightError("bad 'comparison' in findArray");
         }
@@ -85,6 +85,53 @@ export function findArray(compared: string, comparison: string, value: any, data
         throw new InsightError("bad value in findArray");
     }
     return [];
+}
+
+function greatHelper(comparedArray: ImKeyEntry[], value: number): number[] {
+    let result: number[] = [];
+    for (const m of comparedArray) {
+            if (m.mKey < value) {break; }
+            if (m.mKey > value) {
+                result.push(m.courseIndex);
+            }
+        }
+    return result;
+    }
+
+function lessHelper(comparedArray: ImKeyEntry[], value: number): number[] {
+    let result: number[] = [];
+    for (let i = comparedArray.length - 1; i > -1; i--) {
+        if (comparedArray[i].mKey > value) {break; }
+        if (comparedArray[i].mKey < value) {
+            result.push(comparedArray[i].courseIndex);
+        }
+    }
+    return result;
+}
+
+function equalHelper(comparedArray: ImKeyEntry[], value: number): number[] {
+    let result: number[] = [];
+    const middle = comparedArray[Math.floor(comparedArray.length / 2)].mKey;
+    if (value > middle) {
+        for (const m of comparedArray) {
+            if (m.mKey < value) {
+                break;
+            }
+            if (m.mKey === value) {
+                result.push(m.courseIndex);
+            }
+        }
+    } else {
+        for (let i = comparedArray.length - 1; i > -1; i--) {
+            if (comparedArray[i].mKey > value) {
+                break;
+            }
+            if (comparedArray[i].mKey === value) {
+                result.push(comparedArray[i].courseIndex);
+            }
+        }
+    }
+    return result;
 }
 
 // return the an array corresponding to the mKey.courseIndex's of the subset of the input array
