@@ -1,5 +1,12 @@
 import Log from "../Util";
-import {IInsightFacade, InsightDataset, InsightDatasetKind, InsightError, NotFoundError} from "./IInsightFacade";
+import {
+    IInsightFacade,
+    InsightDataset,
+    InsightDatasetKind,
+    InsightError,
+    NotFoundError,
+    ResultTooLargeError
+} from "./IInsightFacade";
 import * as JSZip from "jszip";
 import {queryParser} from "restify";
 import * as fs from "fs";
@@ -122,6 +129,14 @@ export default class InsightFacade implements IInsightFacade {
         const order = optionCont["ORDER"]; // should be string
 
         const array = performValidQuery(whereCont, dataset); // return array of index
+
+        if (array === []) {
+            return Promise.resolve([]);
+        }
+
+        if (array.length > 5000) {
+            return Promise.reject(new ResultTooLargeError());
+        }
 
         const finalResultArray = formatResults(dataset, array, columnCont, order);
 
