@@ -250,28 +250,31 @@ function buildResultObj(course: ICourse, columns: string[], id: string): IResult
 
 export function formatResults(dataset: ICourseDataset, arr: number[], columns: string[], order: string): IResultObj[] {
     let res: IResultObj[] = [];
+    let id: string = dataset.id;
     for (let index of arr) {
-        res.push(buildResultObj(dataset.courses[index], columns, dataset.id));
+        res.push(buildResultObj(dataset.courses[index], columns, id));
     }
     if (order === "") {
         return res;
     }
     if (["year", "avg", "pass", "fail", "audit"].includes(order)) {
         // sort by numerical order of that column:
+        let fieldName: string = id + "_" + order;
         res.sort((a, b) => {
             let aObj: IResultObj = a;
             let bObj: IResultObj = b;
-            let aNum: number = Number(aObj[order]);
-            let bNum: number = Number(bObj[order]);
-            return bNum - aNum;
+            let aNum: number = Number(aObj[fieldName]);
+            let bNum: number = Number(bObj[fieldName]);
+            return aNum - bNum;
         });
     } else {
         // sort by alphabetical order of that column:
+        let fieldName: string = id + "_" + order;
         res.sort((a, b) => {
             let aObj: IResultObj = a;
             let bObj: IResultObj = b;
-            let aStr: string = String(aObj[order]);
-            let bStr: string = String(bObj[order]);
+            let aStr: string = String(aObj[fieldName]);
+            let bStr: string = String(bObj[fieldName]);
             return bStr > aStr ? -1 : 1;
         });
     }
