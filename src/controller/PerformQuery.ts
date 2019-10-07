@@ -9,7 +9,7 @@ export function performValidQuery(query: any, dataset: ICourseDataset): number[]
     const mSingle = ["GT", "LT", "EQ"];
     const sSingle = ["IS"];
     const neg = "NOT";
-    let result: number[] =  [];
+    let result: number[] = [];
 
     if (query !== null && typeof query === "object") {
         if (Array.isArray(Object.keys(query))) {
@@ -26,8 +26,9 @@ export function performValidQuery(query: any, dataset: ICourseDataset): number[]
                                 if (result === []) {
                                 result.concat(performValidQuery(clause, dataset));
                                 } else {
-                                    result = [...new Set(result.filter((value) =>
-                                        performValidQuery(clause, dataset).includes(value)))]; // might not have to Set
+                                    let temp = performValidQuery(clause, dataset);
+                                    result = [...new Set(temp.filter((value) =>
+                                        result.includes(value)))]; // might not have to Set
                                 }
                             } else {
                                 result.concat(performValidQuery(clause, dataset));

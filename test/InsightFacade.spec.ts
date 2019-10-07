@@ -4,8 +4,17 @@ import {InsightDataset, InsightDatasetKind, InsightError, NotFoundError} from ".
 import InsightFacade from "../src/controller/InsightFacade";
 import Log from "../src/Util";
 import TestUtil from "./TestUtil";
-import {whereHandler, valueMatchKey, typeMatchValidID, validateQuery, validateIS} from "../src/controller/PerformQuery";
+import {
+    typeMatchValidID,
+    validateIS,
+    validateQuery,
+    valueMatchKey,
+    whereHandler,
+    performValidQuery,
+    findDatasetById
+} from "../src/controller/PerformQuery";
 import {deleteAllFromDisk} from "../src/controller/AddDatasetHelpers";
+import {ICourseDataset} from "../src/controller/ICourseDataset";
 
 // This should match the schema given to TestUtil.validate(..) in TestUtil.readTestQueries(..)
 // except 'filename' which is injected when the file is read.
@@ -1072,6 +1081,69 @@ describe("InsightFacade Add/Remove Dataset from Linh's d0", function () {
         });
     });
 
+    it("Test IS", function () {
+        let obj = {
+            WHERE: {
+                AND: [
+                    {
+                        NOT: {
+                            IS: {
+                                courses_dept: "math"
+                            }
+                        }
+                    },
+                    {
+                        GT: {
+                            courses_avg: 97
+                        }
+                    }
+                ]
+            },
+            OPTIONS: {
+                COLUMNS: [
+                    "courses_dept",
+                    "courses_avg"
+                ],
+                ORDER: "courses_avg"
+            }
+        };
+        return insightFacade.addDataset("courses", datasets["courses"], InsightDatasetKind.Courses)
+            .then((result: any[]) => {
+                let dataset: ICourseDataset = findDatasetById(insightFacade.database, "courses");
+                const answer = performValidQuery(obj, dataset);
+                expect(answer.length).to.equal(41);
+            }).catch((err: any) => {
+                expect(err).to.be.instanceOf(InsightError);
+            });
+    });
+
+    it("Test performValid", function () {
+        let obj = {
+                AND: [
+                    {
+                        NOT: {
+                            IS: {
+                                courses_dept: "math"
+                            }
+                        }
+                    },
+                    {
+                        GT: {
+                            courses_avg: 97
+                        }
+                    }
+                ]
+        };
+
+        return insightFacade.addDataset("courses", datasets["courses"], InsightDatasetKind.Courses)
+            .then((result: any[]) => {
+                let dataset: ICourseDataset = findDatasetById(insightFacade.database, "courses");
+                const answer = performValidQuery(obj, dataset);
+                expect(answer.length).to.equal(41);
+            }).catch((err: any) => {
+                expect(err).to.be.instanceOf(InsightError);
+            });
+});
     it("Test VERY Complex structures", function () {
         let obj = {
             OR: [
