@@ -241,7 +241,7 @@ export function findDatasetById(database: IDatabase, id: string): ICourseDataset
 
 function buildResultObj(course: ICourse, columns: string[]): IResultObj {
     let res: IResultObj = {};
-    for (let key in columns) {
+    for (let key of columns) {
         res[key] = course[key];
     }
     return res;

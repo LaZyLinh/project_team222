@@ -50,7 +50,8 @@ export function findArray(compared: string, comparison: string, value: any, data
         } else if (comparison === "LT") {
             return datasetArray.filter(((m) => m.mKey < value)).map((m: ImKeyEntry) => m.courseIndex);
         } else if (comparison === "EQ") {
-            return datasetArray.filter(((m) => m.mKey = value)).map((m: ImKeyEntry) => m.courseIndex);
+            let newArr =  datasetArray.filter(((m) => m.mKey === value));
+            return newArr.map((m: ImKeyEntry) => m.courseIndex);
         } else {
             throw new InsightError("bad 'comparison' in findArray");
         }
@@ -90,7 +91,7 @@ export function findArray(compared: string, comparison: string, value: any, data
 // return the an array corresponding to the mKey.courseIndex's of the subset of the input array
 // that is greater than 'value'
 // assume that input is sorted in descending order.
-/*
+
 function sortedArrayGT(input: ImKeyEntry[], value: number): number[] {
     let i = 0;
     let k = input.length - 1;
@@ -110,4 +111,4 @@ function sortedArrayGT(input: ImKeyEntry[], value: number): number[] {
         }
     }
 }
-*/
+

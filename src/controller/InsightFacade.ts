@@ -109,39 +109,41 @@ export default class InsightFacade implements IInsightFacade {
 
     public performQuery(query: any): Promise <any[]> {
 
-        if (validateQuery(query) === null) {
-            return Promise.reject(new InsightError("Invalid Query"));
-        }
-        const datasetID: string = validateQuery(query);
+        return new Promise((resolve, reject) => {
+            if (validateQuery(query) === null) {
+                reject(new InsightError("Invalid Query"));
+            }
+            const datasetID: string = validateQuery(query);
 
-        if (this.database.datasets === []) {
-            return Promise.reject(new InsightError("No Dataset added"));
-        }
-        loadFromDiskIfNecessary(this, datasetID);
-        if (!idsInMemory(this.database).includes(datasetID)) {
-            return Promise.reject(new InsightError("Dataset not found"));
-        }
+            if (this.database.datasets === []) {
+                reject(new InsightError("No Dataset added"));
+            }
+            loadFromDiskIfNecessary(this, datasetID);
+            if (!idsInMemory(this.database).includes(datasetID)) {
+                reject(new InsightError("Dataset not found"));
+            }
 
-        let dataset: ICourseDataset = findDatasetById(this.database, datasetID);
-        const whereCont = query["WHERE"];   // make sure where only takes 1 FILTER and is the right type
-        const optionCont = query["OPTIONS"];
-        const columnCont = optionCont["COLUMNS"]; // should be string[]
-        const order = optionCont["ORDER"]; // should be string
+            let dataset: ICourseDataset = findDatasetById(this.database, datasetID);
+            const whereCont = query["WHERE"];   // make sure where only takes 1 FILTER and is the right type
+            const optionCont = query["OPTIONS"];
+            const columnCont = optionCont["COLUMNS"]
+                .map((str: string) => str.replace(datasetID + "_", "")); // should be string[]
+            const order = optionCont["ORDER"].replace(datasetID + "_", ""); // should be string
 
-        const array = performValidQuery(whereCont, dataset); // return array of index
+            const array = performValidQuery(whereCont, dataset); // return array of index
 
-        if (array === []) {
-            return Promise.resolve([]);
-        }
+            if (array === []) {
+                resolve([]);
+            }
 
-        if (array.length > 5000) {
-            return Promise.reject(new ResultTooLargeError());
-        }
+            if (array.length > 5000) {
+                reject(new ResultTooLargeError());
+            }
 
-        const finalResultArray = formatResults(dataset, array, columnCont, order);
+            const finalResultArray = formatResults(dataset, array, columnCont, order);
 
-        return Promise.resolve(finalResultArray);
-
+            resolve(finalResultArray);
+        });
     }
 
     public listDatasets(): Promise<InsightDataset[]> {
