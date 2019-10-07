@@ -1083,7 +1083,6 @@ describe("InsightFacade Add/Remove Dataset from Linh's d0", function () {
 
     it("Test IS", function () {
         let obj = {
-            WHERE: {
                 AND: [
                     {
                         NOT: {
@@ -1098,14 +1097,7 @@ describe("InsightFacade Add/Remove Dataset from Linh's d0", function () {
                         }
                     }
                 ]
-            },
-            OPTIONS: {
-                COLUMNS: [
-                    "courses_dept",
-                    "courses_avg"
-                ],
-                ORDER: "courses_avg"
-            }
+
         };
         return insightFacade.addDataset("courses", datasets["courses"], InsightDatasetKind.Courses)
             .then((result: any[]) => {
