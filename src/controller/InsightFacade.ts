@@ -110,10 +110,11 @@ export default class InsightFacade implements IInsightFacade {
     public performQuery(query: any): Promise <any[]> {
 
         return new Promise((resolve, reject) => {
-            if (validateQuery(query) === null) {
-                reject(new InsightError("Invalid Query"));
+            let temp = validateQuery(query);
+            if (temp === null) {
+                return Promise.reject(new InsightError("Invalid Query"));
             }
-            const datasetID: string = validateQuery(query);
+            const datasetID: string = temp;
 
             if (this.database.datasets === []) {
                 reject(new InsightError("No Dataset added"));
