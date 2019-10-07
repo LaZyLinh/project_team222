@@ -179,6 +179,57 @@ describe("InsightFacade Add/Remove Dataset from Aiden's d0", function () {
 
     });
 
+    it("SMALL performQuery", function () {
+        const id: string = "courses";
+        insightFacade.addDataset(id, datasets[id], InsightDatasetKind.Courses);
+        let obj = {
+            WHERE: {EQ: {
+                    courses_avg: 99.78 }},
+            OPTIONS: {
+                COLUMNS: [
+                    "courses_dept",
+                    "courses_id",
+                    "courses_instructor",
+                    "courses_title",
+                    "courses_uuid",
+                    "courses_avg",
+                    "courses_pass",
+                    "courses_fail",
+                    "courses_audit",
+                    "courses_year"
+                ],
+                ORDER: "courses_avg"
+            }};
+        const expected = [
+            {
+                courses_dept: "math",
+                courses_id: "527",
+                courses_instructor: "gomez, jose",
+                courses_title: "algb topology i",
+                courses_uuid: "5373",
+                courses_avg: 99.78,
+                courses_pass: 9,
+                courses_fail: 0,
+                courses_audit: 0,
+                courses_year: 2009
+            },
+            {
+                courses_dept: "math",
+                courses_id: "527",
+                courses_instructor: "",
+                courses_title: "algb topology i",
+                courses_uuid: "5374",
+                courses_avg: 99.78,
+                courses_pass: 9,
+                courses_fail: 0,
+                courses_audit: 0,
+                courses_year: 1900
+            }
+        ];
+        const actual = insightFacade.performQuery(obj);
+        expect(actual).to.equal(expected);
+    });
+
     it("Should add a valid dataset, even if it contains file with broken json", function () {
         const id: string = "brkdata";
         const expected: string[] = [id];
