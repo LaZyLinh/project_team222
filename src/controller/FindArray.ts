@@ -61,20 +61,20 @@ export function findArray(compared: string, comparison: string, value: any, data
             if (valueWithoutWildcards === value) {
                 // no wildcards
                 return datasetArray.filter(((s) => s.sKey === value)).map((s: IsKeyEntry) => s.courseIndex);
-            } else if (value.match(/[*].*[^*]/)[0] === value) {
+            } else if (value.match(/[*].*[^*]/) !== null && value.match(/[*].*[^*]/)[0] === value) {
                 // wildcard at start
                 return datasetArray
-                    .filter(((s) => s.sKey.match(".*" + valueWithoutWildcards)[0] === s.sKey))
+                    .filter((s) => RegExp("^.*" + valueWithoutWildcards + "$").test(s.sKey))
                     .map((s: IsKeyEntry) => s.courseIndex);
-            } else if (value.match(/[^*].*[*]/)[0] === value) {
+            } else if (value.match(/[^*].*[*]/) !== null && value.match(/[^*].*[*]/)[0] === value) {
                 // wildcard at end
                 return datasetArray
-                    .filter(((s) => s.sKey.match(valueWithoutWildcards + ".*")[0] === s.sKey))
+                    .filter((s) => RegExp("^" + valueWithoutWildcards + ".*$").test(s.sKey))
                     .map((s: IsKeyEntry) => s.courseIndex);
-            } else if (value.match(/[*].*[*]/)[0] === value) {
+            } else if (value.match(/[*].*[*]/) !== null && value.match(/[*].*[*]/)[0] === value) {
                 // wildcard at both ends
                 return datasetArray
-                    .filter(((s) => s.sKey.match(".*" + valueWithoutWildcards + ".*")[0] === s.sKey))
+                    .filter((s) => RegExp("^.*" + valueWithoutWildcards + ".*$").test(s.sKey))
                     .map((s: IsKeyEntry) => s.courseIndex);
             }
         } else {

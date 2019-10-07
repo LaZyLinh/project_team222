@@ -240,6 +240,92 @@ describe("InsightFacade Add/Remove Dataset from Aiden's d0", function () {
         });
     });
 
+    /*
+    it("Testing other performQuery", function () {
+        const id: string = "courses";
+        let obj = {
+            WHERE: {
+                OR: [
+                    {
+                        AND: [
+                            {
+                                GT: {
+                                    courses_avg: 95
+                                }
+                            },
+                            {
+                                OR: [
+                                    {
+                                        IS: {
+                                            courses_dept: "wood"
+                                        }
+                                    },
+                                    {
+                                        IS: {
+                                            courses_dept: "*sc"
+                                        }
+                                    }
+                                ]
+                            },
+                            {
+                                NOT: {
+                                    GT: {
+                                        courses_year: 1998
+                                    }
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        AND: [
+                            {
+                                GT: {
+                                    courses_year: 2003
+                                }
+                            },
+                            {
+                                NOT: {
+                                    OR: [
+                                        {
+                                            IS: {
+                                                courses_dept: "wood"
+                                            }
+                                        },
+                                        {
+                                            IS: {
+                                                courses_dept: "*sc"
+                                            }
+                                        }
+                                    ]
+                                }
+                            },
+                            {
+                                GT: {
+                                    courses_avg: 97
+                                }
+                            }
+                        ]
+                    }
+                ]
+            },
+            OPTIONS: {
+                COLUMNS: [
+                    "courses_dept",
+                    "courses_avg"
+                ],
+                ORDER: "courses_avg"
+            }
+        };
+        const expected = [{}];
+        return insightFacade.addDataset(id, datasets[id], InsightDatasetKind.Courses)
+            .then((result: string[]) => {
+                return insightFacade.performQuery(obj);
+            }).then((value: any[]) => {
+                expect(value).to.deep.equal(expected);
+            });
+    });
+     */
+
     it("Should add a valid dataset, even if it contains file with broken json", function () {
         const id: string = "brkdata";
         const expected: string[] = [id];
