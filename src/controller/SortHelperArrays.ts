@@ -2,6 +2,7 @@
 import {ICourseDataset, ImKeyEntry, IsKeyEntry} from "./ICourseDataset";
 
 export function sortHelperArrays(dataset: ICourseDataset) {
+    let promises: Array<Promise<boolean>> = [];
     getImKeyArrays(dataset).forEach((value) => {
         value.sort((a, b) => {
             let ask: ImKeyEntry = a;

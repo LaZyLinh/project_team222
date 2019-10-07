@@ -5,6 +5,7 @@ import InsightFacade from "../src/controller/InsightFacade";
 import Log from "../src/Util";
 import TestUtil from "./TestUtil";
 import {whereHandler, valueMatchKey, typeMatchValidID, validateQuery, validateIS} from "../src/controller/PerformQuery";
+import {deleteAllFromDisk} from "../src/controller/AddDatasetHelpers";
 
 // This should match the schema given to TestUtil.validate(..) in TestUtil.readTestQueries(..)
 // except 'filename' which is injected when the file is read.
@@ -59,6 +60,7 @@ describe("InsightFacade Add/Remove Dataset from Aiden's d0", function () {
 
     after(function () {
         Log.test(`After: ${this.test.parent.title}`);
+        deleteAllFromDisk();
     });
 
     afterEach(function () {
@@ -520,6 +522,7 @@ describe("InsightFacade Add/Remove Dataset from Linh's d0", function () {
 
     after(function () {
         Log.test(`After: ${this.test.parent.title}`);
+        deleteAllFromDisk();
     });
 
     afterEach(function () {
@@ -1150,6 +1153,7 @@ describe("InsightFacade test disk persistence", function () {
 
     after(function () {
         Log.test(`After: ${this.test.parent.title}`);
+        deleteAllFromDisk();
     });
 
     afterEach(function () {

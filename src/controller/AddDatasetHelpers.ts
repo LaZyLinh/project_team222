@@ -155,7 +155,7 @@ export function deleteDatasetFromDisk(id: string): boolean {
     }
 }
 
-export function deleteAllFromDisk(infa: InsightFacade, id: string) {
+export function deleteAllFromDisk() {
     try {
         let fnames: string[] = fs.readdirSync("data/");
         for (let fname of fnames) {

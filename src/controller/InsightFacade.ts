@@ -71,7 +71,7 @@ export default class InsightFacade implements IInsightFacade {
                 }
                 if (newDataset.courses.length !== 0) {
                     this.database.datasets.push(newDataset);
-                    sortHelperArrays(newDataset);
+                    // sortHelperArrays(newDataset);
                     saveDatasetToDisk(newDataset);
                     return Promise.resolve();
                 } else {
