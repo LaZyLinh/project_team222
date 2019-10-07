@@ -1,6 +1,7 @@
 import {InsightDataset} from "./IInsightFacade";
 
 export interface ICourse {
+    [key: string]: string|number;
     year: number;
     avg: number;
     pass: number;
@@ -39,4 +40,18 @@ export interface ImKeyEntry {
 export interface IsKeyEntry {
     courseIndex: number;
     sKey: string;
+}
+
+export interface IResultObj {
+    [key: string]: string|number;
+    year?: number;
+    avg?: number;
+    pass?: number;
+    fail?: number;
+    audit?: number;
+    dept?: string;
+    id?: string;
+    instructor?: string;
+    title?: string;
+    uuid?: string;
 }

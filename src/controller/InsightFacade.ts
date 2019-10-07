@@ -1,12 +1,5 @@
 import Log from "../Util";
-import {
-    IInsightFacade,
-    InsightDataset,
-    InsightDatasetKind,
-    InsightError,
-    NotFoundError,
-    ResultTooLargeError
-} from "./IInsightFacade";
+import {IInsightFacade, InsightDataset, InsightDatasetKind, InsightError, NotFoundError} from "./IInsightFacade";
 import * as JSZip from "jszip";
 import {queryParser} from "restify";
 import * as fs from "fs";
@@ -19,7 +12,7 @@ import {
     newDatasetHelper,
     saveDatasetToDisk, validateIDString,
 } from "./AddDatasetHelpers";
-import {validateQuery, performValidQuery} from "./PerformQuery";
+import {validateQuery, performValidQuery, findDatasetById, formatResults} from "./PerformQuery";
 import {sortHelperArrays} from "./SortHelperArrays";
 
 /**
@@ -119,22 +112,20 @@ export default class InsightFacade implements IInsightFacade {
         }
         loadFromDiskIfNecessary(this, datasetID);
         if (!idsInMemory(this.database).includes(datasetID)) {
-            return Promise.reject(new InsightError());
+            return Promise.reject(new InsightError("Dataset not found"));
         }
 
-        let dataset: ICourseDataset = this.database.datasets[0];    // TODO: find dataset
-        const whereCont = query["WHERE"];
-        const array = performValidQuery(whereCont, dataset);
-        if (array === []) {
-            return Promise.resolve(array);
-        }
+        let dataset: ICourseDataset = findDatasetById(this.database, datasetID);
+        const whereCont = query["WHERE"];   // make sure where only takes 1 FILTER and is the right type
+        const optionCont = query["OPTIONS"];
+        const columnCont = optionCont["COLUMNS"]; // should be string[]
+        const order = optionCont["ORDER"]; // should be string
 
-        if (array.length > 5000) {
-            return Promise.reject(new ResultTooLargeError());
-        } // return array of index
+        const array = performValidQuery(whereCont, dataset); // return array of index
 
-        // TODO: turn index array into actual result array of courses, then return
-        return Promise.resolve(array);
+        const finalResultArray = formatResults(dataset, array, columnCont, order);
+
+        return Promise.resolve(finalResultArray);
 
     }
 

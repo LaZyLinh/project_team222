@@ -1,7 +1,8 @@
 import {InsightDataset, InsightDatasetKind, InsightError} from "./IInsightFacade";
 import InsightFacade from "./InsightFacade";
-import {ICourseDataset} from "./ICourseDataset";
+import {ICourse, ICourseDataset, IDatabase, ImKeyEntry, IResultObj} from "./ICourseDataset";
 import {validateIDString} from "./AddDatasetHelpers";
+import {findArray} from "./FindArray";
 
 export function performValidQuery(query: any, dataset: ICourseDataset): number[] {
     const mult = ["AND", "OR"];
@@ -43,12 +44,6 @@ export function performValidQuery(query: any, dataset: ICourseDataset): number[]
             }}
     }
     return result;
-}
-
-function findArray(compared: string, comparison: string, value: any, dataset: ICourseDataset): number[] {
-    // TODO: compared: year/instructor etc. Comparison in [GT, LT, EQ, IS]. Return index array fit comparison.
-    // By the time this function is reached, any = string for IS, else number
-    return [];
 }
 
 export function validateQuery(query: any): null | string {
@@ -232,4 +227,49 @@ export function typeMatchValidID(key: string): string[] | null {        // retur
         }
     }
     return null;
+}
+
+export function findDatasetById(database: IDatabase, id: string): ICourseDataset {
+    for (let dataset of database.datasets) {
+        if (dataset.id === id) {
+            return dataset;
+        }
+    }
+    throw new InsightError("Dataset that should've been found, not found");
+    // (because this method is only called when we already know the dataset exists and is loaded into memory.)
+}
+
+function buildResultObj(course: ICourse, columns: string[]): IResultObj {
+    let res: IResultObj = {};
+    for (let key in columns) {
+        res[key] = course[key];
+    }
+    return res;
+}
+
+export function formatResults(dataset: ICourseDataset, arr: number[], columns: string[], order: string): IResultObj[] {
+    let res: IResultObj[] = [];
+    for (let index of arr) {
+        res.push(buildResultObj(dataset.courses[index], columns));
+    }
+    if (["year", "avg", "pass", "fail", "audit"].includes(order)) {
+        // sort by numerical order of that column:
+        res.sort((a, b) => {
+            let aObj: IResultObj = a;
+            let bObj: IResultObj = b;
+            let aNum: number = Number(aObj[order]);
+            let bNum: number = Number(bObj[order]);
+            return bNum - aNum;
+        });
+    } else {
+        // sort by alphabetical order of that column:
+        res.sort((a, b) => {
+            let aObj: IResultObj = a;
+            let bObj: IResultObj = b;
+            let aStr: string = String(aObj[order]);
+            let bStr: string = String(bObj[order]);
+            return bStr > aStr ? -1 : 1;
+        });
+    }
+    return res;
 }

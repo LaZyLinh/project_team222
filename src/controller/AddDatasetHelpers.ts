@@ -22,7 +22,6 @@ export function newDatasetHelper(newID: string, newKind: InsightDatasetKind): IC
     };
 }
 
-// TODO: write tests for me!
 export function addCoursesToDataset(courses: ICourse[], dataset: ICourseDataset) {
     for (let course of courses) {
         let index = dataset.courses.push(course) - 1;
@@ -40,13 +39,11 @@ export function addCoursesToDataset(courses: ICourse[], dataset: ICourseDataset)
     dataset.numRows += courses.length;
 }
 
-// TODO: write tests for me!
 // returns a string array of the ID's of currently-added datasets, given an IDatabase
 export function idListHelper(database: IDatabase): string[] {
     return arrayUnion(idsInMemory(database), idsInDisk());
 }
 
-// TODO: write tests for me!
 // given a course json file, generates an array of ICourse corresponding to it.
 export function ICourseHelper(course: any): ICourse[] {
     let result: ICourse[] = [];
@@ -133,7 +130,7 @@ export function loadAllFromDisk(infa: InsightFacade) {
     try {
         let fnames: string[] = fs.readdirSync("data/");
         for (let fname of fnames) {
-            if (idsInMemory(infa.database).includes(fname)) {continue;}
+            if (idsInMemory(infa.database).includes(fname)) {continue; }
             loadDatasetFromDisk(infa, fname);
         }
     } catch {
