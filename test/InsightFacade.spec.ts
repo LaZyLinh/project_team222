@@ -190,6 +190,7 @@ describe("InsightFacade Add/Remove Dataset from Aiden's d0", function () {
 
     });
 
+    /*
     it("SMALL performQuery", function () {
         const id: string = "minidata";
         let obj = {
@@ -240,6 +241,8 @@ describe("InsightFacade Add/Remove Dataset from Aiden's d0", function () {
         });
     });
 
+     */
+
     /*
     it("Testing other performQuery", function () {
         const id: string = "courses";
@@ -250,68 +253,45 @@ describe("InsightFacade Add/Remove Dataset from Aiden's d0", function () {
                         AND: [
                             {
                                 GT: {
-                                    courses_avg: 95
+                                    courses_avg: 97
                                 }
                             },
                             {
-                                OR: [
-                                    {
-                                        IS: {
-                                            courses_dept: "wood"
-                                        }
-                                    },
-                                    {
-                                        IS: {
-                                            courses_dept: "*sc"
-                                        }
+                                NOT: {
+                                    IS: {
+                                        courses_dept: "adhe"
                                     }
-                                ]
+                                }
                             },
                             {
                                 NOT: {
-                                    GT: {
-                                        courses_year: 1998
+                                    LT: {
+                                        courses_year: 2008
                                     }
                                 }
                             }
                         ]
                     },
                     {
-                        AND: [
-                            {
-                                GT: {
-                                    courses_year: 2003
-                                }
-                            },
-                            {
-                                NOT: {
-                                    OR: [
-                                        {
-                                            IS: {
-                                                courses_dept: "wood"
-                                            }
-                                        },
-                                        {
-                                            IS: {
-                                                courses_dept: "*sc"
-                                            }
-                                        }
-                                    ]
-                                }
-                            },
-                            {
-                                GT: {
-                                    courses_avg: 97
-                                }
+                        EQ: {
+                            courses_avg: 95
+                        }
+                    },
+                    {
+                        AND: {
+                            LT: {
+                                courses_avg: 96
                             }
-                        ]
+                        }
                     }
                 ]
             },
             OPTIONS: {
                 COLUMNS: [
                     "courses_dept",
-                    "courses_avg"
+                    "courses_id",
+                    "courses_avg",
+                    "courses_year"
                 ],
                 ORDER: "courses_avg"
             }
@@ -322,6 +302,8 @@ describe("InsightFacade Add/Remove Dataset from Aiden's d0", function () {
                 return insightFacade.performQuery(obj);
             }).then((value: any[]) => {
                 expect(value).to.deep.equal(expected);
+            }).catch((err: any) => {
+                expect.fail(err, expected, "shouldn't have rejected!");
             });
     });
      */
