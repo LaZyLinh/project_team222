@@ -23,32 +23,35 @@ export function performValidQuery(query: any, dataset: ICourseDataset): number[]
                     if (Array.isArray(more)) {
                         for (const clause of more) {
                             if (key === "AND") {
-                                if (result.length === 0) {
-                                result = performValidQuery(clause, dataset);
-                                } else {
+                                if (!Array.isArray(result) || !result.length) {
+                                 result = performValidQuery(clause, dataset);
+                                 } else {
                                     let temp = performValidQuery(clause, dataset);
                                     result = [...new Set(temp.filter((value) =>
                                         result.includes(value)))]; // might not have to Set
-                                }
+                                 }
                             } else {
-                                if (result.length === 0) {
-                                    result = performValidQuery(clause, dataset);
-                                } else {
-                                    result.concat(performValidQuery(clause, dataset));
-                                    result = [...new Set(result)];
+                                 if (!Array.isArray(result) || !result.length) {
+                                   result = performValidQuery(clause, dataset);
+                                 } else {
+                                     let array: number[] = performValidQuery(clause, dataset);
+                                     result = result.concat(array);
+                                     result = [...new Set(result)];
                                 }
                             }
                         }
-                    } else {result = performValidQuery(more, dataset); }
-                }
+                    } else {result = performValidQuery(more, dataset); }}
                 if (mSingle.includes(key) || sSingle.includes(key)) {
                     for (const [field, value] of Object.entries(query[key])) {
-                        const compared = typeMatchValidID(field)[2];
-                        // if (result.length === 0) {
-                        //    result = findArray(compared, key, value, dataset);
-                        // } else {
-                        result = [...new Set(findArray(compared, key, value, dataset))];
+                        let tmResult = typeMatchValidID(field);
+                        if (tmResult !== null) {
+                            const compared = tmResult[2];
+                            // if (result.length === 0) {
+                            //    result = findArray(compared, key, value, dataset);
+                            // } else {
+                            result = [...new Set(findArray(compared, key, value, dataset))];
                         }
+                    }
                 }
             }}
     }

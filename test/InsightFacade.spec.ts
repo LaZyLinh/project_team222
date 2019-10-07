@@ -1111,27 +1111,29 @@ describe("InsightFacade Add/Remove Dataset from Linh's d0", function () {
 
     it("Test performValid", function () {
         let obj = {
-                AND: [
-                    {
-                        NOT: {
-                            IS: {
-                                courses_dept: "math"
+            OR: [
+                {
+                    AND: [
+                        {
+                            GT: {
+                                courses_avg: 99
                             }
                         }
-                    },
-                    {
-                        GT: {
-                            courses_avg: 97
-                        }
+                    ]
+                },
+                {
+                    EQ: {
+                        courses_avg: 95
                     }
-                ]
+                }
+            ]
         };
 
         return insightFacade.addDataset("courses", datasets["courses"], InsightDatasetKind.Courses)
             .then((result: any[]) => {
                 let dataset: ICourseDataset = findDatasetById(insightFacade.database, "courses");
                 const answer = performValidQuery(obj, dataset);
-                expect(answer.length).to.equal(41);
+                expect(answer.length).to.equal(44);
             }).catch((err: any) => {
                 expect(err).to.be.instanceOf(InsightError);
             });
