@@ -1326,7 +1326,8 @@ describe("InsightFacade PerformQuery", () => {
     const datasetsToQuery: { [id: string]: any } = {
         courses: {id: "courses", path: "./test/data/courses.zip", kind: InsightDatasetKind.Courses},
         coursesduplicate: {id: "coursesduplicate", path: "./test/data/courses.zip", kind: InsightDatasetKind.Courses},
-        newCourses: {id: "newCourses", path: "./test/data/courses.zip", kind: InsightDatasetKind.Courses}
+        newCourses: {id: "newCourses", path: "./test/data/courses.zip", kind: InsightDatasetKind.Courses},
+        minidata: {id: "minidata", path: "./test/data/minidata.zip", kind: InsightDatasetKind.Courses}
     };
     let insightFacade: InsightFacade = new InsightFacade();
     let testQueries: ITestQuery[] = [];
