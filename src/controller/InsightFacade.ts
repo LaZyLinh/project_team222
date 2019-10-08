@@ -108,7 +108,6 @@ export default class InsightFacade implements IInsightFacade {
     }
 
     public performQuery(query: any): Promise <any[]> {
-
         return new Promise((resolve, reject) => {
             let temp = validateQuery(query);
             if (temp === null) {
@@ -136,8 +135,13 @@ export default class InsightFacade implements IInsightFacade {
             if ( typeof optionCont["ORDER"] === "string") {
                 order = optionCont["ORDER"].replace(datasetID + "_", ""); // should be string
             }
-
-            const array = performValidQuery(whereCont, dataset); // return array of index
+            let array = [];
+            if (Array.isArray(Object.keys(whereCont)) && Object.keys(whereCont).length === 0) {
+                array = Array.from(Array(dataset.numRows).keys()); // edge case: empty WHERE should just return the
+                // whole dataset.
+            } else {
+                array = performValidQuery(whereCont, dataset); // return array of index
+            }
 
             if (array === []) {
                 resolve([]);
