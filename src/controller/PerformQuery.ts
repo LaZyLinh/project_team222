@@ -120,6 +120,7 @@ export function correctOption(columnCont: string[], optionCont: any): null | str
         if (!columnCont.includes(optionCont["ORDER"])) {
             return null;
         }
+
     }
 
     return id;
