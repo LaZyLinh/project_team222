@@ -1167,33 +1167,66 @@ describe("InsightFacade Add/Remove Dataset from Linh's d0", function () {
         });
     });
 
-    it("Test IS", function () {
+   /* it("Test IS", function () {
         let obj = {
-                AND: [
+            WHERE: {
+                OR: [
                     {
-                        NOT: {
-                            IS: {
-                                courses_dept: "math"
+                        AND: [
+                            {
+                                GT: {
+                                    courses_avg: 97
+                                }
+                            },
+                            {
+                                NOT: {
+                                    IS: {
+                                        courses_dept: "adhe"
+                                    }
+                                }
+                            },
+                            {
+                                NOT: {
+                                    LT: {
+                                        courses_year: 2008
+                                    }
+                                }
                             }
+                        ]
+                    },
+                    {
+                        EQ: {
+                            courses_avg: 95
                         }
                     },
                     {
-                        GT: {
-                            courses_avg: 97
+                        AND: {
+                            LT: {
+                                courses_avg: 96
+                            }
                         }
                     }
                 ]
-
+            },
+            OPTIONS: {
+                COLUMNS: [
+                    "courses_dept",
+                    "courses_id",
+                    "courses_avg",
+                    "courses_year"
+                ],
+                ORDER: "courses_avg"
+            }
         };
         return insightFacade.addDataset("courses", datasets["courses"], InsightDatasetKind.Courses)
             .then((result: any[]) => {
                 let dataset: ICourseDataset = findDatasetById(insightFacade.database, "courses");
-                const answer = performValidQuery(obj, dataset);
+                const answer = insightFacade.performQuery(obj);
                 expect(answer.length).to.equal(41);
             }).catch((err: any) => {
                 expect(err).to.be.instanceOf(InsightError);
             });
-    });
+    }); */
 
     it("Test performValid", function () {
         let obj = {
@@ -1202,7 +1235,21 @@ describe("InsightFacade Add/Remove Dataset from Linh's d0", function () {
                     AND: [
                         {
                             GT: {
-                                courses_avg: 99
+                                courses_avg: 97
+                            }
+                        },
+                        {
+                            NOT: {
+                                IS: {
+                                    courses_dept: "adhe"
+                                }
+                            }
+                        },
+                        {
+                            NOT: {
+                                LT: {
+                                    courses_year: 2008
+                                }
                             }
                         }
                     ]
@@ -1210,6 +1257,13 @@ describe("InsightFacade Add/Remove Dataset from Linh's d0", function () {
                 {
                     EQ: {
                         courses_avg: 95
+                    }
+                },
+                {
+                    AND: {
+                        LT: {
+                            courses_avg: 96
+                        }
                     }
                 }
             ]
@@ -1219,7 +1273,7 @@ describe("InsightFacade Add/Remove Dataset from Linh's d0", function () {
             .then((result: any[]) => {
                 let dataset: ICourseDataset = findDatasetById(insightFacade.database, "courses");
                 const answer = performValidQuery(obj, dataset);
-                expect(answer.length).to.equal(44);
+                expect(answer.length).to.equal(167);
             }).catch((err: any) => {
                 expect(err).to.be.instanceOf(InsightError);
             });

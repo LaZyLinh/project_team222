@@ -189,12 +189,10 @@ export function anyFalseSingle(item: any, key: string, dataID: string): number {
     }
 }
 export function validateIS(value: string): boolean {
-    let match = value.match(/[*]?[^*]*[*]?/);
+    let match = value.match(/^[*]?[^*]*[*]?$/);
     if (match === null) {
         return false;
-    } else if (match[0] !== value) {
-        return false;
-    } else {return true; }
+    } else {return /^[*]?[^*]*[*]?$/.test(value); }
 }
 
 export function valueMatchKey([key, value]: [string, any]) {
