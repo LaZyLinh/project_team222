@@ -15,8 +15,7 @@
         }
     },
     "isQueryValid": true,
-    "result": {
-        "result": [
+    "result": [
             {
                 "courses_dept": "epse",
                 "courses_avg": 97.09
@@ -214,5 +213,4 @@
                 "courses_avg": 99.78
             }
         ]
-    }
 }

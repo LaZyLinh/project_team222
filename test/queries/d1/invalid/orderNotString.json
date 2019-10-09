@@ -1,9 +1,9 @@
 {
-    "title": "SELECT dept, avg WHERE avg > 97, invalid b/c order must be in columns.",
+    "title": "SELECT dept, avg WHERE avg > 97",
     "query": {
         "WHERE": {
             "GT": {
-                "courses_avg":97
+                "courses_avg": 97
             }
         },
         "OPTIONS": {
@@ -11,7 +11,7 @@
                 "courses_dept",
                 "courses_avg"
             ],
-            "ORDER": "courses_year"
+            "ORDER": null
         }
     },
     "isQueryValid": false,

@@ -34,8 +34,7 @@
         }
     },
     "isQueryValid": true,
-    "result": {
-        "result": [
+    "result": [
             {
                 "courses_dept": "adhe",
                 "courses_id": "329",
@@ -317,5 +316,4 @@
                 "courses_avg": 96.11
             }
         ]
-    }
 }

@@ -3,15 +3,16 @@
     "query": {
         "WHERE": {
             "GT": {
-                "Courses_avg":97
+                "courses_avg_avg": 97
             }
+
         },
         "OPTIONS": {
             "COLUMNS": [
-                "Courses_dept",
-                "Courses_avg"
+                "courses_dept_dept",
+                "courses_avg_avg"
             ],
-            "ORDER": "Courses_avg"
+            "ORDER": "courses_avg_avg"
         }
     },
     "isQueryValid": false,

@@ -4,6 +4,17 @@ import {InsightDataset, InsightDatasetKind, InsightError, NotFoundError} from ".
 import InsightFacade from "../src/controller/InsightFacade";
 import Log from "../src/Util";
 import TestUtil from "./TestUtil";
+import {
+    typeMatchValidID,
+    validateIS,
+    validateQuery,
+    valueMatchKey,
+    whereHandler,
+    performValidQuery,
+    findDatasetById
+} from "../src/controller/PerformQuery";
+import {deleteAllFromDisk} from "../src/controller/AddDatasetHelpers";
+import {ICourseDataset} from "../src/controller/ICourseDataset";
 
 // This should match the schema given to TestUtil.validate(..) in TestUtil.readTestQueries(..)
 // except 'filename' which is injected when the file is read.
@@ -58,6 +69,7 @@ describe("InsightFacade Add/Remove Dataset from Aiden's d0", function () {
 
     after(function () {
         Log.test(`After: ${this.test.parent.title}`);
+        deleteAllFromDisk();
     });
 
     afterEach(function () {
@@ -177,6 +189,124 @@ describe("InsightFacade Add/Remove Dataset from Aiden's d0", function () {
         });
 
     });
+
+    /*
+    it("SMALL performQuery", function () {
+        const id: string = "minidata";
+        let obj = {
+            WHERE: {EQ: {minidata_avg: 78.95 }},
+            OPTIONS: {
+                COLUMNS: [
+                    "minidata_dept",
+                    "minidata_id",
+                    "minidata_instructor",
+                    "minidata_title",
+                    "minidata_uuid",
+                    "minidata_avg",
+                    "minidata_pass",
+                    "minidata_fail",
+                    "minidata_audit",
+                    "minidata_year"
+                ],
+                ORDER: "minidata_avg"
+            }};
+        const expected = [{
+                minidata_audit: 0,
+                minidata_avg: 78.95,
+                minidata_dept: "phys",
+                minidata_fail: 0,
+                minidata_id: "107",
+                minidata_instructor: "",
+                minidata_pass: 88,
+                minidata_title: "enrich physics 1",
+                minidata_uuid: "33532",
+                minidata_year: 2010,
+            }, {
+                minidata_audit: 0,
+                minidata_avg: 78.95,
+                minidata_dept: "phys",
+                minidata_fail: 0,
+                minidata_id: "107",
+                minidata_instructor: "affleck, ian keith;bonn, douglas andrew",
+                minidata_pass: 88,
+                minidata_title: "enrich physics 1",
+                minidata_uuid: "33531",
+                minidata_year: 2010,
+            }];
+        return insightFacade.addDataset(id, datasets[id], InsightDatasetKind.Courses)
+            .then((result: string[]) => {
+            return insightFacade.performQuery(obj);
+        }).then((value: any[]) => {
+            expect(value).to.deep.equal(expected);
+        });
+    });
+
+     */
+
+    /*
+    it("Testing other performQuery", function () {
+        const id: string = "courses";
+        let obj = {
+            WHERE: {
+                OR: [
+                    {
+                        AND: [
+                            {
+                                GT: {
+                                    courses_avg: 97
+                                }
+                            },
+                            {
+                                NOT: {
+                                    IS: {
+                                        courses_dept: "adhe"
+                                    }
+                                }
+                            },
+                            {
+                                NOT: {
+                                    LT: {
+                                        courses_year: 2008
+                                    }
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        EQ: {
+                            courses_avg: 95
+                        }
+                    },
+                    {
+                        AND: {
+                            LT: {
+                                courses_avg: 96
+                            }
+                        }
+                    }
+                ]
+            },
+            OPTIONS: {
+                COLUMNS: [
+                    "courses_dept",
+                    "courses_id",
+                    "courses_avg",
+                    "courses_year"
+                ],
+                ORDER: "courses_avg"
+            }
+        };
+        const expected = [{}];
+        return insightFacade.addDataset(id, datasets[id], InsightDatasetKind.Courses)
+            .then((result: string[]) => {
+                return insightFacade.performQuery(obj);
+            }).then((value: any[]) => {
+                expect(value).to.deep.equal(expected);
+            }).catch((err: any) => {
+                expect.fail(err, expected, "shouldn't have rejected!");
+            });
+    });
+     */
 
     it("Should add a valid dataset, even if it contains file with broken json", function () {
         const id: string = "brkdata";
@@ -469,6 +599,7 @@ describe("InsightFacade Add/Remove Dataset from Linh's d0", function () {
 
     after(function () {
         Log.test(`After: ${this.test.parent.title}`);
+        deleteAllFromDisk();
     });
 
     afterEach(function () {
@@ -598,7 +729,7 @@ describe("InsightFacade Add/Remove Dataset from Linh's d0", function () {
     it("Should accept add not duplicate, multiple file", function () {
         const id: string = "courses";
         const id2: string = "chin";
-        const expected: string[] = [id, id2];
+        const expected: string[] = [id2, id];
         return insightFacade.addDataset(id, datasets[id], InsightDatasetKind.Courses).then((result: string[]) => {
             return insightFacade.addDataset(id2, datasets[id2], InsightDatasetKind.Courses);
         }).then((response: string[]) => { // Note: response here comes from methodToRunSecond.
@@ -860,57 +991,81 @@ describe("InsightFacade Add/Remove Dataset from Linh's d0", function () {
     });
 
     // Test for validateQueries and helpers
-    it("typeOfKey return correct type on number", function () {
-        const expected = "number";
-        const actual = insightFacade.typeOfKey("courses_year");
-        expect(actual).to.deep.equal(expected);
+    it("validateIS on *", function () {
+        const expected = true;
+        const actual = validateIS("*");
+        expect(actual).to.equal(expected);
     });
 
-    it("typeOfKey return correct type on string", function () {
+    it("validateIS on **", function () {
+        const expected = true;
+        const actual = validateIS("**");
+        expect(actual).to.equal(expected);
+    });
+
+    it("validateIS on string", function () {
+        const expected = true;
+        const actual = validateIS("adhe");
+        expect(actual).to.equal(expected);
+    });
+
+    it("validateIS on ***", function () {
         const expected = false;
-        const actual = insightFacade.typeOfKey("courses_dept") !== ("string" || "number");
+        const actual = validateIS("***");
+        expect(actual).to.equal(expected);
+    });
+
+    it("typeOfKey return correct type on number", function () {
+        const expected = ["number", "courses", "year"];
+        const actual = typeMatchValidID("courses_year");
         expect(actual).to.deep.equal(expected);
     });
 
-    it("typeOfKey return correct type on wrong keys", function () {
+    it("typeMatchValidID return correct type on string", function () {
+        const expected = ["string", "courses", "dept"];
+        const actual = typeMatchValidID("courses_dept");
+        expect(actual).to.deep.equal(expected);
+    });
+
+    it("typeMatchValidID return correct type on wrong keys", function () {
         let expected = null;
-        const actual = insightFacade.typeOfKey("courses_instructorst");
+        const actual = typeMatchValidID("courses_instructorst");
         expect(actual).to.deep.equal(expected);
     });
 
     it("valueMatchKey should work for string", function () {
         const expected = true;
-        const actual = insightFacade.valueMatchKey(["course_id", "420C"]);
+        const actual = valueMatchKey(["course_id", "420C"]);
         expect(actual).to.deep.equal(expected);
     });
 
     it("valueMatchKey should work for number", function () {
         const expected = true;
-        const actual = insightFacade.valueMatchKey(["course_pass", 20]);
+        const actual = valueMatchKey(["course_pass", 20]);
         expect(actual).to.deep.equal(expected);
     });
 
     it("valueMatchKey should reject unmatched set", function () {
         const expected = false;
-        const actual = insightFacade.valueMatchKey(["course_pass", "lol"]);
+        const actual = valueMatchKey(["course_pass", "lol"]);
         expect(actual).to.deep.equal(expected);
     });
 
     it("valueMatchKey should reject unmatched set reversed", function () {
         const expected = false;
-        const actual = insightFacade.valueMatchKey(["course_title", 600]);
+        const actual = valueMatchKey(["course_title", 600]);
         expect(actual).to.deep.equal(expected);
     });
 
     it("valueMatchKey should reject null value", function () {
         const expected = false;
-        const actual = insightFacade.valueMatchKey(["course_pass", null]);
+        const actual = valueMatchKey(["course_pass", null]);
         expect(actual).to.deep.equal(expected);
     });
 
     it("valueMatchKey should reject all null", function () {
         const expected = false;
-        const actual = insightFacade.valueMatchKey([null, null]);
+        const actual = valueMatchKey([null, null]);
         expect(actual).to.deep.equal(expected);
     });
 
@@ -925,8 +1080,8 @@ describe("InsightFacade Add/Remove Dataset from Linh's d0", function () {
                 ORDER: "courses_avg"
             }
         };
-        const expected = true;
-        const actual = insightFacade.validateQuery(obj);
+        const expected = "courses";
+        const actual = validateQuery(obj);
         expect(actual).to.equal(expected);
     });
 
@@ -956,7 +1111,7 @@ describe("InsightFacade Add/Remove Dataset from Linh's d0", function () {
         };
 
         const expected = 0;
-        const actual = insightFacade.whereHandler(obj);
+        const actual = whereHandler(obj, "courses");
         expect(actual).to.equal(expected);
     });
 
@@ -968,10 +1123,143 @@ describe("InsightFacade Add/Remove Dataset from Linh's d0", function () {
         };
 
         const expected = 0;
-        const actual = insightFacade.whereHandler(obj);
+        const actual = whereHandler(obj, "courses");
         expect(actual).to.equal(expected);
     });
 
+    it("Test validate with ORDER not in COLUMN", function () {
+        let obj = {
+            WHERE: {
+                GT: {
+                    courses_avg: 97
+                }
+            },
+            OPTIONS: {
+                COLUMNS: [
+                    "courses_dept",
+                    "courses_avg"
+                ],
+                ORDER: "courses_year"
+            }
+        };
+        return insightFacade.performQuery(obj).then((result: any[]) => {
+            expect.fail();
+        }).catch((err: any) => {
+            expect(err).to.be.instanceOf(InsightError);
+        });
+    });
+
+   /* it("Test IS", function () {
+        let obj = {
+            WHERE: {
+                OR: [
+                    {
+                        AND: [
+                            {
+                                GT: {
+                                    courses_avg: 97
+                                }
+                            },
+                            {
+                                NOT: {
+                                    IS: {
+                                        courses_dept: "adhe"
+                                    }
+                                }
+                            },
+                            {
+                                NOT: {
+                                    LT: {
+                                        courses_year: 2008
+                                    }
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        EQ: {
+                            courses_avg: 95
+                        }
+                    },
+                    {
+                        AND: {
+                            LT: {
+                                courses_avg: 96
+                            }
+                        }
+                    }
+                ]
+            },
+            OPTIONS: {
+                COLUMNS: [
+                    "courses_dept",
+                    "courses_id",
+                    "courses_avg",
+                    "courses_year"
+                ],
+                ORDER: "courses_avg"
+            }
+        };
+        return insightFacade.addDataset("courses", datasets["courses"], InsightDatasetKind.Courses)
+            .then((result: any[]) => {
+                let dataset: ICourseDataset = findDatasetById(insightFacade.database, "courses");
+                const answer = insightFacade.performQuery(obj);
+                expect(answer.length).to.equal(41);
+            }).catch((err: any) => {
+                expect(err).to.be.instanceOf(InsightError);
+            });
+    }); */
+
+    it("Test performValid", function () {
+        let obj = {
+            OR: [
+                {
+                    AND: [
+                        {
+                            GT: {
+                                courses_avg: 97
+                            }
+                        },
+                        {
+                            NOT: {
+                                IS: {
+                                    courses_dept: "adhe"
+                                }
+                            }
+                        },
+                        {
+                            NOT: {
+                                LT: {
+                                    courses_year: 2008
+                                }
+                            }
+                        }
+                    ]
+                },
+                {
+                    EQ: {
+                        courses_avg: 95
+                    }
+                },
+                {
+                    AND: {
+                        LT: {
+                            courses_avg: 96
+                        }
+                    }
+                }
+            ]
+        };
+
+        return insightFacade.addDataset("courses", datasets["courses"], InsightDatasetKind.Courses)
+            .then((result: any[]) => {
+                let dataset: ICourseDataset = findDatasetById(insightFacade.database, "courses");
+                const answer = performValidQuery(obj, dataset);
+                expect(answer.length).to.equal(167);
+            }).catch((err: any) => {
+                expect(err).to.be.instanceOf(InsightError);
+            });
+});
     it("Test VERY Complex structures", function () {
         let obj = {
             OR: [
@@ -1014,9 +1302,73 @@ describe("InsightFacade Add/Remove Dataset from Linh's d0", function () {
         };
 
         const expected = 0;
-        const actual = insightFacade.whereHandler(obj);
+        const actual = whereHandler(obj, "courses");
         expect(actual).to.deep.equal(expected);
     });
+});
+
+describe("InsightFacade test disk persistence", function () {
+    // Reference any datasets you've added to test/data here and they will
+    // automatically be loaded in the 'before' hook.
+    const datasetsToLoad: { [id: string]: string } = {
+        courses: "./test/data/courses.zip",
+    };
+    let datasets: { [id: string]: string } = {};
+    let insightFacade: InsightFacade;
+    const cacheDir = __dirname + "/../data";
+
+    before(function () {
+        // This section runs once and loads all datasets specified in the datasetsToLoad object
+        // into the datasets object
+        Log.test(`Before all`);
+        for (const id of Object.keys(datasetsToLoad)) {
+            datasets[id] = fs.readFileSync(datasetsToLoad[id]).toString("base64");
+        }
+    });
+
+    beforeEach(function () {
+        // This section resets the data directory (removing any cached data) and resets the InsightFacade instance
+        // This runs before each test, which should make each test independent from the previous one
+        Log.test(`BeforeTest: ${this.currentTest.title}`);
+        try {
+            fs.removeSync(cacheDir);
+            fs.mkdirSync(cacheDir);
+            insightFacade = new InsightFacade();
+        } catch (err) {
+            Log.error(err);
+        }
+    });
+
+    after(function () {
+        Log.test(`After: ${this.test.parent.title}`);
+        deleteAllFromDisk();
+    });
+
+    afterEach(function () {
+        Log.test(`AfterTest: ${this.currentTest.title}`);
+    });
+
+    it("Added datasets should be accessible from other instances of InsightFacade", function () {
+        const id: string = "courses";
+        const expected: string[] = [id];
+        const expected2: InsightDataset[] = [{
+            id: id,
+            kind: InsightDatasetKind.Courses,
+            numRows: 64612,
+        }];
+        return insightFacade.addDataset(id, datasets[id], InsightDatasetKind.Courses).then((result: string[]) => {
+            expect(result).to.deep.equal(expected);
+            let insightFacade2: InsightFacade = new InsightFacade();
+            return insightFacade2.listDatasets();
+        }).then((result: InsightDataset[]) => {
+            expect(result).to.deep.equal(expected2);
+        }).catch((err: any) => {
+            Log.error(err);
+            expect.fail(err, expected, "Should not have rejected");
+        });
+
+    });
+
 });
 
 /*
@@ -1028,7 +1380,8 @@ describe("InsightFacade PerformQuery", () => {
     const datasetsToQuery: { [id: string]: any } = {
         courses: {id: "courses", path: "./test/data/courses.zip", kind: InsightDatasetKind.Courses},
         coursesduplicate: {id: "coursesduplicate", path: "./test/data/courses.zip", kind: InsightDatasetKind.Courses},
-        newCourses: {id: "newCourses", path: "./test/data/courses.zip", kind: InsightDatasetKind.Courses}
+        newCourses: {id: "newCourses", path: "./test/data/courses.zip", kind: InsightDatasetKind.Courses},
+        minidata: {id: "minidata", path: "./test/data/minidata.zip", kind: InsightDatasetKind.Courses}
     };
     let insightFacade: InsightFacade = new InsightFacade();
     let testQueries: ITestQuery[] = [];

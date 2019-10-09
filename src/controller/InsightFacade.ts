@@ -1,37 +1,44 @@
 import Log from "../Util";
-import {IInsightFacade, InsightDataset, InsightDatasetKind, InsightError, NotFoundError} from "./IInsightFacade";
+import {
+    IInsightFacade,
+    InsightDataset,
+    InsightDatasetKind,
+    InsightError,
+    NotFoundError,
+    ResultTooLargeError
+} from "./IInsightFacade";
 import * as JSZip from "jszip";
 import {queryParser} from "restify";
 import * as fs from "fs";
-import PerformQuery from "./PerformQuery";
 import {JSZipObject} from "jszip";
 import {ICourse, ICourseDataset, IDatabase} from "./ICourseDataset";
 import {
-    addCoursesToDataset,
+    addCoursesToDataset, deleteDatasetFromDisk,
     ICourseHelper,
-    idListHelper, loadFromDiskIfNecessary,
+    idListHelper, idsInMemory, loadAllFromDisk, loadFromDiskIfNecessary,
     newDatasetHelper,
-    saveDatasetToDisk
+    saveDatasetToDisk, validateIDString,
 } from "./AddDatasetHelpers";
+import {validateQuery, performValidQuery, findDatasetById, formatResults} from "./PerformQuery";
+import {sortHelperArrays} from "./SortHelperArrays";
 
 /**
  * This is the main programmatic entry point for the project.
  * Method documentation is in IInsightFacade
  *
  */
-export default class InsightFacade extends PerformQuery implements IInsightFacade {
+export default class InsightFacade implements IInsightFacade {
 
     public database: IDatabase = {
         datasets: [],
     };
 
     constructor() {
-        super();
         Log.trace("InsightFacadeImpl::init()");
     }
 
     public addDataset(id: string, content: string, kind: InsightDatasetKind): Promise<string[]> {
-        let validatedId: string | InsightError = this.validateIDString(id);
+        let validatedId: string | InsightError = validateIDString(id);
         if (validatedId instanceof InsightError) {
             return Promise.reject(validatedId);
         }
@@ -64,6 +71,7 @@ export default class InsightFacade extends PerformQuery implements IInsightFacad
                 }
                 if (newDataset.courses.length !== 0) {
                     this.database.datasets.push(newDataset);
+                    // sortHelperArrays(newDataset);
                     saveDatasetToDisk(newDataset);
                     return Promise.resolve();
                 } else {
@@ -80,43 +88,80 @@ export default class InsightFacade extends PerformQuery implements IInsightFacad
     }
 
     public removeDataset(id: string): Promise<string> {
-        let validatedId: string | InsightError = this.validateIDString(id);
+        let validatedId: string | InsightError = validateIDString(id);
         if (validatedId instanceof InsightError) {
             return Promise.reject(validatedId);
         }
-        loadFromDiskIfNecessary(this, id);
-        let idIndex: number = idListHelper(this.database).indexOf(id);
+        let idIndex: number = idsInMemory(this.database).indexOf(id);
         if (idIndex > -1) {
             // remove the dataset
             let foundId: string = this.database.datasets[idIndex].id;
             this.database.datasets.splice(idIndex);
+            deleteDatasetFromDisk(id); // because we still need to clear the disk!
             return Promise.resolve(foundId);
-        } else {
+            // what if the dataset is on the disk? Just in case...
+        } else if (deleteDatasetFromDisk(id)) {
+                return Promise.resolve(id);
+            } else {
             return Promise.reject(new NotFoundError("dataset id not found"));
         }
     }
 
     public performQuery(query: any): Promise <any[]> {
-        let datasetID: string;
+        return new Promise((resolve, reject) => {
+            let temp = validateQuery(query);
+            if (temp === null) {
+                reject(new InsightError("Invalid Query"));
+                return;
+            }
+            const datasetID: string = temp;
 
-        // TODO: find datasetID
-        if (!this.validateQuery(query)) {
-            return Promise.reject(new InsightError("Invalid Query"));
-        }
-        if (this.database.datasets === []) {
-            return Promise.reject(new InsightError("No Dataset added"));
-        }
+            if (this.database.datasets === []) {
+                reject(new InsightError("No Dataset added"));
+                return;
+            }
+            loadFromDiskIfNecessary(this, datasetID);
+            if (!idsInMemory(this.database).includes(datasetID)) {
+                reject(new InsightError("Dataset not found"));
+                return;
+            }
 
-        const whereCont = query["WHERE"];   // make sure where only takes 1 FILTER and is the right type
-        const optionCont = query["OPTIONS"];
-        const columnCont = optionCont["COLUMNS"];
+            let dataset: ICourseDataset = findDatasetById(this.database, datasetID);
+            const whereCont = query["WHERE"];   // make sure where only takes 1 FILTER and is the right type
+            const optionCont = query["OPTIONS"];
+            const columnCont = optionCont["COLUMNS"]
+                .map((str: string) => str.replace(datasetID + "_", "")); // should be string[]
+            let order = "";
+            if ( typeof optionCont["ORDER"] === "string") {
+                order = optionCont["ORDER"].replace(datasetID + "_", ""); // should be string
+            }
+            let array = [];
+            if (Array.isArray(Object.keys(whereCont)) && Object.keys(whereCont).length === 0) {
+                array = Array.from(Array(dataset.numRows).keys()); // edge case: empty WHERE should just return the
+                // whole dataset.
+            } else {
+                array = performValidQuery(whereCont, dataset); // return array of index
+            }
 
-        // let result = this.performQueryHelper(whereCont, datasetID);
+            if (array === []) {
+                resolve([]);
+                return;
+            }
 
+            if (array.length > 5000) {
+                reject(new ResultTooLargeError());
+                return;
+            }
+
+            const finalResultArray = formatResults(dataset, array, columnCont, order);
+
+            resolve(finalResultArray);
+        });
     }
 
     public listDatasets(): Promise<InsightDataset[]> {
         return new Promise((resolve, reject) => {
+            loadAllFromDisk(this);
             let result: InsightDataset[] = [];
             for (let dataset of this.database.datasets) {
                 let newObj: InsightDataset = {
@@ -126,20 +171,5 @@ export default class InsightFacade extends PerformQuery implements IInsightFacad
             }
             resolve(result);
         });
-    }
-
-    private validateIDString(id: string): string | InsightError {
-        if (id === null) {
-            return new InsightError("ID String cannot be null");
-        } else if (id === undefined) {
-            return new InsightError("ID String cannot be undefined");
-        } else if (id === "") {
-            return new InsightError("ID String cannot be an empty string");
-        } else if (/^\s*$/.test(id)) {
-            return new InsightError("ID String cannot be all whitespace");
-        } else if ( !/^[^_]*$/.test(id)) {
-            return new InsightError("ID String cannot contain underscores");
-        }
-        return id;
     }
 }

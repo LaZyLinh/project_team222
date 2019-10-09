@@ -1,5 +1,5 @@
-import {InsightDatasetKind} from "./IInsightFacade";
-import {ICourse, ICourseDataset, IDatabase} from "./ICourseDataset";
+import {InsightDatasetKind, InsightError} from "./IInsightFacade";
+import {ICourse, ICourseDataset, IDatabase, ImKeyEntry, IsKeyEntry} from "./ICourseDataset";
 import InsightFacade from "./InsightFacade";
 import * as fs from "fs";
 
@@ -22,27 +22,28 @@ export function newDatasetHelper(newID: string, newKind: InsightDatasetKind): IC
     };
 }
 
-// TODO: write tests for me!
 export function addCoursesToDataset(courses: ICourse[], dataset: ICourseDataset) {
     for (let course of courses) {
         let index = dataset.courses.push(course) - 1;
-        // TODO: Add the key/val pairs to all of the other arrays in the dataset
+        dataset.year.push({courseIndex: index, mKey: course.year});
+        dataset.avg.push({courseIndex: index, mKey: course.avg});
+        dataset.pass.push({courseIndex: index, mKey: course.pass});
+        dataset.fail.push({courseIndex: index, mKey: course.fail});
+        dataset.audit.push({courseIndex: index, mKey: course.audit});
+        dataset.course_ids.push({courseIndex: index, sKey: course.id});
+        dataset.dept.push({courseIndex: index, sKey: course.dept});
+        dataset.instructor.push({courseIndex: index, sKey: course.instructor});
+        dataset.title.push({courseIndex: index, sKey: course.title});
+        dataset.uuid.push({courseIndex: index, sKey: course.uuid});
     }
     dataset.numRows += courses.length;
 }
 
-// TODO: write tests for me!
-// TODO: rewrite me, I don't know how to check the disk for things!
 // returns a string array of the ID's of currently-added datasets, given an IDatabase
 export function idListHelper(database: IDatabase): string[] {
-    let res: string[] = [];
-    for (let item of database.datasets) {
-        res.push(item.id);
-    }
-    return res;
+    return arrayUnion(idsInMemory(database), idsInDisk());
 }
 
-// TODO: write tests for me!
 // given a course json file, generates an array of ICourse corresponding to it.
 export function ICourseHelper(course: any): ICourse[] {
     let result: ICourse[] = [];
@@ -60,6 +61,7 @@ export function ICourseHelper(course: any): ICourse[] {
         Professor: "string", // instructor -> Professor
         Title: "string", // title -> Title
         id: "number", // uuid -> id
+        Section: "string"
     };
     for (let item of course.result) {
         let allValid: boolean = true;
@@ -84,6 +86,9 @@ export function ICourseHelper(course: any): ICourse[] {
             title: item.Title,
             uuid: String(item.id),
         };
+        if (item.Section === "overall") {
+            newCourse.year = 1900;
+        }
         result.push(newCourse);
     }
     return result;
@@ -91,14 +96,19 @@ export function ICourseHelper(course: any): ICourse[] {
 
 // Given a new dataset that has been created, persist it to disk
 export function saveDatasetToDisk(dataset: ICourseDataset) {
-    fs.writeFileSync("data/" + dataset.id, JSON.stringify(dataset), null);
-    // TODO: should this be a async method call or 'sync', do we want to block the execution here until this is done?
+    try {
+        fs.writeFileSync("data/" + dataset.id, JSON.stringify(dataset), null);
+        // TODO: should this be a async method call or 'sync',
+        //  do we want to block the execution here until this is done?
+    } catch (err) {
+        return;
+    }
 }
 
 // If the insightFacade doesn't already have a dataset with the given ID loaded,
 // check the disk for it. If it's there, try to load it into memory.
 export function loadFromDiskIfNecessary(infa: InsightFacade, id: string) {
-    if (idsInDatabase(infa.database).indexOf(id) === -1) {
+    if (!idsInMemory(infa.database).includes(id)) {
         loadDatasetFromDisk(infa, id);
     }
 }
@@ -108,7 +118,7 @@ export function loadFromDiskIfNecessary(infa: InsightFacade, id: string) {
 export function loadDatasetFromDisk(infa: InsightFacade, id: string): boolean {
     try {
         // fs.accessSync("data/" + id, fs.constants.F_OK);
-        let data = fs.readFileSync("data/" + id, {encoding: "string"});
+        let data = fs.readFileSync("data/" + id, { encoding: "utf8"});
         // It exists on disk!
         let loadedDataset: ICourseDataset = JSON.parse(data);
         infa.database.datasets.push(loadedDataset);
@@ -119,10 +129,12 @@ export function loadDatasetFromDisk(infa: InsightFacade, id: string): boolean {
     }
 }
 
-export function loadAllFromDisk(infa: InsightFacade, id: string) {
+// load all datasets from disk. If the dataset is already stored from memory, don't load it again.
+export function loadAllFromDisk(infa: InsightFacade) {
     try {
         let fnames: string[] = fs.readdirSync("data/");
         for (let fname of fnames) {
+            if (idsInMemory(infa.database).includes(fname)) {continue; }
             loadDatasetFromDisk(infa, fname);
         }
     } catch {
@@ -143,7 +155,7 @@ export function deleteDatasetFromDisk(id: string): boolean {
     }
 }
 
-export function deleteAllFromDisk(infa: InsightFacade, id: string) {
+export function deleteAllFromDisk() {
     try {
         let fnames: string[] = fs.readdirSync("data/");
         for (let fname of fnames) {
@@ -155,10 +167,48 @@ export function deleteAllFromDisk(infa: InsightFacade, id: string) {
 }
 
 // returns list of id strings corresponding to datasets currently in memory
-export function idsInDatabase(database: IDatabase): string[] {
+export function idsInMemory(database: IDatabase): string[] {
     let res: string[] = [];
     for (let item of database.datasets) {
         res.push(item.id);
     }
     return res;
+}
+
+// returns list of id strings corresponding to datasets currently on the disk
+export function idsInDisk(): string[] {
+    try {
+        let fnames: string[] = fs.readdirSync("data/");
+        return fnames;
+    } catch {
+        return [];
+    }
+}
+
+// return the array tha
+function arrayUnion(a: string[], b: string[]): string[] {
+    let res: string[] = [];
+    for (let valA of a) {
+        if (!b.includes(valA)) {
+            res.push(valA);
+        }
+    }
+    res = res.concat(b);
+    return res;
+}
+
+// return the validated string if it's valid, return an InsightError otherwise.
+export function validateIDString(id: string): string | InsightError {
+    if (id === null) {
+        return new InsightError("ID String cannot be null");
+    } else if (id === undefined) {
+        return new InsightError("ID String cannot be undefined");
+    } else if (id === "") {
+        return new InsightError("ID String cannot be an empty string");
+    } else if (/^\s*$/.test(id)) {
+        return new InsightError("ID String cannot be all whitespace");
+    } else if ( !/^[^_]*$/.test(id)) {
+        return new InsightError("ID String cannot contain underscores");
+    }
+    return id;
 }
