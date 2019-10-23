@@ -19,7 +19,8 @@ import {
     newDatasetHelper,
     saveDatasetToDisk, validateIDString,
 } from "./AddDatasetHelpers";
-import {validateQuery, performValidQuery, findDatasetById, formatResults} from "./PerformQuery";
+import {performValidQuery, findDatasetById, formatResults} from "./PerformQueryHelper";
+import {validateQuery} from "./ValidateQuery";
 import {sortHelperArrays} from "./SortHelperArrays";
 
 /**

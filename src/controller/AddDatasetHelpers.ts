@@ -134,7 +134,9 @@ export function loadAllFromDisk(infa: InsightFacade) {
     try {
         let fnames: string[] = fs.readdirSync("data/");
         for (let fname of fnames) {
-            if (idsInMemory(infa.database).includes(fname)) {continue; }
+            if (idsInMemory(infa.database).includes(fname)) {
+            continue;
+            }
             loadDatasetFromDisk(infa, fname);
         }
     } catch {

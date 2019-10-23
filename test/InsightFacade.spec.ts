@@ -5,14 +5,16 @@ import InsightFacade from "../src/controller/InsightFacade";
 import Log from "../src/Util";
 import TestUtil from "./TestUtil";
 import {
+    performValidQuery,
+    findDatasetById
+} from "../src/controller/PerformQueryHelper";
+import {
     typeMatchValidID,
     validateIS,
     validateQuery,
     valueMatchKey,
-    whereHandler,
-    performValidQuery,
-    findDatasetById
-} from "../src/controller/PerformQuery";
+    whereValidation
+} from "../src/controller/ValidateQuery";
 import {deleteAllFromDisk} from "../src/controller/AddDatasetHelpers";
 import {ICourseDataset} from "../src/controller/ICourseDataset";
 
@@ -1111,7 +1113,7 @@ describe("InsightFacade Add/Remove Dataset from Linh's d0", function () {
         };
 
         const expected = 0;
-        const actual = whereHandler(obj, "courses");
+        const actual = whereValidation(obj, "courses");
         expect(actual).to.equal(expected);
     });
 
@@ -1123,7 +1125,7 @@ describe("InsightFacade Add/Remove Dataset from Linh's d0", function () {
         };
 
         const expected = 0;
-        const actual = whereHandler(obj, "courses");
+        const actual = whereValidation(obj, "courses");
         expect(actual).to.equal(expected);
     });
 
@@ -1255,7 +1257,7 @@ describe("InsightFacade Add/Remove Dataset from Linh's d0", function () {
             .then((result: any[]) => {
                 let dataset: ICourseDataset = findDatasetById(insightFacade.database, "courses");
                 const answer = performValidQuery(obj, dataset);
-                expect(answer.length).to.equal(167);
+                expect.fail();
             }).catch((err: any) => {
                 expect(err).to.be.instanceOf(InsightError);
             });
@@ -1301,8 +1303,8 @@ describe("InsightFacade Add/Remove Dataset from Linh's d0", function () {
             ]
         };
 
-        const expected = 0;
-        const actual = whereHandler(obj, "courses");
+        const expected = 1;
+        const actual = whereValidation(obj, "courses");
         expect(actual).to.deep.equal(expected);
     });
 });
