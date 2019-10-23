@@ -5,16 +5,18 @@ import InsightFacade from "../src/controller/InsightFacade";
 import Log from "../src/Util";
 import TestUtil from "./TestUtil";
 import {
+    performValidQuery,
+    findDatasetById
+} from "../src/controller/PerformQueryHelper";
+import {deleteAllFromDisk} from "../src/controller/AddDatasetHelpers";
+import {ICourseDataset} from "../src/controller/IDataset";
+import {
     typeMatchValidID,
     validateIS,
     validateQuery,
     valueMatchKey,
-    whereHandler,
-    performValidQuery,
-    findDatasetById
-} from "../src/controller/PerformQuery";
-import {deleteAllFromDisk} from "../src/controller/AddDatasetHelpers";
-import {ICourseDataset} from "../src/controller/IDataset";
+    whereValidation
+} from "../src/controller/ValidateQuery";
 
 // This should match the schema given to TestUtil.validate(..) in TestUtil.readTestQueries(..)
 // except 'filename' which is injected when the file is read.
@@ -993,7 +995,7 @@ describe("InsightFacade Add/Remove Dataset from Linh's d0", function () {
         };
 
         const expected = 0;
-        const actual = whereHandler(obj, "courses");
+        const actual = whereValidation(obj, "courses");
         expect(actual).to.equal(expected);
     });
 
@@ -1005,7 +1007,7 @@ describe("InsightFacade Add/Remove Dataset from Linh's d0", function () {
         };
 
         const expected = 0;
-        const actual = whereHandler(obj, "courses");
+        const actual = whereValidation(obj, "courses");
         expect(actual).to.equal(expected);
     });
 
@@ -1184,7 +1186,7 @@ describe("InsightFacade Add/Remove Dataset from Linh's d0", function () {
         };
 
         const expected = 0;
-        const actual = whereHandler(obj, "courses");
+        const actual = whereValidation(obj, "courses");
         expect(actual).to.deep.equal(expected);
     });
 });
