@@ -14,7 +14,7 @@ import {
     findDatasetById
 } from "../src/controller/PerformQuery";
 import {deleteAllFromDisk} from "../src/controller/AddDatasetHelpers";
-import {ICourseDataset} from "../src/controller/ICourseDataset";
+import {ICourseDataset} from "../src/controller/IDataset";
 
 // This should match the schema given to TestUtil.validate(..) in TestUtil.readTestQueries(..)
 // except 'filename' which is injected when the file is read.
@@ -189,124 +189,6 @@ describe("InsightFacade Add/Remove Dataset from Aiden's d0", function () {
         });
 
     });
-
-    /*
-    it("SMALL performQuery", function () {
-        const id: string = "minidata";
-        let obj = {
-            WHERE: {EQ: {minidata_avg: 78.95 }},
-            OPTIONS: {
-                COLUMNS: [
-                    "minidata_dept",
-                    "minidata_id",
-                    "minidata_instructor",
-                    "minidata_title",
-                    "minidata_uuid",
-                    "minidata_avg",
-                    "minidata_pass",
-                    "minidata_fail",
-                    "minidata_audit",
-                    "minidata_year"
-                ],
-                ORDER: "minidata_avg"
-            }};
-        const expected = [{
-                minidata_audit: 0,
-                minidata_avg: 78.95,
-                minidata_dept: "phys",
-                minidata_fail: 0,
-                minidata_id: "107",
-                minidata_instructor: "",
-                minidata_pass: 88,
-                minidata_title: "enrich physics 1",
-                minidata_uuid: "33532",
-                minidata_year: 2010,
-            }, {
-                minidata_audit: 0,
-                minidata_avg: 78.95,
-                minidata_dept: "phys",
-                minidata_fail: 0,
-                minidata_id: "107",
-                minidata_instructor: "affleck, ian keith;bonn, douglas andrew",
-                minidata_pass: 88,
-                minidata_title: "enrich physics 1",
-                minidata_uuid: "33531",
-                minidata_year: 2010,
-            }];
-        return insightFacade.addDataset(id, datasets[id], InsightDatasetKind.Courses)
-            .then((result: string[]) => {
-            return insightFacade.performQuery(obj);
-        }).then((value: any[]) => {
-            expect(value).to.deep.equal(expected);
-        });
-    });
-
-     */
-
-    /*
-    it("Testing other performQuery", function () {
-        const id: string = "courses";
-        let obj = {
-            WHERE: {
-                OR: [
-                    {
-                        AND: [
-                            {
-                                GT: {
-                                    courses_avg: 97
-                                }
-                            },
-                            {
-                                NOT: {
-                                    IS: {
-                                        courses_dept: "adhe"
-                                    }
-                                }
-                            },
-                            {
-                                NOT: {
-                                    LT: {
-                                        courses_year: 2008
-                                    }
-                                }
-                            }
-                        ]
-                    },
-                    {
-                        EQ: {
-                            courses_avg: 95
-                        }
-                    },
-                    {
-                        AND: {
-                            LT: {
-                                courses_avg: 96
-                            }
-                        }
-                    }
-                ]
-            },
-            OPTIONS: {
-                COLUMNS: [
-                    "courses_dept",
-                    "courses_id",
-                    "courses_avg",
-                    "courses_year"
-                ],
-                ORDER: "courses_avg"
-            }
-        };
-        const expected = [{}];
-        return insightFacade.addDataset(id, datasets[id], InsightDatasetKind.Courses)
-            .then((result: string[]) => {
-                return insightFacade.performQuery(obj);
-            }).then((value: any[]) => {
-                expect(value).to.deep.equal(expected);
-            }).catch((err: any) => {
-                expect.fail(err, expected, "shouldn't have rejected!");
-            });
-    });
-     */
 
     it("Should add a valid dataset, even if it contains file with broken json", function () {
         const id: string = "brkdata";
@@ -1253,9 +1135,9 @@ describe("InsightFacade Add/Remove Dataset from Linh's d0", function () {
 
         return insightFacade.addDataset("courses", datasets["courses"], InsightDatasetKind.Courses)
             .then((result: any[]) => {
-                let dataset: ICourseDataset = findDatasetById(insightFacade.database, "courses");
-                const answer = performValidQuery(obj, dataset);
-                expect(answer.length).to.equal(167);
+                let dataset: InsightDataset = findDatasetById(insightFacade.database, "courses");
+                const answer = performValidQuery(obj, dataset as ICourseDataset);
+                expect.fail();
             }).catch((err: any) => {
                 expect(err).to.be.instanceOf(InsightError);
             });
@@ -1304,142 +1186,5 @@ describe("InsightFacade Add/Remove Dataset from Linh's d0", function () {
         const expected = 0;
         const actual = whereHandler(obj, "courses");
         expect(actual).to.deep.equal(expected);
-    });
-});
-
-describe("InsightFacade test disk persistence", function () {
-    // Reference any datasets you've added to test/data here and they will
-    // automatically be loaded in the 'before' hook.
-    const datasetsToLoad: { [id: string]: string } = {
-        courses: "./test/data/courses.zip",
-    };
-    let datasets: { [id: string]: string } = {};
-    let insightFacade: InsightFacade;
-    const cacheDir = __dirname + "/../data";
-
-    before(function () {
-        // This section runs once and loads all datasets specified in the datasetsToLoad object
-        // into the datasets object
-        Log.test(`Before all`);
-        for (const id of Object.keys(datasetsToLoad)) {
-            datasets[id] = fs.readFileSync(datasetsToLoad[id]).toString("base64");
-        }
-    });
-
-    beforeEach(function () {
-        // This section resets the data directory (removing any cached data) and resets the InsightFacade instance
-        // This runs before each test, which should make each test independent from the previous one
-        Log.test(`BeforeTest: ${this.currentTest.title}`);
-        try {
-            fs.removeSync(cacheDir);
-            fs.mkdirSync(cacheDir);
-            insightFacade = new InsightFacade();
-        } catch (err) {
-            Log.error(err);
-        }
-    });
-
-    after(function () {
-        Log.test(`After: ${this.test.parent.title}`);
-        deleteAllFromDisk();
-    });
-
-    afterEach(function () {
-        Log.test(`AfterTest: ${this.currentTest.title}`);
-    });
-
-    it("Added datasets should be accessible from other instances of InsightFacade", function () {
-        const id: string = "courses";
-        const expected: string[] = [id];
-        const expected2: InsightDataset[] = [{
-            id: id,
-            kind: InsightDatasetKind.Courses,
-            numRows: 64612,
-        }];
-        return insightFacade.addDataset(id, datasets[id], InsightDatasetKind.Courses).then((result: string[]) => {
-            expect(result).to.deep.equal(expected);
-            let insightFacade2: InsightFacade = new InsightFacade();
-            return insightFacade2.listDatasets();
-        }).then((result: InsightDataset[]) => {
-            expect(result).to.deep.equal(expected2);
-        }).catch((err: any) => {
-            Log.error(err);
-            expect.fail(err, expected, "Should not have rejected");
-        });
-
-    });
-
-});
-
-/*
- * This test suite dynamically generates tests from the JSON files in test/queries.
- * You should not need to modify it; instead, add additional files to the queries directory.
- * You can still make tests the normal way, this is just a convenient tool for a majority of queries.
- */
-describe("InsightFacade PerformQuery", () => {
-    const datasetsToQuery: { [id: string]: any } = {
-        courses: {id: "courses", path: "./test/data/courses.zip", kind: InsightDatasetKind.Courses},
-        coursesduplicate: {id: "coursesduplicate", path: "./test/data/courses.zip", kind: InsightDatasetKind.Courses},
-        newCourses: {id: "newCourses", path: "./test/data/courses.zip", kind: InsightDatasetKind.Courses},
-        minidata: {id: "minidata", path: "./test/data/minidata.zip", kind: InsightDatasetKind.Courses}
-    };
-    let insightFacade: InsightFacade = new InsightFacade();
-    let testQueries: ITestQuery[] = [];
-
-    // Load all the test queries, and call addDataset on the insightFacade instance for all the datasets
-    before(function () {
-        Log.test(`Before: ${this.test.parent.title}`);
-
-        // Load the query JSON files under test/queries.
-        // Fail if there is a problem reading ANY query.
-        try {
-            testQueries = TestUtil.readTestQueries();
-        } catch (err) {
-            expect.fail("", "", `Failed to read one or more test queries. ${err}`);
-        }
-
-        // Load the datasets specified in datasetsToQuery and add them to InsightFacade.
-        // Will fail* if there is a problem reading ANY dataset.
-        const loadDatasetPromises: Array<Promise<string[]>> = [];
-        for (const key of Object.keys(datasetsToQuery)) {
-            const ds = datasetsToQuery[key];
-            const data = fs.readFileSync(ds.path).toString("base64");
-            loadDatasetPromises.push(insightFacade.addDataset(ds.id, data, ds.kind));
-        }
-        return Promise.all(loadDatasetPromises).catch((err) => {
-            /* *IMPORTANT NOTE: This catch is to let this run even without the implemented addDataset,
-             * for the purposes of seeing all your tests run.
-             * For D1, remove this catch block (but keep the Promise.all)
-             */
-            return Promise.resolve("HACK TO LET QUERIES RUN");
-        });
-    });
-
-    beforeEach(function () {
-        Log.test(`BeforeTest: ${this.currentTest.title}`);
-    });
-
-    after(function () {
-        Log.test(`After: ${this.test.parent.title}`);
-    });
-
-    afterEach(function () {
-        Log.test(`AfterTest: ${this.currentTest.title}`);
-    });
-
-    // Dynamically create and run a test for each query in testQueries
-    // Creates an extra "test" called "Should run test queries" as a byproduct. Don't worry about it
-    it("Should run test queries", function () {
-        describe("Dynamic InsightFacade PerformQuery tests", function () {
-            for (const test of testQueries) {
-                it(`[${test.filename}] ${test.title}`, function (done) {
-                    insightFacade.performQuery(test.query).then((result) => {
-                        TestUtil.checkQueryResult(test, result, done);
-                    }).catch((err) => {
-                        TestUtil.checkQueryResult(test, err, done);
-                    });
-                });
-            }
-        });
     });
 });

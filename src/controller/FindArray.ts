@@ -1,4 +1,4 @@
-import {ICourseDataset, ImKeyEntry, IsKeyEntry} from "./ICourseDataset";
+import {ICourseDataset, ImKeyEntry, IsKeyEntry} from "./IDataset";
 import {InsightError} from "./IInsightFacade";
 
 function getImKeyArray(dataset: ICourseDataset, compared: string): ImKeyEntry[] {

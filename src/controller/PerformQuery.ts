@@ -1,6 +1,6 @@
 import {InsightDataset, InsightDatasetKind, InsightError} from "./IInsightFacade";
 import InsightFacade from "./InsightFacade";
-import {ICourse, ICourseDataset, IDatabase, ImKeyEntry, IResultObj} from "./ICourseDataset";
+import {ICourse, ICourseDataset, IDatabase, ImKeyEntry, IResultObj} from "./IDataset";
 import {validateIDString} from "./AddDatasetHelpers";
 import {findArray} from "./FindArray";
 
@@ -240,7 +240,7 @@ export function typeMatchValidID(key: string): string[] | null {        // retur
     return null;
 }
 
-export function findDatasetById(database: IDatabase, id: string): ICourseDataset {
+export function findDatasetById(database: IDatabase, id: string): InsightDataset {
     for (let dataset of database.datasets) {
         if (dataset.id === id) {
             return dataset;

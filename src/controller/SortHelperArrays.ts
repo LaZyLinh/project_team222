@@ -1,5 +1,5 @@
 // Sorts the 'helper arrays' of the dataset after all entries have been added
-import {ICourseDataset, ImKeyEntry, IsKeyEntry} from "./ICourseDataset";
+import {ICourseDataset, ImKeyEntry, IsKeyEntry} from "./IDataset";
 
 export function sortHelperArrays(dataset: ICourseDataset) {
     let promises: Array<Promise<boolean>> = [];

@@ -1,7 +1,41 @@
-import {InsightDatasetKind, InsightError} from "./IInsightFacade";
-import {ICourse, ICourseDataset, IDatabase, ImKeyEntry, IsKeyEntry} from "./ICourseDataset";
+import {InsightDataset, InsightDatasetKind, InsightError} from "./IInsightFacade";
+import {ICourse, ICourseDataset, IDatabase, ImKeyEntry, IsKeyEntry} from "./IDataset";
 import InsightFacade from "./InsightFacade";
 import * as fs from "fs";
+import * as JSZip from "jszip";
+import {JSZipObject} from "jszip";
+
+export function getAddDatasetPromise(content: string, id: string, datasets: InsightDataset[]) {
+    return new JSZip().loadAsync(content, {base64: true})
+        .then((zip) => {
+            let filePromises: Array<Promise<string | void>> = [];
+            zip.folder("courses").forEach((path: string, file: JSZipObject) => {
+                filePromises.push(file.async("text"));
+            });
+            return Promise.all(filePromises);
+        }).then((res: string[]) => {
+            // do something with the string body of each file. parse it! (or not)
+            let newDataset: ICourseDataset = newDatasetHelper(id, InsightDatasetKind.Courses);
+            for (content of res) {
+                try {
+                    let course = JSON.parse(content);
+                    let coursesData: ICourse[] = ICourseHelper(course);
+                    addCoursesToDataset(coursesData, newDataset);
+                } catch (err) {
+                    // parsing the json failed!
+                    // but this is fine so long as not *all* of the json files fail. We'll see later.
+                }
+            }
+            if (newDataset.courses.length !== 0) {
+                datasets.push(newDataset);
+                // sortHelperArrays(newDataset);
+                saveDatasetToDisk(newDataset);
+                return Promise.resolve();
+            } else {
+                return Promise.reject(new InsightError("No valid courses in zip file."));
+            }
+        });
+}
 
 export function newDatasetHelper(newID: string, newKind: InsightDatasetKind): ICourseDataset {
     return {
@@ -134,7 +168,9 @@ export function loadAllFromDisk(infa: InsightFacade) {
     try {
         let fnames: string[] = fs.readdirSync("data/");
         for (let fname of fnames) {
-            if (idsInMemory(infa.database).includes(fname)) {continue; }
+            if (idsInMemory(infa.database).includes(fname)) {
+                continue;
+            }
             loadDatasetFromDisk(infa, fname);
         }
     } catch {
@@ -212,3 +248,4 @@ export function validateIDString(id: string): string | InsightError {
     }
     return id;
 }
+

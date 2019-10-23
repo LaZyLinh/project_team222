@@ -7,20 +7,12 @@ import {
     NotFoundError,
     ResultTooLargeError
 } from "./IInsightFacade";
-import * as JSZip from "jszip";
-import {queryParser} from "restify";
-import * as fs from "fs";
-import {JSZipObject} from "jszip";
-import {ICourse, ICourseDataset, IDatabase} from "./ICourseDataset";
+import {ICourseDataset, IDatabase} from "./IDataset";
 import {
-    addCoursesToDataset, deleteDatasetFromDisk,
-    ICourseHelper,
-    idListHelper, idsInMemory, loadAllFromDisk, loadFromDiskIfNecessary,
-    newDatasetHelper,
-    saveDatasetToDisk, validateIDString,
+    deleteDatasetFromDisk, getAddDatasetPromise,
+    idListHelper, idsInMemory, loadAllFromDisk, loadFromDiskIfNecessary, validateIDString,
 } from "./AddDatasetHelpers";
 import {validateQuery, performValidQuery, findDatasetById, formatResults} from "./PerformQuery";
-import {sortHelperArrays} from "./SortHelperArrays";
 
 /**
  * This is the main programmatic entry point for the project.
@@ -47,44 +39,13 @@ export default class InsightFacade implements IInsightFacade {
                 return Promise.reject(new InsightError("Invalid ID: id already in database"));
             }
         }
-        // by here we know the id string is valid
-        let newZip = new JSZip(); // more files !
-        return newZip.loadAsync(content, {base64: true})
-            .then((zip) => {
-                let filePromises: Array<Promise<string|void>> = [];
-                zip.folder("courses").forEach((path: string, file: JSZipObject) => {
-                    filePromises.push(file.async("text"));
-                });
-                return Promise.all(filePromises);
-            }).then((res: string[]) => {
-                // do something with the string body of each file. parse it! (or not)
-                let newDataset: ICourseDataset = newDatasetHelper(id, InsightDatasetKind.Courses);
-                for (content of res) {
-                    try {
-                        let course = JSON.parse(content);
-                        let coursesData: ICourse[] = ICourseHelper(course);
-                        addCoursesToDataset(coursesData, newDataset);
-                    } catch (err) {
-                        // parsing the json failed!
-                        // but this is fine so long as not *all* of the json files fail. We'll see later.
-                    }
-                }
-                if (newDataset.courses.length !== 0) {
-                    this.database.datasets.push(newDataset);
-                    // sortHelperArrays(newDataset);
-                    saveDatasetToDisk(newDataset);
-                    return Promise.resolve();
-                } else {
-                    return Promise.reject(new InsightError("No valid courses in zip file."));
-                }
-            }).then((res) => {
-                return idListHelper(this.database);
-            }).catch((err) => {
-                // okay what happened?
-                return Promise.reject(new InsightError(err));
-            });
-
-        // return Promise.reject("Shouldn't have made it to here.");
+        // by here we know the id string is valid, so add the dataset
+        return getAddDatasetPromise(content, id, this.database.datasets).then((res) => {
+            // then return a list of the added datasets.
+            return idListHelper(this.database);
+        }).catch((err) => {
+            return Promise.reject(new InsightError(err));
+        });
     }
 
     public removeDataset(id: string): Promise<string> {
@@ -126,7 +87,7 @@ export default class InsightFacade implements IInsightFacade {
                 return;
             }
 
-            let dataset: ICourseDataset = findDatasetById(this.database, datasetID);
+            let dataset: ICourseDataset = findDatasetById(this.database, datasetID) as ICourseDataset;
             const whereCont = query["WHERE"];   // make sure where only takes 1 FILTER and is the right type
             const optionCont = query["OPTIONS"];
             const columnCont = optionCont["COLUMNS"]

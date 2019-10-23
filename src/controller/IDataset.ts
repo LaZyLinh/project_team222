@@ -14,6 +14,21 @@ export interface ICourse {
     uuid: string;
 }
 
+export interface IRoom {
+    [key: string]: string|number;
+    fullname: string;
+    shortname: string;
+    number: string;
+    name: string;
+    address: string;
+    lat: number;
+    lon: number;
+    seats: number;
+    type: string;
+    furniture: string;
+    href: string;
+}
+
 export interface ICourseDataset extends InsightDataset {
     courses: ICourse[];
     year: ImKeyEntry[];
@@ -28,8 +43,24 @@ export interface ICourseDataset extends InsightDataset {
     uuid: IsKeyEntry[];
 }
 
+export interface IRoomDataset extends InsightDataset {
+    // [key: string]: IsKeyEntry[]|ImKeyEntry[]|IRoom[]|string|number;
+    rooms: IRoom[];
+    fullname: IsKeyEntry[];
+    shortname: IsKeyEntry[];
+    number: IsKeyEntry[];
+    name: IsKeyEntry[];
+    address: IsKeyEntry[];
+    lat: ImKeyEntry[];
+    lon: ImKeyEntry[];
+    seats: ImKeyEntry[];
+    type: IsKeyEntry[];
+    furniture: IsKeyEntry[];
+    href: IsKeyEntry[];
+}
+
 export interface IDatabase {
-    datasets: ICourseDataset[];
+    datasets: InsightDataset[];
 }
 
 export interface ImKeyEntry {
