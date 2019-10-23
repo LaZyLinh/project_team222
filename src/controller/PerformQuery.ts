@@ -4,6 +4,27 @@ import {ICourse, ICourseDataset, IDatabase, ImKeyEntry, IResultObj} from "./IDat
 import {validateIDString} from "./AddDatasetHelpers";
 import {findArray} from "./FindArray";
 
+function MultHelper(key: string, result: number[], clause: any, dataset: ICourseDataset) {
+    if (key === "AND") {
+        if (!Array.isArray(result) || !result.length) {
+            result = performValidQuery(clause, dataset);
+        } else {
+            let temp = performValidQuery(clause, dataset);
+            result = [...new Set(temp.filter((value) =>
+                result.includes(value)))]; // might not have to Set
+        }
+    } else {
+        if (!Array.isArray(result) || !result.length) {
+            result = performValidQuery(clause, dataset);
+        } else {
+            let array: number[] = performValidQuery(clause, dataset);
+            result = result.concat(array);
+            result = [...new Set(result)];
+        }
+    }
+    return result;
+}
+
 export function performValidQuery(query: any, dataset: ICourseDataset): number[] {
     const mult = ["AND", "OR"];
     const mSingle = ["GT", "LT", "EQ"];
@@ -11,49 +32,35 @@ export function performValidQuery(query: any, dataset: ICourseDataset): number[]
     const neg = "NOT";
     let result: number[] = [];
 
-    if (query !== null && typeof query === "object") {
-        if (Array.isArray(Object.keys(query))) {
-            for (const[key, more] of Object.entries(query)) {
-                if (key === neg) {
-                    let fullSet = Array.from(Array(dataset.numRows).keys());   // create array [1, 2, .. numRows]
-                    const tmp: number[] = performValidQuery(more, dataset);
-                    result = fullSet.filter((value) => !tmp.includes(value));
+    if (query === null || typeof query !== "object") {
+        return result;
+    }
+    if (Array.isArray(Object.keys(query))) {
+        for (const [key, more] of Object.entries(query)) {
+            if (key === neg) {
+                let fullSet = Array.from(Array(dataset.numRows).keys());   // create array [1, 2, .. numRows]
+                const tmp: number[] = performValidQuery(more, dataset);
+                result = fullSet.filter((value) => !tmp.includes(value));
+                continue;
+            }
+            if (mult.includes(key) && Array.isArray(more)) {
+                for (const clause of more) {
+                    result = MultHelper(key, result, clause, dataset);
                 }
-                if (mult.includes(key)) {
-                    if (Array.isArray(more)) {
-                        for (const clause of more) {
-                            if (key === "AND") {
-                                if (!Array.isArray(result) || !result.length) {
-                                 result = performValidQuery(clause, dataset);
-                                 } else {
-                                    let temp = performValidQuery(clause, dataset);
-                                    result = [...new Set(temp.filter((value) =>
-                                        result.includes(value)))]; // might not have to Set
-                                 }
-                            } else {
-                                 if (!Array.isArray(result) || !result.length) {
-                                   result = performValidQuery(clause, dataset);
-                                 } else {
-                                     let array: number[] = performValidQuery(clause, dataset);
-                                     result = result.concat(array);
-                                     result = [...new Set(result)];
-                                }
-                            }
-                        }
-                    } else {result = performValidQuery(more, dataset); }}
-                if (mSingle.includes(key) || sSingle.includes(key)) {
-                    for (const [field, value] of Object.entries(query[key])) {
-                        let tmResult = typeMatchValidID(field);
-                        if (tmResult !== null) {
-                            const compared = tmResult[2];
-                            // if (result.length === 0) {
-                            //    result = findArray(compared, key, value, dataset);
-                            // } else {
-                            result = [...new Set(findArray(compared, key, value, dataset))];
-                        }
-                    }
+                continue;
+            }
+            // if (mSingle.includes(key) || sSingle.includes(key)) {
+            for (const [field, value] of Object.entries(query[key])) {
+                let tmResult = typeMatchValidID(field);
+                if (tmResult !== null) {
+                    const compared = tmResult[2];
+                    // if (result.length === 0) {
+                    //    result = findArray(compared, key, value, dataset);
+                    // } else {
+                    result = [...new Set(findArray(compared, key, value, dataset))];
                 }
-            }}
+            }
+        }
     }
     return result;
 }
@@ -78,7 +85,9 @@ export function validateQuery(query: any): null | string {
     let test = correctOption(columnCont, optionCont);
     if (test === null) {
         return null;
-    } else { dataID = test; }
+    } else {
+        dataID = test;
+    }
     // dealing with WHERE section
     if (Object.keys(whereCont).length !== 0) {            // if WHERE: {}, all good!
         if (this.whereHandler(whereCont, dataID) > 0) {
@@ -137,31 +146,45 @@ export function whereHandler(item: any, dataID: string): number {
             for (const [key, more] of Object.entries(item)) {
                 if (Object.keys(item).length > 1) {
                     anyFalse++;
-                    break; }
+                    break;
+                }
                 if (!mSingle.includes(key) && !sSingle.includes(key) && !mult.includes(key) && key !== neg) {
                     anyFalse++;
-                    break; }
+                    break;
+                }
                 if (more === null || Object.entries(more).length === 0) {
                     anyFalse++;
-                    break; }
+                    break;
+                }
                 if (mult.includes(key)) {
                     if (Array.isArray(more)) {
-                        for (const clause of more) {anyFalse += this.whereHandler(clause, dataID); }
-                    } else {anyFalse += this.whereHandler(more, dataID); }
+                        for (const clause of more) {
+                            anyFalse += this.whereHandler(clause, dataID);
+                        }
+                    } else {
+                        anyFalse += this.whereHandler(more, dataID);
+                    }
                 }
                 if (key === neg) {
                     if (Object.entries(more).length > 1 || Array.isArray(more)) {
                         anyFalse++;
-                        break; }
-                    anyFalse += this.whereHandler(more, dataID); }
+                        break;
+                    }
+                    anyFalse += this.whereHandler(more, dataID);
+                }
                 if (mSingle.includes(key) || sSingle.includes(key)) {
                     if (Object.entries(more).length > 1 || Array.isArray(more)) {
                         anyFalse++;
-                        break; }
+                        break;
+                    }
                     if (anyFalseSingle(item, key, dataID) > 0) {
                         anyFalse++;
                         break;
-                    }}}}}
+                    }
+                }
+            }
+        }
+    }
     return anyFalse;
 }
 
@@ -183,17 +206,22 @@ export function anyFalseSingle(item: any, key: string, dataID: string): number {
             }
         } else {
             if (typeValid[0] !== "string" || !valueMatchKey([field, value])) {
-                return 1; }
+                return 1;
+            }
             if (typeof value === "string" && !validateIS(value)) {
-                return 1; }
+                return 1;
+            }
         }
     }
 }
+
 export function validateIS(value: string): boolean {
     let match = value.match(/^[*]?[^*]*[*]?$/);
     if (match === null) {
         return false;
-    } else {return /^[*]?[^*]*[*]?$/.test(value); }
+    } else {
+        return /^[*]?[^*]*[*]?$/.test(value);
+    }
 }
 
 export function valueMatchKey([key, value]: [string, any]) {
