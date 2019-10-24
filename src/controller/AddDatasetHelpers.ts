@@ -1,11 +1,11 @@
 import {InsightDataset, InsightDatasetKind, InsightError} from "./IInsightFacade";
-import {ICourse, ICourseDataset, IDatabase, ImKeyEntry, IsKeyEntry} from "./IDataset";
+import {ICourse, ICourseDataset, IDatabase} from "./IDataset";
 import InsightFacade from "./InsightFacade";
 import * as fs from "fs";
 import * as JSZip from "jszip";
 import {JSZipObject} from "jszip";
 
-export function getAddDatasetPromise(content: string, id: string, datasets: InsightDataset[]) {
+function getAddCourseDatasetPromise(content: string, id: string, datasets: InsightDataset[]): Promise<any> {
     return new JSZip().loadAsync(content, {base64: true})
         .then((zip) => {
             let filePromises: Array<Promise<string | void>> = [];
@@ -35,6 +35,28 @@ export function getAddDatasetPromise(content: string, id: string, datasets: Insi
                 return Promise.reject(new InsightError("No valid courses in zip file."));
             }
         });
+}
+
+function getAddRoomDatasetPromise(content: string, id: string, datasets: InsightDataset[]) {
+    return new JSZip().loadAsync(content, {base64: true})
+        .then((zip) => {
+            let filePromises: Array<Promise<string | void>> = [];
+            zip.folder("courses").forEach((path: string, file: JSZipObject) => {
+                filePromises.push(file.async("text"));
+            });
+            return Promise.all(filePromises);
+        });
+}
+
+export function getAddDatasetPromise(kind: InsightDatasetKind,
+                                     content: string,
+                                     id: string,
+                                     datasets: InsightDataset[]) {
+    if (kind === InsightDatasetKind.Courses) {
+        return getAddCourseDatasetPromise(content, id, datasets);
+    } else {
+        return getAddRoomDatasetPromise(content, id, datasets);
+    }
 }
 
 export function newDatasetHelper(newID: string, newKind: InsightDatasetKind): ICourseDataset {

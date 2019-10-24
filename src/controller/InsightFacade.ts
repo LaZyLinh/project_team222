@@ -42,7 +42,7 @@ export default class InsightFacade implements IInsightFacade {
             }
         }
         // by here we know the id string is valid, so add the dataset
-        return getAddDatasetPromise(content, id, this.database.datasets).then((res) => {
+        return getAddDatasetPromise(kind, content, id, this.database.datasets).then((res) => {
             // then return a list of the added datasets.
             return idListHelper(this.database);
         }).catch((err) => {
