@@ -55,10 +55,14 @@ function getAddRoomDatasetPromise(content: string, id: string, datasets: Insight
         }).then((res: string) => {
             // TODO: parse html file
             let roomsToParse: string[] = parseIndexHTML(res);
+        }).then((res: any) => {
+            // TODO
         });
-    // TODO: load all other files
+    // TODO: load the other files
     // TODO: for each entry in the table in the index.html, parse corresponding room file
+    //      (only load the ones in index.html?)
     // TODO: geolocation for each thing
+    // TODO: Stick these all together and return a new IRoomDataset
 }
 
 export function getAddDatasetPromise(kind: InsightDatasetKind,
