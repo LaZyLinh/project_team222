@@ -117,7 +117,6 @@ export default class InsightFacade implements IInsightFacade {
             }
 
             const finalResultArray = formatResults(dataset, array, columnCont, order);
-
             resolve(finalResultArray);
         });
     }

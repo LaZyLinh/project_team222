@@ -37,15 +37,28 @@ function getAddCourseDatasetPromise(content: string, id: string, datasets: Insig
         });
 }
 
+function parseIndexHTML(res: string): string[] {
+    const parse5 = require("parse5");
+    let parsed = parse5.parse(res);
+    // TODO: implement me~~ <3 <3
+    //       I need to be able to return... what exactly? I'm not certain.
+    return [];
+}
+
 function getAddRoomDatasetPromise(content: string, id: string, datasets: InsightDataset[]) {
+    let zip: JSZip;
     return new JSZip().loadAsync(content, {base64: true})
-        .then((zip) => {
-            let filePromises: Array<Promise<string | void>> = [];
-            zip.folder("courses").forEach((path: string, file: JSZipObject) => {
-                filePromises.push(file.async("text"));
-            });
-            return Promise.all(filePromises);
+        .then((res: JSZip) => {
+            // load html file
+            zip = res;
+            return zip.folder("rooms").file("index.html").async("text");
+        }).then((res: string) => {
+            // TODO: parse html file
+            let roomsToParse: string[] = parseIndexHTML(res);
         });
+    // TODO: load all other files
+    // TODO: for each entry in the table in the index.html, parse corresponding room file
+    // TODO: geolocation for each thing
 }
 
 export function getAddDatasetPromise(kind: InsightDatasetKind,
