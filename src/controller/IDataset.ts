@@ -44,7 +44,7 @@ export interface ICourseDataset extends InsightDataset {
 }
 
 export interface IRoomDataset extends InsightDataset {
-    // [key: string]: IsKeyEntry[]|ImKeyEntry[]|IRoom[]|string|number;
+    [key: string]: IsKeyEntry[]|ImKeyEntry[]|IRoom[]|string|number;
     rooms: IRoom[];
     fullname: IsKeyEntry[];
     shortname: IsKeyEntry[];

@@ -1,9 +1,21 @@
 import {InsightDataset, InsightDatasetKind, InsightError} from "./IInsightFacade";
-import {ICourse, ICourseDataset, IDatabase} from "./IDataset";
+import {ICourse, ICourseDataset, IDatabase, IRoom, IRoomDataset} from "./IDataset";
 import InsightFacade from "./InsightFacade";
 import * as fs from "fs";
 import * as JSZip from "jszip";
 import {JSZipObject} from "jszip";
+import {getAddRoomDatasetPromise} from "./AddRoomDatasetHelpers";
+
+export function getAddDatasetPromise(kind: InsightDatasetKind,
+                                     content: string,
+                                     id: string,
+                                     datasets: InsightDataset[]) {
+    if (kind === InsightDatasetKind.Courses) {
+        return getAddCourseDatasetPromise(content, id, datasets);
+    } else {
+        return getAddRoomDatasetPromise(content, id, datasets);
+    }
+}
 
 function getAddCourseDatasetPromise(content: string, id: string, datasets: InsightDataset[]): Promise<any> {
     return new JSZip().loadAsync(content, {base64: true})
@@ -15,7 +27,7 @@ function getAddCourseDatasetPromise(content: string, id: string, datasets: Insig
             return Promise.all(filePromises);
         }).then((res: string[]) => {
             // do something with the string body of each file. parse it! (or not)
-            let newDataset: ICourseDataset = newDatasetHelper(id, InsightDatasetKind.Courses);
+            let newDataset: ICourseDataset = newCourseDatasetHelper(id, InsightDatasetKind.Courses);
             for (content of res) {
                 try {
                     let course = JSON.parse(content);
@@ -37,46 +49,7 @@ function getAddCourseDatasetPromise(content: string, id: string, datasets: Insig
         });
 }
 
-function parseIndexHTML(res: string): string[] {
-    const parse5 = require("parse5");
-    let parsed = parse5.parse(res);
-    // TODO: implement me~~ <3 <3
-    //       I need to be able to return... what exactly? I'm not certain.
-    return [];
-}
-
-function getAddRoomDatasetPromise(content: string, id: string, datasets: InsightDataset[]) {
-    let zip: JSZip;
-    return new JSZip().loadAsync(content, {base64: true})
-        .then((res: JSZip) => {
-            // load html file
-            zip = res;
-            return zip.folder("rooms").file("index.html").async("text");
-        }).then((res: string) => {
-            // TODO: parse html file
-            let roomsToParse: string[] = parseIndexHTML(res);
-        }).then((res: any) => {
-            // TODO
-        });
-    // TODO: load the other files
-    // TODO: for each entry in the table in the index.html, parse corresponding room file
-    //      (only load the ones in index.html?)
-    // TODO: geolocation for each thing
-    // TODO: Stick these all together and return a new IRoomDataset
-}
-
-export function getAddDatasetPromise(kind: InsightDatasetKind,
-                                     content: string,
-                                     id: string,
-                                     datasets: InsightDataset[]) {
-    if (kind === InsightDatasetKind.Courses) {
-        return getAddCourseDatasetPromise(content, id, datasets);
-    } else {
-        return getAddRoomDatasetPromise(content, id, datasets);
-    }
-}
-
-export function newDatasetHelper(newID: string, newKind: InsightDatasetKind): ICourseDataset {
+export function newCourseDatasetHelper(newID: string, newKind: InsightDatasetKind): ICourseDataset {
     return {
         audit: [],
         avg: [],
@@ -287,4 +260,3 @@ export function validateIDString(id: string): string | InsightError {
     }
     return id;
 }
-
