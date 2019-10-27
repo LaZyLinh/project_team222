@@ -7,6 +7,7 @@ import {
     NotFoundError,
     ResultTooLargeError
 } from "./IInsightFacade";
+import {groupResults} from "./FormatTransformation";
 import {ICourseDataset, IDatabase} from "./IDataset";
 import {
     deleteDatasetFromDisk, getAddDatasetPromise,
@@ -110,16 +111,17 @@ export default class InsightFacade implements IInsightFacade {
                 reject(new ResultTooLargeError());
                 return;
             }
-            // let group = [];
-            // let apply = [];
-            // if (query.hasOwnProperty("TRANSFORMATIONS")) {
-
-             // }
+            /*let group = [];
+            let apply = [];
+            if (query.hasOwnProperty("TRANSFORMATIONS")) {
+                group = query["TRANSFORMATIONS"]["GROUP"].map((str: string) => str.replace(datasetID + "_", ""));
+              }*/
             let order: string;
             if ( typeof optionCont["ORDER"] === "string") {
                 order = optionCont["ORDER"].replace(datasetID + "_", ""); // should be string
             }
             const finalResultArray = formatResults(dataset, result, columnCont, order);
+            // const finalResultArray = groupResults(dataset, result, group);
 
             resolve(finalResultArray);
         });

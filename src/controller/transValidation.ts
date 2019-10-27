@@ -3,11 +3,11 @@ import {typeMatchValidID} from "./ValidateQuery";
 
 export function transformationValidation(trans: any, column: string[], dataID: string,
                                          kind: InsightDatasetKind): number {
-
-    if (!trans.hasOwnProperty("GROUP") && trans.hasOwnProperty("APPLY")) {
+    if (trans === null) {
         return 1;
     }
-    if (trans.hasOwnProperty("GROUP") && !trans.hasOwnProperty("APPLY")) {
+
+    if (!trans.hasOwnProperty("GROUP") || !trans.hasOwnProperty("APPLY")) {
         return 1;
     }
 
@@ -48,29 +48,27 @@ function applyValidation(apply: any[], kind: InsightDatasetKind, dataID: string)
         if (obj === null || typeof obj !== "object") {
             return null;
         }
-        for (const [name, entry] of Object.entries(obj)) {
-            if (!/^[^_]+$/.test(name) || applyKeys.includes(name)) {
+        for (const [appKey, entry] of Object.entries(obj)) {
+            if (!/^[^_]+$/.test(appKey) || applyKeys.includes(appKey)) {
                 return null;
             }
             if (typeof entry !== "object" || Object.keys(entry).length > 1) {
                 return null;
             }
-            for (const [key, value] of Object.entries(entry)) {
-                if (!applyToken.includes(key)) {
+            for (const [token, key] of Object.entries(entry)) {
+                if (!applyToken.includes(token)) {
                     return null;
                 }
-                if (typeof value !== "string" || typeMatchValidID(value, kind) === null) {
+                if (typeof key !== "string" || typeMatchValidID(key, kind) === null ||
+                    typeMatchValidID(key, kind)[1] !== dataID) {
                     return null;
                 }
-                if (typeMatchValidID(value, kind)[1] !== dataID) {
-                    return null;
-                }
-                if (numOnlyToken.includes(name) && typeMatchValidID(value, kind)[0] !== "number") {
+                if (numOnlyToken.includes(token) && typeMatchValidID(key, kind)[0] !== "number") {
                     return null;
                 }
             }
             // here, the clauses are valid, so applykey is a good one
-            applyKeys.push(name);
+            applyKeys.push(appKey);
         }
     }
     return applyKeys;

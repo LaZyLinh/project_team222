@@ -45,6 +45,9 @@ export function validateQuery(query: any, kind: InsightDatasetKind): string | nu
         dataID = test[0];
     }
     let hasApplyKey = test[1];
+    if (hasApplyKey && !query.hasOwnProperty("TRANSFORMATIONS")) {
+        return null;
+    }
     // dealing with WHERE section
     if (Object.keys(whereCont).length !== 0) {            // if WHERE: {}, all good!
         if (this.whereValidation(whereCont, dataID, kind) > 0) {
@@ -52,10 +55,6 @@ export function validateQuery(query: any, kind: InsightDatasetKind): string | nu
         }
     }
     // deal with Transformation if it exists
-    if (hasApplyKey && !query.hasOwnProperty("TRANSFORMATIONS")) {
-        return null;
-    }
-
     if (query.hasOwnProperty("TRANSFORMATIONS")) {
 
        // if (!Array.isArray(group) || !Array.isArray(apply)) {
@@ -129,7 +128,7 @@ function orderValidation(order: any, columnCont: string[]): number {
         if (order["dir"] !== "UP" && order["dir"] !== "DOWN") {
             return 1;
         }
-        if (!Array.isArray(order["keys"])) {
+        if (!Array.isArray(order["keys"]) || order["keys"].length === 0) {
             return 1;
         }
         for (const key of order["keys"]) {
