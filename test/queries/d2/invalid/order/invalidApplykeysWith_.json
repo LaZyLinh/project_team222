@@ -1,0 +1,24 @@
+{
+    "title": "Invalid, columns is null",
+    "query": {
+        "WHERE": {
+            "LT": {
+                "courses_avg": 40
+            }
+        },
+        "OPTIONS": {
+            "COLUMNS": [
+                "courses_dept",
+                "courses_avg",
+                "min_course"
+            ],
+            "ORDER": {
+                "dir" : "UP",
+                "keys": ["min_course"]
+
+            }
+        }
+    },
+    "isQueryValid": false,
+    "result": "InsightError"
+}
