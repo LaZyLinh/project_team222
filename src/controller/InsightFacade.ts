@@ -117,7 +117,7 @@ export default class InsightFacade implements IInsightFacade {
                 let order: string = "";
                 if (!query.hasOwnProperty("ORDER")) {
                     finalArray = formatResults(dataset, result, columnCont, "");
-                } else {
+                } else { // has ORDER
                     if (typeof optionCont["ORDER"] === "string") {
                         order = optionCont["ORDER"].replace(datasetID + "_", ""); // should be string
                         finalArray = formatResults(dataset, result, columnCont, order);
@@ -151,7 +151,7 @@ export default class InsightFacade implements IInsightFacade {
                     dataList = (dataset as IRoomDataset).rooms;
                 }
                 for (let i = 0; i < groupedArray.length; i++) {
-                    let obj: {[k: string]: any} = {};
+                    let obj: { [k: string]: any } = {};
                     for (const key of optionCont["COLUMNS"]) {
                         if (typeMatchValidID(key, kind) !== null) {
                             obj[key] = dataList[groupedArray[i][0]][typeMatchValidID(key, kind)[2]];
@@ -161,19 +161,20 @@ export default class InsightFacade implements IInsightFacade {
                     }
                     finalArray.push(obj);
                 }
-            }
-            if (finalArray.length > 5000) {
-                reject(new ResultTooLargeError());
-                return;
-            }
-            if (query.hasOwnProperty("ORDER")) {
-                if (typeof columnCont("ORDER") === "string") {
-                    finalArray = sortResultHelper(finalArray, [optionCont["ORDER"]], "UP");
-                } else {
-                    finalArray = sortResultHelper(finalArray, optionCont["ORDER"]["keys"], optionCont["ORDER"]["dir"]);
+                if (finalArray.length > 5000) {
+                    reject(new ResultTooLargeError());
+                    return;
                 }
+                if (query.hasOwnProperty("ORDER")) {
+                    if (typeof columnCont("ORDER") === "string") {
+                        finalArray = sortResultHelper(finalArray, [optionCont["ORDER"]], "UP");
+                    } else {
+                        // eslint-disable-next-line @typescript-eslint/tslint/config
+                        finalArray = sortResultHelper(finalArray, optionCont["ORDER"]["keys"], optionCont["ORDER"]["dir"]);
+                    }
+                }
+                resolve(finalArray);
             }
-            resolve(finalArray);
         });
     }
 

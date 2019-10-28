@@ -88,7 +88,7 @@ export function applyMax(dataset: InsightDataset, indexGroup: number[], key: str
 }
 
 export function applyMin(dataset: InsightDataset, indexGroup: number[], key: string): number {
-    let min;
+    let min: number = Number.MAX_VALUE;
     let dataList: any;
     if (dataset.kind === InsightDatasetKind.Courses) {
         dataList = (dataset as ICourseDataset).courses;
@@ -96,9 +96,7 @@ export function applyMin(dataset: InsightDataset, indexGroup: number[], key: str
         dataList = (dataset as IRoomDataset).rooms;
     }
     for (const index of indexGroup) {
-        if (min === undefined) {
-            min = dataList[index][key];
-        } else if (dataList[index][key] < min) {
+        if (dataList[index][key] < min) {
             min = dataList[index][key];
         }
     }
