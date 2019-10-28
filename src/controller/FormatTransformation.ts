@@ -2,40 +2,55 @@ import {InsightDatasetKind} from "./IInsightFacade";
 import {ICourseDataset, IRoomDataset} from "./IDataset";
 
 export function groupResults(dataset: ICourseDataset | IRoomDataset, result: number[], group: string[]): any[] {
-    let groupedResult: any[];
-    let unique: any[] = [];
-    let entries: any;
+    let groupedResult: number[][] = [];
+    let unique: any[][] = [];
+    let dataList: any;
     if (dataset.kind === InsightDatasetKind.Courses) {
-        entries = (dataset as ICourseDataset).courses;
+        dataList = (dataset as ICourseDataset).courses;
     } else {
-        entries = (dataset as IRoomDataset).rooms;
+        dataList = (dataset as IRoomDataset).rooms;
     }
-    if (unique === []) {
-        let newUnique = [];
-        for (const key of group) {
-            newUnique.push(entries[result[0]][key]);
-        }
-        unique.push(newUnique);
-    }
-
     for (const courseIndex of result) {
+        if (unique === []) {
+            let newUnique = [];
+            for (const key of group) {
+                newUnique.push(dataList[courseIndex][key]);
+            }
+            unique.push(newUnique);
+            groupedResult.push([courseIndex]);
+            break;
+        }
         let uCount = 0;
+        let matchFound = false;
         for (const u of unique) {
             let keyCount = 0;
             let isMatch = true;
             for (const key of group) {
-                if (entries[courseIndex][key] !== u[keyCount]) {
+                if (dataList[courseIndex][key] !== u[keyCount]) {
                     isMatch = false;
                     break;
                 }
                 keyCount++;
             }
             if (isMatch) {
+                matchFound = true;
                 groupedResult[uCount].push(courseIndex);
                 break;
             }
             uCount++;
         }
+        if (!matchFound) {
+            let newUnique = [];
+            for (const key of group) {
+                newUnique.push(dataList[courseIndex][key]);
+            }
+            unique.push(newUnique);
+            groupedResult.push([courseIndex]);
+        }
     }
     return groupedResult;
+}
+
+export function applyMax(dataset: ICourseDataset | IRoomDataset, indexGroup: number[], key: string): any[] {
+    return [];
 }
