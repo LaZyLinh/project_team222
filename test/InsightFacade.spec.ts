@@ -13,6 +13,7 @@ import {
     valueMatchKey,
     whereValidation
 } from "../src/controller/ValidateQuery";
+import {getApplyList} from "../src/controller/FormatTransformation";
 // import {transformationValidation} from "../src/controller/transValidation";
 
 // This should match the schema given to TestUtil.validate(..) in TestUtil.readTestQueries(..)
@@ -966,34 +967,56 @@ describe("InsightFacade Add/Remove Dataset from Linh's d0", function () {
         expect(actual).to.equal(expected);
     });
 
-    it("Test simple object with complex WHERE", function () {
-        let obj = {
-            OR: [
-                {
-                    AND: [
-                        {
-                            GT: {
-                                courses_avg: 90
-                            }
-                        },
-                        {
-                            IS: {
-                                courses_dept: "adhe"
-                            }
-                        }
-                    ]
-                },
-                {
-                    EQ: {
-                        courses_avg: 95
-                    }
+    it("Test getApplyList", function () {
+        let obj = [
+            {
+                overallAvg: {
+                    AVG: "courses_avg"
                 }
-            ]
-        };
+            }
+        ];
+        const expected = [["overallAvg", "AVG", "avg"]];
+        const actual = getApplyList(obj, [
+            "courses_title",
+            "overallAvg"
+        ], InsightDatasetKind.Courses, "courses");
+        expect(actual).to.deep.equal(expected);
+    });
 
-        const expected = 0;
-        const actual = whereValidation(obj, "courses", InsightDatasetKind.Courses);
-        expect(actual).to.equal(expected);
+    it("Test Apply", function () {
+        let obj =  {
+            WHERE: {
+                GT: {
+                    courses_avg: 70
+                }
+            },
+            OPTIONS: {
+                COLUMNS: [
+                    "courses_title",
+                    "overallAvg"
+                ]
+            },
+            TRANSFORMATIONS: {
+                GROUP: [
+                    "courses_title"
+                ],
+                APPLY: [
+                    {
+                        overallAvg: {
+                            AVG: "courses_avg"
+                        }
+                    }
+                ]
+            }
+        };
+        return insightFacade.addDataset("courses", datasets["courses"], InsightDatasetKind.Courses)
+            .then((result: any[]) => {
+                return insightFacade.performQuery(obj);
+            }).then((result2: any[]) => {
+                expect(result2.length).to.deep.equal(143);
+            }).catch((err: any) => {
+                expect(err).to.be.instanceOf(InsightError);
+            });
     });
 
     it("Test simple object with single WHERE", function () {
@@ -1193,7 +1216,7 @@ describe("InsightFacade Add/Remove Dataset from Linh's d0", function () {
             ]
         };
 
-        const expected = 0;
+        const expected = 1;
         const actual = whereValidation(obj, "courses", InsightDatasetKind.Courses);
         expect(actual).to.deep.equal(expected);
     });

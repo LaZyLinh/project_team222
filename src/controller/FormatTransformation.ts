@@ -1,6 +1,6 @@
 import {InsightDataset, InsightDatasetKind} from "./IInsightFacade";
 import {ICourseDataset, IRoomDataset} from "./IDataset";
-import "decimal.js";
+import Decimal from "decimal.js";
 import {typeMatchValidID} from "./ValidateQuery";
 
 export function groupResults(dataset: InsightDataset, result: number[], group: string[]): number[][] {
@@ -79,7 +79,7 @@ export function applyMax(dataset: InsightDataset, indexGroup: number[], key: str
     } else {
         dataList = (dataset as IRoomDataset).rooms;
     }
-    for (const index in indexGroup) {
+    for (const index of indexGroup) {
         if (dataList[index][key] > max) {
             max = dataList[index][key];
         }
@@ -95,7 +95,7 @@ export function applyMin(dataset: InsightDataset, indexGroup: number[], key: str
     } else {
         dataList = (dataset as IRoomDataset).rooms;
     }
-    for (const index in indexGroup) {
+    for (const index of indexGroup) {
         if (min === undefined) {
             min = dataList[index][key];
         } else if (dataList[index][key] < min) {
@@ -113,7 +113,7 @@ export function applySum(dataset: InsightDataset, indexGroup: number[], key: str
     } else {
         dataList = (dataset as IRoomDataset).rooms;
     }
-    for (const index in indexGroup) {
+    for (const index of indexGroup) {
         sum += dataList[index][key];
     }
     return Number(sum.toFixed(2));
@@ -127,7 +127,7 @@ export function applyAvg(dataset: InsightDataset, indexGroup: number[], key: str
     } else {
         dataList = (dataset as IRoomDataset).rooms;
     }
-    for (const index in indexGroup) {
+    for (const index of indexGroup) {
         sum = sum.add(new Decimal(dataList[index][key]));
     }
     let avg = sum.toNumber() / indexGroup.length;
@@ -143,7 +143,7 @@ export function applyCount(dataset: InsightDataset, indexGroup: number[], key: s
     } else {
         dataList = (dataset as IRoomDataset).rooms;
     }
-    for (const index in indexGroup) {
+    for (const index of indexGroup) {
         if (!current.includes(dataList[index][key])) {
             count++;
             current.push(dataList[index][key]);

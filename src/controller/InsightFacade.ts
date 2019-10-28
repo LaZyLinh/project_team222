@@ -15,6 +15,7 @@ import {
 } from "./AddDatasetHelpers";
 import {performValidQuery, findDatasetById, formatResults} from "./PerformQueryHelper";
 import {validateQuery, getFirstQueryId, typeMatchValidID} from "./ValidateQuery";
+import {sortResultHelper} from "./SortResultHelper";
 
 /**
  * This is the main programmatic entry point for the project.
@@ -106,23 +107,30 @@ export default class InsightFacade implements IInsightFacade {
                 return;
             }
 
-            if (result.length > 5000) {
-                reject(new ResultTooLargeError());
-                return;
-            }
             let groupedArray: number[][] = [];
             let finalArray: any[] = [];
-            if (!query.hasOwnProperty("TRANSFORMATION")) {
-                let order: string;
-                if ( typeof optionCont["ORDER"] === "string") {
-                    order = optionCont["ORDER"].replace(datasetID + "_", ""); // should be string
-                    finalArray = formatResults(dataset, result, columnCont, order);
+            if (!query.hasOwnProperty("TRANSFORMATIONS")) {
+                if (result.length > 5000) {
+                    reject(new ResultTooLargeError());
+                    return;
+                }
+                let order: string = "";
+                if (!query.hasOwnProperty("ORDER")) {
+                    finalArray = formatResults(dataset, result, columnCont, "");
                 } else {
-                    finalArray = formatResults(dataset, result, columnCont, order);
+                    if (typeof optionCont["ORDER"] === "string") {
+                        order = optionCont["ORDER"].replace(datasetID + "_", ""); // should be string
+                        finalArray = formatResults(dataset, result, columnCont, order);
+                    } else {
+                        finalArray = formatResults(dataset, result, columnCont, "");
+                        // eslint-disable-next-line @typescript-eslint/tslint/config
+                        finalArray = sortResultHelper(finalArray, optionCont["ORDER"]["keys"], optionCont["ORDER"]["dir"]);
+                    }
                 }
                 resolve(finalArray);
                 return;
             }
+
             if (query.hasOwnProperty("TRANSFORMATIONS")) {
                 let group = query["TRANSFORMATIONS"]["GROUP"];
                 let apply = query["TRANSFORMATIONS"]["APPLY"];
@@ -130,10 +138,10 @@ export default class InsightFacade implements IInsightFacade {
                     str.replace(datasetID + "_", ""));
 
                 groupedArray = groupResults(dataset, result, group);
-                let applyList: string[][] = [];
+                let applyList: any;
                 if (query["TRANSFORMATIONS"]["APPLY"].length !== 0) {
                     // eslint-disable-next-line @typescript-eslint/tslint/config
-                    applyList = this.makeApplyList(applyList, apply, columnCont, kind, datasetID, groupedArray, dataset);
+                    applyList = this.makeApplyResult(apply, columnCont, kind, datasetID, groupedArray, dataset);
                 }
                 // build the final grouping
                 let dataList: any;
@@ -142,46 +150,38 @@ export default class InsightFacade implements IInsightFacade {
                 } else {
                     dataList = (dataset as IRoomDataset).rooms;
                 }
-                for (const array of groupedArray) {
+                for (let i = 0; i < groupedArray.length; i++) {
                     let obj: {[k: string]: any} = {};
-                    let counter = 0;
-                    for (const key of columnCont) {
+                    for (const key of optionCont["COLUMNS"]) {
                         if (typeMatchValidID(key, kind) !== null) {
-                            obj[key] = dataList[array[0]][typeMatchValidID(key, kind)[2]];
+                            obj[key] = dataList[groupedArray[i][0]][typeMatchValidID(key, kind)[2]];
                         } else {
-                            obj[key] = applyList[key][counter];
+                            obj[key] = applyList[key][i];
                         }
                     }
                     finalArray.push(obj);
-                    counter++;
                 }
             }
-
-            /*if (!query.hasOwnProperty("TRANSFORMATION")) {
-                let order: string;
-                if ( typeof optionCont["ORDER"] === "string") {
-                    order = optionCont["ORDER"].replace(datasetID + "_", ""); // should be string
-                    finalResultArray = formatResults(dataset, result, columnCont, order);
+            if (finalArray.length > 5000) {
+                reject(new ResultTooLargeError());
+                return;
+            }
+            if (query.hasOwnProperty("ORDER")) {
+                if (typeof columnCont("ORDER") === "string") {
+                    finalArray = sortResultHelper(finalArray, [optionCont["ORDER"]], "UP");
                 } else {
-                    finalResultArray = formatResults(dataset, result, columnCont, order);
+                    finalArray = sortResultHelper(finalArray, optionCont["ORDER"]["keys"], optionCont["ORDER"]["dir"]);
                 }
-                resolve(finalResultArray);
             }
-            /!*let group = [];
-            let apply = [];
-            if (query.hasOwnProperty("TRANSFORMATIONS")) {
-                group = query["TRANSFORMATIONS"]["GROUP"].map((str: string) => str.replace(datasetID + "_", ""));
-              }*!/
-            */
             resolve(finalArray);
         });
     }
 
-    private makeApplyList(applyList: string[][], apply: any, columnCont: string[], kind: InsightDatasetKind,
-                          datasetID: string, groupedArray: number[][], dataset: InsightDataset) {
-        applyList = getApplyList(apply, columnCont, kind, datasetID);
+    private makeApplyResult(apply: any, columnCont: string[], kind: InsightDatasetKind,
+                            datasetID: string, groupedArray: number[][], dataset: InsightDataset): object {
+        let applyList: string[][] = getApplyList(apply, columnCont, kind, datasetID);
         let applyResult: { [k: string]: any } = {};
-        for (const rule in applyList) {
+        for (const rule of applyList) {
             let newRule: number[] = [];
             for (const array of groupedArray) {
                 switch (rule[1]) {
@@ -209,7 +209,7 @@ export default class InsightFacade implements IInsightFacade {
             }
             applyResult[rule[0]] = newRule;
         }
-        return applyList;
+        return applyResult;
     }
 
     public listDatasets(): Promise<InsightDataset[]> {
