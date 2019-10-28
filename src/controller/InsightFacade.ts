@@ -7,14 +7,14 @@ import {
     NotFoundError,
     ResultTooLargeError
 } from "./IInsightFacade";
-import {groupResults} from "./FormatTransformation";
-import {ICourseDataset, IDatabase} from "./IDataset";
+import {applyAvg, applyCount, applyMax, applyMin, applySum, getApplyList, groupResults} from "./FormatTransformation";
+import {ICourseDataset, IDatabase, IRoomDataset} from "./IDataset";
 import {
     deleteDatasetFromDisk, getAddDatasetPromise,
     idListHelper, idsInMemory, loadAllFromDisk, loadFromDiskIfNecessary, validateIDString,
 } from "./AddDatasetHelpers";
 import {performValidQuery, findDatasetById, formatResults} from "./PerformQueryHelper";
-import {validateQuery, getFirstQueryId} from "./ValidateQuery";
+import {validateQuery, getFirstQueryId, typeMatchValidID} from "./ValidateQuery";
 
 /**
  * This is the main programmatic entry point for the project.
@@ -87,9 +87,9 @@ export default class InsightFacade implements IInsightFacade {
                 return;
             }
 
-            let dataset: ICourseDataset = findDatasetById(this.database, datasetID) as ICourseDataset;
-            let datasetType: InsightDatasetKind = dataset.kind;
-            let temp = validateQuery(query, datasetType);
+            let dataset: InsightDataset = findDatasetById(this.database, datasetID);
+            let kind: InsightDatasetKind = dataset.kind;
+            let temp = validateQuery(query, kind);
             if (temp === null || temp !== datasetID) {
                 reject(new InsightError("Invalid Query"));
             }
@@ -110,20 +110,106 @@ export default class InsightFacade implements IInsightFacade {
                 reject(new ResultTooLargeError());
                 return;
             }
-            /*let group = [];
+            let groupedArray: number[][] = [];
+            let finalArray: any[] = [];
+            if (!query.hasOwnProperty("TRANSFORMATION")) {
+                let order: string;
+                if ( typeof optionCont["ORDER"] === "string") {
+                    order = optionCont["ORDER"].replace(datasetID + "_", ""); // should be string
+                    finalArray = formatResults(dataset, result, columnCont, order);
+                } else {
+                    finalArray = formatResults(dataset, result, columnCont, order);
+                }
+                resolve(finalArray);
+                return;
+            }
+            if (query.hasOwnProperty("TRANSFORMATIONS")) {
+                let group = query["TRANSFORMATIONS"]["GROUP"];
+                let apply = query["TRANSFORMATIONS"]["APPLY"];
+                group = group.map((str: string) =>
+                    str.replace(datasetID + "_", ""));
+
+                groupedArray = groupResults(dataset, result, group);
+                let applyList: string[][] = [];
+                if (query["TRANSFORMATIONS"]["APPLY"].length !== 0) {
+                    // eslint-disable-next-line @typescript-eslint/tslint/config
+                    applyList = this.makeApplyList(applyList, apply, columnCont, kind, datasetID, groupedArray, dataset);
+                }
+                // build the final grouping
+                let dataList: any;
+                if (dataset.kind === InsightDatasetKind.Courses) {
+                    dataList = (dataset as ICourseDataset).courses;
+                } else {
+                    dataList = (dataset as IRoomDataset).rooms;
+                }
+                for (const array of groupedArray) {
+                    let obj: {[k: string]: any} = {};
+                    let counter = 0;
+                    for (const key of columnCont) {
+                        if (typeMatchValidID(key, kind) !== null) {
+                            obj[key] = dataList[array[0]][typeMatchValidID(key, kind)[2]];
+                        } else {
+                            obj[key] = applyList[key][counter];
+                        }
+                    }
+                    finalArray.push(obj);
+                    counter++;
+                }
+            }
+
+            /*if (!query.hasOwnProperty("TRANSFORMATION")) {
+                let order: string;
+                if ( typeof optionCont["ORDER"] === "string") {
+                    order = optionCont["ORDER"].replace(datasetID + "_", ""); // should be string
+                    finalResultArray = formatResults(dataset, result, columnCont, order);
+                } else {
+                    finalResultArray = formatResults(dataset, result, columnCont, order);
+                }
+                resolve(finalResultArray);
+            }
+            /!*let group = [];
             let apply = [];
             if (query.hasOwnProperty("TRANSFORMATIONS")) {
                 group = query["TRANSFORMATIONS"]["GROUP"].map((str: string) => str.replace(datasetID + "_", ""));
-              }*/
-            let order: string;
-            if ( typeof optionCont["ORDER"] === "string") {
-                order = optionCont["ORDER"].replace(datasetID + "_", ""); // should be string
-            }
-            const finalResultArray = formatResults(dataset, result, columnCont, order);
-            // const finalResultArray = groupResults(dataset, result, group);
-
-            resolve(finalResultArray);
+              }*!/
+            */
+            resolve(finalArray);
         });
+    }
+
+    private makeApplyList(applyList: string[][], apply: any, columnCont: string[], kind: InsightDatasetKind,
+                          datasetID: string, groupedArray: number[][], dataset: InsightDataset) {
+        applyList = getApplyList(apply, columnCont, kind, datasetID);
+        let applyResult: { [k: string]: any } = {};
+        for (const rule in applyList) {
+            let newRule: number[] = [];
+            for (const array of groupedArray) {
+                switch (rule[1]) {
+                    case "MAX": {
+                        newRule.push(applyMax(dataset, array, rule[2]));
+                        break;
+                    }
+                    case "MIN": {
+                        newRule.push(applyMin(dataset, array, rule[2]));
+                        break;
+                    }
+                    case "AVG": {
+                        newRule.push(applyAvg(dataset, array, rule[2]));
+                        break;
+                    }
+                    case "COUNT": {
+                        newRule.push(applyCount(dataset, array, rule[2]));
+                        break;
+                    }
+                    case "SUM": {
+                        newRule.push(applySum(dataset, array, rule[2]));
+                        break;
+                    }
+                }
+            }
+            applyResult[rule[0]] = newRule;
+        }
+        return applyList;
     }
 
     public listDatasets(): Promise<InsightDataset[]> {

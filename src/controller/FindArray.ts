@@ -1,47 +1,95 @@
-import {ICourseDataset, ImKeyEntry, IsKeyEntry} from "./IDataset";
-import {InsightError} from "./IInsightFacade";
+import {ICourseDataset, ImKeyEntry, IRoomDataset, IsKeyEntry} from "./IDataset";
+import {InsightDataset, InsightDatasetKind, InsightError} from "./IInsightFacade";
 
-function getImKeyArray(dataset: ICourseDataset, compared: string): ImKeyEntry[] {
-    switch (compared) {
-        case "year": {
-            return dataset.year;
+function getImKeyArray(dataset: InsightDataset, compared: string): ImKeyEntry[] {
+    if (dataset.kind === InsightDatasetKind.Courses) {
+        let courseDataset: ICourseDataset = dataset as ICourseDataset;
+        switch (compared) {
+            case "year": {
+                return courseDataset.year;
+            }
+            case "avg": {
+                return courseDataset.avg;
+            }
+            case "pass": {
+                return courseDataset.pass;
+            }
+            case "fail": {
+                return courseDataset.fail;
+            }
+            case "audit": {
+                return courseDataset.audit;
+            }
         }
-        case "avg": {
-            return dataset.avg;
-        }
-        case "pass": {
-            return dataset.pass;
-        }
-        case "fail": {
-            return dataset.fail;
-        }
-        case "audit": {
-            return dataset.audit;
+    } else {
+        let roomDataset: IRoomDataset = dataset as IRoomDataset;
+        switch (compared) {
+            case "lat": {
+                return roomDataset.lat;
+            }
+            case "lon": {
+                return roomDataset.lon;
+            }
+            case "seats": {
+                return roomDataset.seats;
+            }
         }
     }
 }
 
-function getIsKeyArray(dataset: ICourseDataset, compared: string): IsKeyEntry[] {
-    switch (compared) {
-        case "dept": {
-            return dataset.dept;
+function getIsKeyArray(dataset: InsightDataset, compared: string): IsKeyEntry[] {
+    if (dataset.kind === InsightDatasetKind.Courses) {
+        let courseDataset: ICourseDataset = dataset as ICourseDataset;
+        switch (compared) {
+            case "dept": {
+                return courseDataset.dept;
+            }
+            case "id": {
+                return courseDataset.course_ids;
+            }
+            case "instructor": {
+                return courseDataset.instructor;
+            }
+            case "title": {
+                return courseDataset.title;
+            }
+            case "uuid": {
+                return courseDataset.uuid;
+            }
         }
-        case "id": {
-            return dataset.course_ids;
-        }
-        case "instructor": {
-            return dataset.instructor;
-        }
-        case "title": {
-            return dataset.title;
-        }
-        case "uuid": {
-            return dataset.uuid;
+    } else {
+        let roomDataset: IRoomDataset = dataset as IRoomDataset;
+        switch (compared) {
+            case "fullname": {
+                return roomDataset.fullname;
+            }
+            case "shortname": {
+                return roomDataset.shortname;
+            }
+            case "number": {
+                return roomDataset.number;
+            }
+            case "name": {
+                return roomDataset.name;
+            }
+            case "address": {
+                return roomDataset.address;
+            }
+            case "type": {
+                return roomDataset.type;
+            }
+            case "furniture": {
+                return roomDataset.furniture;
+            }
+            case "href": {
+                return roomDataset.href;
+            }
         }
     }
 }
 
-export function findArray(compared: string, comparison: string, value: any, dataset: ICourseDataset): number[] {
+export function findArray(compared: string, comparison: string, value: any, dataset: InsightDataset):
+    number[] {
     // By the time this function is reached, value = string for IS, else number
     if (typeof value === "number") {
         let datasetArray: ImKeyEntry[] = getImKeyArray(dataset, compared);

@@ -1,12 +1,12 @@
 import {InsightDataset, InsightDatasetKind, InsightError} from "./IInsightFacade";
 // import InsightFacade from "./InsightFacade";
-import {ICourse, ICourseDataset, IDatabase, IResultObj} from "./IDataset";
+import {ICourse, ICourseDataset, IDatabase, IResultObj, IRoomDataset} from "./IDataset";
 // import {validateIDString} from "./AddDatasetHelpers";
 import {findArray} from "./FindArray";
 import "./ValidateQuery";
 import {typeMatchValidID} from "./ValidateQuery";
 
-function MultHelper(key: string, result: number[], clause: any, dataset: ICourseDataset) {
+function MultHelper(key: string, result: number[], clause: any, dataset: InsightDataset) {
     if (key === "AND") {
         if (!Array.isArray(result) || !result.length) {
             result = performValidQuery(clause, dataset);
@@ -27,7 +27,7 @@ function MultHelper(key: string, result: number[], clause: any, dataset: ICourse
     return result;
 }
 
-export function performValidQuery(query: any, dataset: ICourseDataset): number[] {
+export function performValidQuery(query: any, dataset: InsightDataset): number[] {
     const kind: InsightDatasetKind = dataset.kind;
     const mult = ["AND", "OR"];
     // const mSingle = ["GT", "LT", "EQ"];
@@ -90,11 +90,17 @@ function buildResultObj(course: ICourse, columns: string[], id: string): IResult
     return res;
 }
 
-export function formatResults(dataset: ICourseDataset, arr: number[], columns: string[], order: string): IResultObj[] {
+export function formatResults(dataset: InsightDataset, arr: number[], columns: string[], order: string): IResultObj[] {
     let res: IResultObj[] = [];
     let id: string = dataset.id;
+    let dataList: any;
+    if (dataset.kind === InsightDatasetKind.Courses) {
+        dataList = (dataset as ICourseDataset).courses;
+    } else {
+        dataList = (dataset as IRoomDataset).rooms;
+    }
     for (let index of arr) {
-        res.push(buildResultObj(dataset.courses[index], columns, id));
+        res.push(buildResultObj(dataList[index], columns, id));
     }
     if (order === "") {
         return res;

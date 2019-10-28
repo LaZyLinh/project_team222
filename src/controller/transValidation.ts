@@ -14,7 +14,7 @@ export function transformationValidation(trans: any, column: string[], dataID: s
     const group = trans["GROUP"];
     const apply = trans["APPLY"];
 
-    if (!Array.isArray(group) || !Array.isArray(apply) || group.length === 0 || apply.length === 0) {
+    if (!Array.isArray(group) || !Array.isArray(apply) || group.length === 0) {
             return 1;
          }
 
