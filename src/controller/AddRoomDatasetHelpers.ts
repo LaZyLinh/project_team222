@@ -1,14 +1,12 @@
-
 // given an arbitrary JSON object representing an HTML file, find and return all of the table elements within.
 // recursively searches
 import {IRoom, IRoomDataset} from "./IDataset";
 import {InsightDataset, InsightDatasetKind, InsightError} from "./IInsightFacade";
 import * as JSZip from "jszip";
 import {saveDatasetToDisk} from "./AddDatasetHelpers";
-
+import Log from "../Util";
 const GEO_URL = "http://cs310.students.cs.ubc.ca:11316/api/v1/project_team";
 const TEAM_NUMBER = 222;
-
 export function getAddRoomDatasetPromise(content: string, id: string, datasets: InsightDataset[]) {
     let zip: JSZip;
     let buildings: IIndexBuildingInfo[];
@@ -54,7 +52,6 @@ export function getAddRoomDatasetPromise(content: string, id: string, datasets: 
             }
         });
 }
-
 function findTableBodies(htmlObj: any): any[] {
     if (htmlObj.hasOwnProperty("nodeName") && htmlObj.nodeName === "tbody") {
         return [htmlObj];
@@ -69,14 +66,12 @@ function findTableBodies(htmlObj: any): any[] {
     }
     return [];
 }
-
 interface IIndexBuildingInfo {
     code: string;       // building code
     title: string;      // building title
     address: string;    // building address
     path: string;       // path to data file
 }
-
 function parseIndexTableEntry(entry: any): IIndexBuildingInfo {
     try {
         let newCode: string = "";
@@ -197,7 +192,6 @@ function parseBuildingTableEntry(entry: any, building: IIndexBuildingInfo): IRoo
         type: newType,
     };
 }
-
 function parseBuildingTable(table: any, building: IIndexBuildingInfo): IRoom[] {
     if (!table.hasOwnProperty("childNodes")) {
         return [];
@@ -216,23 +210,27 @@ function parseBuildingTable(table: any, building: IIndexBuildingInfo): IRoom[] {
     }
     return res;
 }
-
-function makeGeolocationPromise(room: IRoom): Promise<IRoom> {
+export function makeGeolocationPromise(room: IRoom): Promise<IRoom> {
     return new Promise((resolve, reject) => {
         const http = require("http");
         let getURL = GEO_URL + TEAM_NUMBER + "/" + encodeURI(room.address);
-        http.get(getURL, (res: any) => {
-            if (res.statusCode !== 200) {
-                reject(new InsightError("failed to connect to geolocation server"));
-            }
-            let data: any[] = [];
-            res.on("data", (chunk: any) => data.push(chunk));
-            res.on("end", () => resolve(data.join("")));
-        });
+        try {
+            http.get(getURL, (res: any) => {
+                if (res.statusCode !== 200) {
+                    reject("failed to connect to geolocation server: ERR" + res.statusCode);
+                }
+                let data: any[] = [];
+                res.on("data", (chunk: any) => data.push(chunk));
+                res.on("end", () => resolve(data.join("")));
+            });
+        } catch (err) {
+            Log.error(err);
+            reject("Caught error in makeGeolocationPromise: " + err);
+        }
     }).then((response: string) => {
         let geo = JSON.parse(response);
         if (geo.hasOwnProperty("error")) {
-            return Promise.reject(new InsightError("geolocation returned error"));
+            return Promise.reject(geo.error);
         }
         room.lat = geo.lat;
         room.lon = geo.lon;

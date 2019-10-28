@@ -1,0 +1,127 @@
+{
+    "title": "complex query with nested logic",
+    "query": {
+        "WHERE": {
+            "OR": [
+                {
+                    "AND": [
+                        {
+                            "GT": {
+                                "courses_avg": 95
+                            }
+                        },
+                        {
+                            "OR": [
+                                {
+                                    "IS": {
+                                        "courses_dept": "wood"
+                                    }
+                                },
+                                {
+                                    "IS": {
+                                        "courses_dept": "*sc"
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "NOT": {
+                                "GT": {
+                                    "courses_year": 1998
+                                }
+                            }
+                        }
+                    ]
+                },
+                {
+                    "AND": [
+                        {
+                            "GT": {
+                                "courses_year": 2003
+                            }
+                        },
+                        {
+                            "NOT": {
+                                "OR": [
+                                    {
+                                        "IS": {
+                                            "courses_dept": "wood"
+                                        }
+                                    },
+                                    {
+                                        "IS": {
+                                            "courses_dept": "*sc"
+                                        }
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "GT": {
+                                "courses_avg": 97
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        "OPTIONS": {
+            "COLUMNS": [
+                "courses_dept",
+                "overallAvg"
+            ],
+            "ORDER": "courses_dept"
+        },
+        "TRANSFORMATIONS": {
+            "GROUP": [
+                "courses_dept"
+            ],
+            "APPLY": [
+                {
+                    "overallAvg": {
+                        "AVG": "courses_avg"
+                    }
+                }
+            ]
+        }
+    },
+    "isQueryValid": true,
+    "result": [
+    {
+        "courses_dept": "cnps",
+        "overallAvg": 98.33
+    },
+    {
+        "courses_dept": "crwr",
+        "overallAvg": 98
+    },
+    {
+        "courses_dept": "educ",
+        "overallAvg": 97.5
+    },
+    {
+        "courses_dept": "eece",
+        "overallAvg": 98.75
+    },
+    {
+        "courses_dept": "epse",
+        "overallAvg": 98.02
+    },
+    {
+        "courses_dept": "math",
+        "overallAvg": 97.9
+    },
+    {
+        "courses_dept": "musc",
+        "overallAvg": 96.08
+    },
+    {
+        "courses_dept": "nurs",
+        "overallAvg": 98.14
+    },
+    {
+        "courses_dept": "spph",
+        "overallAvg": 98.98
+    }
+]
+}

@@ -15,7 +15,6 @@ import {
 } from "./AddDatasetHelpers";
 import {performValidQuery, findDatasetById, formatResults} from "./PerformQueryHelper";
 import {validateQuery, getFirstQueryId} from "./ValidateQuery";
-import {sortHelperArrays} from "./SortHelperArrays";
 
 /**
  * This is the main programmatic entry point for the project.

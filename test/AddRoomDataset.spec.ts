@@ -5,7 +5,7 @@ import {deleteAllFromDisk} from "../src/controller/AddDatasetHelpers";
 import {InsightDatasetKind, InsightError} from "../src/controller/IInsightFacade";
 import {expect} from "chai";
 
-describe("InsightFacade Add/Remove Dataset from Aiden's d0", function () {
+describe("Add room dataset", function () {
     // Reference any datasets you've added to test/data here and they will
     // automatically be loaded in the 'before' hook.
     const datasetsToLoad: { [id: string]: string } = {
