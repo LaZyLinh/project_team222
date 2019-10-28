@@ -1,7 +1,7 @@
 import {InsightDataset, InsightDatasetKind, InsightError} from "./IInsightFacade";
-import InsightFacade from "./InsightFacade";
-import {ICourse, ICourseDataset, IDatabase, ImKeyEntry, IResultObj} from "./IDataset";
-import {validateIDString} from "./AddDatasetHelpers";
+// import InsightFacade from "./InsightFacade";
+import {ICourse, ICourseDataset, IDatabase, IResultObj} from "./IDataset";
+// import {validateIDString} from "./AddDatasetHelpers";
 import {findArray} from "./FindArray";
 import "./ValidateQuery";
 import {typeMatchValidID} from "./ValidateQuery";
@@ -28,6 +28,7 @@ function MultHelper(key: string, result: number[], clause: any, dataset: ICourse
 }
 
 export function performValidQuery(query: any, dataset: ICourseDataset): number[] {
+    const kind: InsightDatasetKind = dataset.kind;
     const mult = ["AND", "OR"];
     // const mSingle = ["GT", "LT", "EQ"];
     // const sSingle = ["IS"];
@@ -36,6 +37,10 @@ export function performValidQuery(query: any, dataset: ICourseDataset): number[]
 
     if (query === null || typeof query !== "object") {
         return result;
+    }
+    if (Array.isArray(Object.keys(query)) && Object.keys(query).length === 0) {
+         return Array.from(Array(dataset.numRows).keys()); // edge case: empty WHERE should just return the
+        // whole dataset.
     }
     if (Array.isArray(Object.keys(query))) {
         for (const [key, more] of Object.entries(query)) {
@@ -53,7 +58,7 @@ export function performValidQuery(query: any, dataset: ICourseDataset): number[]
             }
             // if (mSingle.includes(key) || sSingle.includes(key)) {
             for (const [field, value] of Object.entries(query[key])) {
-                let tmResult = typeMatchValidID(field);
+                let tmResult = typeMatchValidID(field, kind);
                 if (tmResult !== null) {
                     const compared = tmResult[2];
                     // if (result.length === 0) {

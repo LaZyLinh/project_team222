@@ -7,13 +7,14 @@ import {
     NotFoundError,
     ResultTooLargeError
 } from "./IInsightFacade";
+import {groupResults} from "./FormatTransformation";
 import {ICourseDataset, IDatabase} from "./IDataset";
 import {
     deleteDatasetFromDisk, getAddDatasetPromise,
     idListHelper, idsInMemory, loadAllFromDisk, loadFromDiskIfNecessary, validateIDString,
 } from "./AddDatasetHelpers";
 import {performValidQuery, findDatasetById, formatResults} from "./PerformQueryHelper";
-import {validateQuery} from "./ValidateQuery";
+import {validateQuery, getFirstQueryId} from "./ValidateQuery";
 import {sortHelperArrays} from "./SortHelperArrays";
 
 /**
@@ -72,15 +73,13 @@ export default class InsightFacade implements IInsightFacade {
 
     public performQuery(query: any): Promise <any[]> {
         return new Promise((resolve, reject) => {
-            let temp = validateQuery(query);
-            if (temp === null) {
-                reject(new InsightError("Invalid Query"));
-                return;
-            }
-            const datasetID: string = temp;
-
             if (this.database.datasets === []) {
                 reject(new InsightError("No Dataset added"));
+                return;
+            }
+            const datasetID: string = getFirstQueryId(query);
+            if (datasetID === null) {
+                reject(new InsightError("Invalid Query"));
                 return;
             }
             loadFromDiskIfNecessary(this, datasetID);
@@ -90,33 +89,40 @@ export default class InsightFacade implements IInsightFacade {
             }
 
             let dataset: ICourseDataset = findDatasetById(this.database, datasetID) as ICourseDataset;
+            let datasetType: InsightDatasetKind = dataset.kind;
+            let temp = validateQuery(query, datasetType);
+            if (temp === null || temp !== datasetID) {
+                reject(new InsightError("Invalid Query"));
+            }
+
             const whereCont = query["WHERE"];   // make sure where only takes 1 FILTER and is the right type
             const optionCont = query["OPTIONS"];
             const columnCont = optionCont["COLUMNS"]
                 .map((str: string) => str.replace(datasetID + "_", "")); // should be string[]
-            let order = "";
-            if ( typeof optionCont["ORDER"] === "string") {
-                order = optionCont["ORDER"].replace(datasetID + "_", ""); // should be string
-            }
-            let array = [];
-            if (Array.isArray(Object.keys(whereCont)) && Object.keys(whereCont).length === 0) {
-                array = Array.from(Array(dataset.numRows).keys()); // edge case: empty WHERE should just return the
-                // whole dataset.
-            } else {
-                array = performValidQuery(whereCont, dataset); // return array of index
-            }
 
-            if (array === []) {
+            const result = performValidQuery(whereCont, dataset); // return result of index
+
+            if (result === []) {
                 resolve([]);
                 return;
             }
 
-            if (array.length > 5000) {
+            if (result.length > 5000) {
                 reject(new ResultTooLargeError());
                 return;
             }
+            /*let group = [];
+            let apply = [];
+            if (query.hasOwnProperty("TRANSFORMATIONS")) {
+                group = query["TRANSFORMATIONS"]["GROUP"].map((str: string) => str.replace(datasetID + "_", ""));
+              }*/
+            let order: string;
+            if ( typeof optionCont["ORDER"] === "string") {
+                order = optionCont["ORDER"].replace(datasetID + "_", ""); // should be string
+            }
+            const finalResultArray = formatResults(dataset, result, columnCont, order);
+            // const finalResultArray = groupResults(dataset, result, group);
 
-            const finalResultArray = formatResults(dataset, array, columnCont, order);
             resolve(finalResultArray);
         });
     }
