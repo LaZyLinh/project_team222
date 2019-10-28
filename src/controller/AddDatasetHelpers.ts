@@ -141,7 +141,7 @@ export function ICourseHelper(course: any): ICourse[] {
 }
 
 // Given a new dataset that has been created, persist it to disk
-export function saveDatasetToDisk(dataset: ICourseDataset) {
+export function saveDatasetToDisk(dataset: InsightDataset) {
     try {
         fs.writeFileSync("data/" + dataset.id, JSON.stringify(dataset), null);
         // TODO: should this be a async method call or 'sync',

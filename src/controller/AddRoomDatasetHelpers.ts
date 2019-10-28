@@ -4,6 +4,7 @@
 import {IRoom, IRoomDataset} from "./IDataset";
 import {InsightDataset, InsightDatasetKind, InsightError} from "./IInsightFacade";
 import * as JSZip from "jszip";
+import {saveDatasetToDisk} from "./AddDatasetHelpers";
 
 const GEO_URL = "http://cs310.students.cs.ubc.ca:11316/api/v1/project_team";
 const TEAM_NUMBER = 222;
@@ -15,13 +16,22 @@ export function getAddRoomDatasetPromise(content: string, id: string, datasets: 
         .then((res: JSZip) => {
             // load html file
             zip = res;
-            return zip.folder("rooms").file("index.html").async("text");
+            let roomDir = zip.folder("rooms");
+            if (roomDir === null) {
+                return Promise.reject(new InsightError("No room directory"));
+            }
+            let htmlFile = roomDir.file("index.htm");
+            if (htmlFile === null) {
+                return Promise.reject(new InsightError("No index.htm file"));
+            }
+            return htmlFile.async("text");
         }).then((res: string) => {
             buildings = parseIndexHTML(res);
             // Now, for each entry in roomsToParse, make a promise to load that file into memory
             let filePromises: Array<Promise<string | void>> = [];
             for (let building of buildings) {
-                filePromises.push(zip.folder("rooms").file(building.path).async("text"));
+                let courseFile = zip.folder("rooms").file(building.path);
+                filePromises.push(courseFile.async("text"));
             }
             return Promise.all(filePromises);
         }).then((res: string[]) => {
@@ -34,14 +44,23 @@ export function getAddRoomDatasetPromise(content: string, id: string, datasets: 
         }).then((res: IRoom[]) => {
             let newDataset = newRoomDatasetHelper(id, InsightDatasetKind.Rooms);
             addRoomsToDataset(res, newDataset);
-            return newDataset;
+            if (newDataset.rooms.length !== 0) {
+                datasets.push(newDataset);
+                // sortHelperArrays(newDataset);
+                saveDatasetToDisk(newDataset);
+                return Promise.resolve();
+            } else {
+                return Promise.reject(new InsightError("No valid rooms in zip file."));
+            }
         });
 }
 
 function findTableBodies(htmlObj: any): any[] {
-    if (htmlObj.hasOwnProperty("nodeName") && htmlObj.nodeName === "table") {
+    if (htmlObj.hasOwnProperty("nodeName") && htmlObj.nodeName === "tbody") {
         return [htmlObj];
-    } else if (htmlObj.hasOwnProperty("tbody")) {
+    } else if (htmlObj.hasOwnProperty("nodeName") &&
+        htmlObj.hasOwnProperty("childNodes") &&
+        htmlObj.childNodes !== null) {
         let resultAcc: any[] = [];
         for (let node of htmlObj.childNodes) {
             resultAcc = [...resultAcc, ...findTableBodies(node)];
@@ -73,7 +92,7 @@ function parseIndexTableEntry(entry: any): IIndexBuildingInfo {
             }
             if (child.attrs[0].value === "views-field views-field-title") {
                 newTitle = child.childNodes[1].childNodes[0].value.trim();
-                newPath = child.childNodes[1].attrs[0].value;
+                newPath = child.childNodes[1].attrs[0].value.slice(2);
             }
             if (child.attrs[0].value === "views-field views-field-field-building-address") {
                 newAddress = child.childNodes[0].value.trim();

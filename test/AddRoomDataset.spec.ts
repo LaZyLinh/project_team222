@@ -10,8 +10,8 @@ describe("InsightFacade Add/Remove Dataset from Aiden's d0", function () {
     // automatically be loaded in the 'before' hook.
     const datasetsToLoad: { [id: string]: string } = {
         rooms: "./test/data/rooms.zip",
-        baddirRoom: "./test/data/baddirRooms.zip",
-        brkdataRoom: "./test/data/noIndexRoom.zip"
+        baddirRooms: "./test/data/baddirRooms.zip",
+        noIndexRooms: "./test/data/noIndexRoom.zip"
     };
     let datasets: { [id: string]: string } = {};
     let insightFacade: InsightFacade;
@@ -52,7 +52,7 @@ describe("InsightFacade Add/Remove Dataset from Aiden's d0", function () {
     it("Should add a valid dataset", function () {
         const id: string = "rooms";
         const expected: string[] = [id];
-        return insightFacade.addDataset(id, datasets[id], InsightDatasetKind.Courses).then((result: string[]) => {
+        return insightFacade.addDataset(id, datasets[id], InsightDatasetKind.Rooms).then((result: string[]) => {
             expect(result).to.deep.equal(expected);
         }).catch((err: any) => {
             Log.error(err);
@@ -64,20 +64,20 @@ describe("InsightFacade Add/Remove Dataset from Aiden's d0", function () {
     it("Should reject a dataset which does not contain a directory called 'rooms'", function () {
         const id: string = "baddirRooms";
         const expected: string[] = [id];
-        return insightFacade.addDataset(id, datasets[id], InsightDatasetKind.Courses).then((result: string[]) => {
+        return insightFacade.addDataset(id, datasets[id], InsightDatasetKind.Rooms).then((result: string[]) => {
             expect.fail(result, expected, "Should have rejected");
         }).catch((err: any) => {
-            expect(err).to.deep.equal(new InsightError("No room directory"));
+            expect(err).to.be.instanceOf(InsightError);
         });
     });
 
     it("Should reject a dataset which does not contain an index file", function () {
-        const id: string = "noIndexRoom";
+        const id: string = "noIndexRooms";
         const expected: string[] = [id];
-        return insightFacade.addDataset(id, datasets[id], InsightDatasetKind.Courses).then((result: string[]) => {
+        return insightFacade.addDataset(id, datasets[id], InsightDatasetKind.Rooms).then((result: string[]) => {
             expect.fail(result, expected, "Should have rejected");
         }).catch((err: any) => {
-            expect(err).to.deep.equal(new InsightError("No index.html file"));
+            expect(err).to.be.instanceOf(InsightError);
         });
     });
 

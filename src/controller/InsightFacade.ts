@@ -46,7 +46,7 @@ export default class InsightFacade implements IInsightFacade {
             // then return a list of the added datasets.
             return idListHelper(this.database);
         }).catch((err) => {
-            return Promise.reject(new InsightError(err));
+            return Promise.reject(err);
         });
     }
 
