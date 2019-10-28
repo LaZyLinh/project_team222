@@ -125,7 +125,7 @@ describe("Build / Sort result", function () {
         expect(res).to.deep.equal(expected);
 
     });
-
+/*
     it("Should sort a result obj by numeric order (big)", function () {
         let inputObj = [
             { numField: 9 },
@@ -185,6 +185,8 @@ describe("Build / Sort result", function () {
         let res = sortResultHelper(inputObj, ["numField"], "UP");
         expect(res).to.deep.equal(expected);
     });
+
+ */
 
     it("Should sort a result obj by two keys (alpha and numeric)", function () {
         let inputObj = [
