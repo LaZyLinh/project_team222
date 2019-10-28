@@ -1,6 +1,27 @@
 import {validateIDString} from "./AddDatasetHelpers";
+import {InsightDatasetKind} from "./IInsightFacade";
+import {transformationValidation} from "./transValidation";
 
-export function validateQuery(query: any): null | string {
+
+export function getFirstQueryId(query: any): null | string {
+    if (!query.hasOwnProperty("OPTIONS") || !query["OPTIONS"].hasOwnProperty("COLUMNS") ||
+        query["OPTIONS"]["COLUMNS"] === null) {
+        return null;
+    }
+    const columnCont = query["OPTIONS"]["COLUMNS"];
+    const firstKey = columnCont[0];
+    if (typeof firstKey !== "string") {
+        return null;
+    }
+    let idFinder = typeMatchValidID(firstKey, null);
+    if (idFinder === null) {
+        return null;
+    } else {
+        return idFinder[1];
+    }
+}
+
+export function validateQuery(query: any, kind: InsightDatasetKind): string | null {
     let dataID: string;
     if (!query.hasOwnProperty("WHERE")) {
         return null;
@@ -17,60 +38,109 @@ export function validateQuery(query: any): null | string {
         return null;
     }
     // dealing with OPTION section
-    let test = correctOption(columnCont, optionCont);
+    let test = correctOption(optionCont, kind);
     if (test === null) {
         return null;
     } else {
-        dataID = test;
+        dataID = test[0];
+    }
+    let hasApplyKey = test[1];
+    if (hasApplyKey && !query.hasOwnProperty("TRANSFORMATIONS")) {
+        return null;
     }
     // dealing with WHERE section
     if (Object.keys(whereCont).length !== 0) {            // if WHERE: {}, all good!
-        if (this.whereValidation(whereCont, dataID) > 0) {
+        if (this.whereValidation(whereCont, dataID, kind) > 0) {
             return null;
-        } else {
-            return dataID;
+        }
+    }
+    // deal with Transformation if it exists
+    if (query.hasOwnProperty("TRANSFORMATIONS")) {
+
+       // if (!Array.isArray(group) || !Array.isArray(apply)) {
+        //    return null;
+       // }
+        if (transformationValidation(query.TRANSFORMATIONS, columnCont, dataID, kind) > 0) {
+            return null;
         }
     }
     return dataID;
 }
 
-export function correctOption(columnCont: string[], optionCont: any): null | string {
-    if (Array.isArray(columnCont) && columnCont.length === 0) {
+export function correctOption(option: any, kind: InsightDatasetKind): [string, boolean] | null {
+    const column = option["COLUMNS"];
+    let hasApplykey = false;
+    if (!Array.isArray(column) || column.length === 0) {
         return null;
     }
     let id = null;
-    for (const value of columnCont) {
-        if (value === null || typeMatchValidID(value) === null) {
+    for (const value of column) {
+        if (value === null) {
             return null;
+        }
+        if (typeMatchValidID(value, kind) === null) {
+            if (!/^[^_]+$/.test(value)) { // applyKey
+                return null;
+            } else {
+                hasApplykey = true;
+            }
         } else {
             if (id === null) {
-                id = typeMatchValidID(value)[1];
-            } else {
-                if (typeMatchValidID(value)[1] !== id) {
-                    return null;
-                }
+                id = typeMatchValidID(value, kind)[1];
+            } else if (typeMatchValidID(value, kind)[1] !== id) {
+                return null;
             }
         }
     }
-    if (Object.entries(optionCont).length > 2) {
+    if (Object.entries(option).length > 2) {
         return null;
-    } else if (Object.entries(optionCont).length > 1) {
-        if (!optionCont.hasOwnProperty("ORDER")) {
+    } else if (Object.entries(option).length > 1) {
+        if (!option.hasOwnProperty("ORDER")) {
             return null;
         }
-        if (Array.isArray(optionCont["ORDER"])) {
+        const order = option["ORDER"];
+        if (orderValidation(order, column) > 0) {
             return null;
         }
-        if (!columnCont.includes(optionCont["ORDER"])) {
-            return null;
-        }
-
     }
-
-    return id;
+    return [id, hasApplykey];
 }
 
-export function whereValidation(item: any, dataID: string): number {
+function orderValidation(order: any, columnCont: string[]): number {
+    if (order === null) {
+        return 1;
+    }
+    if (Array.isArray(order)) {
+        return 1;
+    }
+    if (typeof order !== "object" && typeof order !== "string") {
+        return 1;
+    }
+    if (typeof order === "string") {
+        if (!columnCont.includes(order)) {
+            return 1;
+        }
+    } else {
+        // at this point should be Object
+        if (!order.hasOwnProperty("dir") || !order.hasOwnProperty("keys")) {
+            return 1;
+        }
+        if (order["dir"] !== "UP" && order["dir"] !== "DOWN") {
+            return 1;
+        }
+        if (!Array.isArray(order["keys"]) || order["keys"].length === 0) {
+            return 1;
+        }
+        for (const key of order["keys"]) {
+            if (!columnCont.includes(key)) {
+                return 1;
+            }
+        }
+    }
+    return 0;
+}
+
+export function whereValidation(item: any, dataID: string, kind: InsightDatasetKind): number {
     const mult = ["AND", "OR"];
     const mSingle = ["GT", "LT", "EQ"];
     const sSingle = ["IS"];
@@ -96,20 +166,20 @@ export function whereValidation(item: any, dataID: string): number {
                     return 1;
                 }
                 for (const clause of more) {
-                    anyFalse += this.whereValidation(clause, dataID);
+                    anyFalse += this.whereValidation(clause, dataID, kind);
                 }
             }
             if (key === neg) {
                 if (Object.entries(more).length > 1 || Array.isArray(more)) {
                     return 1;
                 }
-                anyFalse += this.whereValidation(more, dataID);
+                anyFalse += this.whereValidation(more, dataID, kind);
             }
             if (mSingle.includes(key) || sSingle.includes(key)) {
                 if (Object.entries(more).length > 1 || Array.isArray(more)) {
                     return 1;
                 }
-                if (anyFalseSingle(item, key, dataID) > 0) {
+                if (anyFalseSingle(item, key, dataID, kind) > 0) {
                     return 1;
                 }
             }
@@ -118,11 +188,11 @@ export function whereValidation(item: any, dataID: string): number {
     return anyFalse;
 }
 
-export function anyFalseSingle(item: any, key: string, dataID: string): number {
+export function anyFalseSingle(item: any, key: string, dataID: string, kind: InsightDatasetKind): number {
     const mSingle = ["GT", "LT", "EQ"];
 
     for (const [field, value] of Object.entries(item[key])) {
-        let typeValid = typeMatchValidID(field);
+        let typeValid = typeMatchValidID(field, kind);
         if (typeValid === null) {
             return 1;
         } else {
@@ -131,11 +201,11 @@ export function anyFalseSingle(item: any, key: string, dataID: string): number {
             }
         }
         if (mSingle.includes(key)) {
-            if (typeValid[0] !== "number" || !valueMatchKey([field, value])) {
+            if (typeValid[0] !== "number" || !valueMatchKey([field, value], kind)) {
                 return 1;
             }
         } else {
-            if (typeValid[0] !== "string" || !valueMatchKey([field, value])) {
+            if (typeValid[0] !== "string" || !valueMatchKey([field, value], kind)) {
                 return 1;
             }
             if (typeof value === "string" && !validateIS(value)) {
@@ -153,19 +223,19 @@ export function validateIS(value: string): boolean {
     }
 }
 
-export function valueMatchKey([key, value]: [string, any]) {
-    let typeValid = typeMatchValidID(key);
+export function valueMatchKey([key, value]: [string, any], kind: InsightDatasetKind = InsightDatasetKind.Courses) {
+    let typeValid = typeMatchValidID(key, kind);
     if (typeValid === null) {
         return false;
     }
 
-    if (typeMatchValidID(key)[0] === "string") {
+    if (typeMatchValidID(key, kind)[0] === "string") {
         if (value !== null && typeof value === "string") {
             return true;
         }
     }
 
-    if (typeMatchValidID(key)[0] === "number") {
+    if (typeMatchValidID(key, kind)[0] === "number") {
         if (value !== null && typeof value === "number") {
             return true;
         }
@@ -173,10 +243,27 @@ export function valueMatchKey([key, value]: [string, any]) {
     return false;
 }
 
-export function typeMatchValidID(key: string): string[] | null {        // returns [type, datasetID, field ie year/etc]
-    let mRegex = [/_year$/, /_avg$/, /_pass$/, /_fail$/, /_audit$/];
-    let sRegex = [/_dept$/, /_id$/, /_instructor$/, /_title$/, /_uuid$/];
-    for (const rx of mRegex) {
+// returns [type, datasetID, field ie year/etc]
+export function typeMatchValidID(key: string, kind: InsightDatasetKind | null): string[] | null {
+    const coursesMRegex = [/_year$/, /_avg$/, /_pass$/, /_fail$/, /_audit$/];
+    const roomsMRegex = [/_lat$/, /_lon$/, /_seats$/];
+    const coursesSRegex = [/_dept$/, /_id$/, /_instructor$/, /_title$/, /_uuid$/];
+    const roomsSRegex = [/_fullname$/, /_shortname$/, /_number$/, /_name$/, /_address$/,
+        /_type$/, /_furniture$/, /_href$/];
+    let mUsed: any[];
+    let sUsed: any[];
+    if (kind === null) {
+        mUsed = coursesMRegex.concat(roomsMRegex);
+        sUsed = coursesSRegex.concat(roomsSRegex);
+    } else if (kind === InsightDatasetKind.Courses) {
+        mUsed = coursesMRegex;
+        sUsed = coursesSRegex;
+    } else {
+        mUsed = roomsMRegex;
+        sUsed = roomsSRegex;
+    }
+
+    for (const rx of mUsed) {
         if (rx.test(key)) {
             let id = validateIDString(key.replace(rx, ""));
             if (typeof id === "string") {
@@ -185,7 +272,7 @@ export function typeMatchValidID(key: string): string[] | null {        // retur
             }
         }
     }
-    for (const rx of sRegex) {
+    for (const rx of sUsed) {
         if (rx.test(key)) {
             let id = validateIDString(key.replace(rx, ""));
             if (typeof id === "string") {

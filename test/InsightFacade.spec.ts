@@ -3,11 +3,7 @@ import * as fs from "fs-extra";
 import {InsightDataset, InsightDatasetKind, InsightError, NotFoundError} from "../src/controller/IInsightFacade";
 import InsightFacade from "../src/controller/InsightFacade";
 import Log from "../src/Util";
-import TestUtil from "./TestUtil";
-import {
-    performValidQuery,
-    findDatasetById
-} from "../src/controller/PerformQueryHelper";
+import {findDatasetById, performValidQuery} from "../src/controller/PerformQueryHelper";
 import {deleteAllFromDisk} from "../src/controller/AddDatasetHelpers";
 import {ICourseDataset} from "../src/controller/IDataset";
 import {
@@ -17,6 +13,7 @@ import {
     valueMatchKey,
     whereValidation
 } from "../src/controller/ValidateQuery";
+// import {transformationValidation} from "../src/controller/transValidation";
 
 // This should match the schema given to TestUtil.validate(..) in TestUtil.readTestQueries(..)
 // except 'filename' which is injected when the file is read.
@@ -901,19 +898,19 @@ describe("InsightFacade Add/Remove Dataset from Linh's d0", function () {
 
     it("typeOfKey return correct type on number", function () {
         const expected = ["number", "courses", "year"];
-        const actual = typeMatchValidID("courses_year");
+        const actual = typeMatchValidID("courses_year", InsightDatasetKind.Courses);
         expect(actual).to.deep.equal(expected);
     });
 
     it("typeMatchValidID return correct type on string", function () {
         const expected = ["string", "courses", "dept"];
-        const actual = typeMatchValidID("courses_dept");
+        const actual = typeMatchValidID("courses_dept", InsightDatasetKind.Courses);
         expect(actual).to.deep.equal(expected);
     });
 
     it("typeMatchValidID return correct type on wrong keys", function () {
         let expected = null;
-        const actual = typeMatchValidID("courses_instructorst");
+        const actual = typeMatchValidID("courses_instructorst", null);
         expect(actual).to.deep.equal(expected);
     });
 
@@ -965,7 +962,7 @@ describe("InsightFacade Add/Remove Dataset from Linh's d0", function () {
             }
         };
         const expected = "courses";
-        const actual = validateQuery(obj);
+        const actual = validateQuery(obj, InsightDatasetKind.Courses);
         expect(actual).to.equal(expected);
     });
 
@@ -995,20 +992,31 @@ describe("InsightFacade Add/Remove Dataset from Linh's d0", function () {
         };
 
         const expected = 0;
-        const actual = whereValidation(obj, "courses");
+        const actual = whereValidation(obj, "courses", InsightDatasetKind.Courses);
         expect(actual).to.equal(expected);
     });
 
     it("Test simple object with single WHERE", function () {
         let obj = {
-            GT: {
-                courses_avg: 97
+            WHERE: {
+                GT: { courses_avg: 70 }
+            },
+            OPTIONS: {
+                COLUMNS: ["courses_title", "overallAvg"]
+            },
+            TRANSFORMATIONS: {
+                GROUP: ["courses_title"],
+                APPLY: [{
+                    overallAvg: {
+                        AVG: "courses_avg"
+                    }
+                }]
             }
         };
 
-        const expected = 0;
-        const actual = whereValidation(obj, "courses");
-        expect(actual).to.equal(expected);
+        let expected = "courses";
+        const actual = validateQuery(obj, InsightDatasetKind.Courses);
+        expect(actual).to.deep.equal(expected);
     });
 
     it("Test validate with ORDER not in COLUMN", function () {
@@ -1186,7 +1194,7 @@ describe("InsightFacade Add/Remove Dataset from Linh's d0", function () {
         };
 
         const expected = 0;
-        const actual = whereValidation(obj, "courses");
+        const actual = whereValidation(obj, "courses", InsightDatasetKind.Courses);
         expect(actual).to.deep.equal(expected);
     });
 });

@@ -1,9 +1,21 @@
 import {InsightDataset, InsightDatasetKind, InsightError} from "./IInsightFacade";
-import {ICourse, ICourseDataset, IDatabase} from "./IDataset";
+import {ICourse, ICourseDataset, IDatabase, IRoom, IRoomDataset} from "./IDataset";
 import InsightFacade from "./InsightFacade";
 import * as fs from "fs";
 import * as JSZip from "jszip";
 import {JSZipObject} from "jszip";
+import {getAddRoomDatasetPromise} from "./AddRoomDatasetHelpers";
+
+export function getAddDatasetPromise(kind: InsightDatasetKind,
+                                     content: string,
+                                     id: string,
+                                     datasets: InsightDataset[]) {
+    if (kind === InsightDatasetKind.Courses) {
+        return getAddCourseDatasetPromise(content, id, datasets);
+    } else {
+        return getAddRoomDatasetPromise(content, id, datasets);
+    }
+}
 
 function getAddCourseDatasetPromise(content: string, id: string, datasets: InsightDataset[]): Promise<any> {
     return new JSZip().loadAsync(content, {base64: true})
@@ -15,7 +27,7 @@ function getAddCourseDatasetPromise(content: string, id: string, datasets: Insig
             return Promise.all(filePromises);
         }).then((res: string[]) => {
             // do something with the string body of each file. parse it! (or not)
-            let newDataset: ICourseDataset = newDatasetHelper(id, InsightDatasetKind.Courses);
+            let newDataset: ICourseDataset = newCourseDatasetHelper(id, InsightDatasetKind.Courses);
             for (content of res) {
                 try {
                     let course = JSON.parse(content);
@@ -37,29 +49,7 @@ function getAddCourseDatasetPromise(content: string, id: string, datasets: Insig
         });
 }
 
-function getAddRoomDatasetPromise(content: string, id: string, datasets: InsightDataset[]) {
-    return new JSZip().loadAsync(content, {base64: true})
-        .then((zip) => {
-            let filePromises: Array<Promise<string | void>> = [];
-            zip.folder("courses").forEach((path: string, file: JSZipObject) => {
-                filePromises.push(file.async("text"));
-            });
-            return Promise.all(filePromises);
-        });
-}
-
-export function getAddDatasetPromise(kind: InsightDatasetKind,
-                                     content: string,
-                                     id: string,
-                                     datasets: InsightDataset[]) {
-    if (kind === InsightDatasetKind.Courses) {
-        return getAddCourseDatasetPromise(content, id, datasets);
-    } else {
-        return getAddRoomDatasetPromise(content, id, datasets);
-    }
-}
-
-export function newDatasetHelper(newID: string, newKind: InsightDatasetKind): ICourseDataset {
+export function newCourseDatasetHelper(newID: string, newKind: InsightDatasetKind): ICourseDataset {
     return {
         audit: [],
         avg: [],
@@ -151,7 +141,7 @@ export function ICourseHelper(course: any): ICourse[] {
 }
 
 // Given a new dataset that has been created, persist it to disk
-export function saveDatasetToDisk(dataset: ICourseDataset) {
+export function saveDatasetToDisk(dataset: InsightDataset) {
     try {
         fs.writeFileSync("data/" + dataset.id, JSON.stringify(dataset), null);
         // TODO: should this be a async method call or 'sync',
@@ -270,4 +260,3 @@ export function validateIDString(id: string): string | InsightError {
     }
     return id;
 }
-
