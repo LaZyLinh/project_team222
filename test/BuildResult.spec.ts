@@ -125,4 +125,118 @@ describe("Build / Sort result", function () {
         expect(res).to.deep.equal(expected);
 
     });
+
+    it("Should sort a result obj by numeric order (big)", function () {
+        let inputObj = [
+            { numField: 9 },
+            { numField: 4 },
+            { numField: 26 },
+            { numField: 50 },
+            { numField: 7 },
+            { numField: 14 },
+            { numField: 13 },
+            { numField: 34 },
+            { numField: 100 },
+            { numField: 55 },
+            { numField: 14 },
+            { numField: 40 },
+            { numField: 53 },
+            { numField: 59 },
+            { numField: 22 },
+            { numField: 90 },
+            { numField: 45 },
+            { numField: 31 },
+            { numField: 89 },
+            { numField: 11 },
+            { numField: 8 },
+            { numField: 21 },
+            { numField: 12 },
+            { numField: 63 },
+            { numField: 37 }
+        ];
+        let expected: any = [
+            { numField: 4 },
+            { numField: 7 },
+            { numField: 8 },
+            { numField: 9 },
+            { numField: 11 },
+            { numField: 12 },
+            { numField: 13 },
+            { numField: 14 },
+            { numField: 14 },
+            { numField: 21 },
+            { numField: 22 },
+            { numField: 26 },
+            { numField: 31 },
+            { numField: 34 },
+            { numField: 37 },
+            { numField: 40 },
+            { numField: 45 },
+            { numField: 50 },
+            { numField: 53 },
+            { numField: 55 },
+            { numField: 59 },
+            { numField: 63 },
+            { numField: 89 },
+            { numField: 90 },
+            { numField: 100 }
+
+        ];
+        let res = sortResultHelper(inputObj, ["numField"], "UP");
+        expect(res).to.deep.equal(expected);
+    });
+
+    it("Should sort a result obj by two keys (alpha and numeric)", function () {
+        let inputObj = [
+            { numField: 1, strField: "B" },
+            { numField: 2, strField: "B" },
+            { numField: 3, strField: "B" },
+            { numField: 1, strField: "C" },
+            { numField: 3, strField: "C" },
+            { numField: 2, strField: "C" },
+            { numField: 3, strField: "A" },
+            { numField: 1, strField: "A" },
+            { numField: 2, strField: "A" },
+        ];
+        let expected: any = [
+            { numField: 1, strField: "C" },
+            { numField: 1, strField: "B" },
+            { numField: 1, strField: "A" },
+            { numField: 2, strField: "C" },
+            { numField: 2, strField: "B" },
+            { numField: 2, strField: "A" },
+            { numField: 3, strField: "C" },
+            { numField: 3, strField: "B" },
+            { numField: 3, strField: "A" },
+        ];
+        let res = sortResultHelper(inputObj, ["numField", "strField"], "UP");
+        expect(res).to.deep.equal(expected);
+    });
+
+    it("Should sort a result obj by numeric order (big)", function () {
+        let inputObj = [
+            { numField: 2, strField: "B", numField2: 10 },
+            { numField: 2, strField: "A", numField2: 20 },
+            { numField: 2, strField: "B", numField2: 20 },
+            { numField: 1, strField: "A", numField2: 10 },
+            { numField: 2, strField: "A", numField2: 10 },
+            { numField: 1, strField: "A", numField2: 20 },
+            { numField: 1, strField: "B", numField2: 10 },
+            { numField: 1, strField: "B", numField2: 20 },
+        ];
+        let expected: any = [
+            { numField: 1, strField: "B", numField2: 10 },
+            { numField: 1, strField: "B", numField2: 20 },
+            { numField: 1, strField: "A", numField2: 10 },
+            { numField: 1, strField: "A", numField2: 20 },
+            { numField: 2, strField: "B", numField2: 10 },
+            { numField: 2, strField: "B", numField2: 20 },
+            { numField: 2, strField: "A", numField2: 10 },
+            { numField: 2, strField: "A", numField2: 20 },
+        ];
+        let res = sortResultHelper(inputObj, ["numField", "strField", "numField2"], "UP");
+        expect(res).to.deep.equal(expected);
+    });
+
+
 });

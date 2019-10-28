@@ -110,11 +110,31 @@ function merge(left: IndexableObject[],
             result.push(right.shift());
         }
     }
-    while (right.length) {
-        result.push(right.shift());
-    }
     while (left.length) {
         result.push(left.shift());
     }
+    while (right.length) {
+        result.push(right.shift());
+    }
     return result;
+}
+
+// insertionSort grabbed from https://basarat.gitbooks.io/algorithms/content/docs/sorting/insertion.html
+// because I needed a stable sorting algorithm to use!
+function insertionSort<T>(
+    array: T[],
+    cmp: (a: T, b: T) => number
+): T[] {
+    let current: T;
+    let j: number;
+    for (let i = 1; i < array.length; i += 1) {
+        current = array[i];
+        j = i - 1;
+        while (j >= 0 && cmp(array[j], current) > 0) {
+            array[j + 1] = array[j];
+            j -= 1;
+        }
+        array[j + 1] = current;
+    }
+    return array;
 }
