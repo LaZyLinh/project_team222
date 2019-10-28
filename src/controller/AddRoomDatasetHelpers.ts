@@ -18,11 +18,11 @@ export function getAddRoomDatasetPromise(content: string, id: string, datasets: 
             zip = res;
             let roomDir = zip.folder("rooms");
             if (roomDir === null) {
-                return Promise.reject(new InsightError("No room directory"));
+                return Promise.reject("No room directory");
             }
             let htmlFile = roomDir.file("index.htm");
             if (htmlFile === null) {
-                return Promise.reject(new InsightError("No index.htm file"));
+                return Promise.reject("No index.htm file");
             }
             return htmlFile.async("text");
         }).then((res: string) => {
