@@ -29,7 +29,6 @@ function withTrans(query: any, groupedArray: number[][], dataset: InsightDataset
     groupedArray = groupResults(dataset, result, group);
     let applyList: any;
     if (query["TRANSFORMATIONS"]["APPLY"].length !== 0) {
-        // eslint-disable-next-line @typescript-eslint/tslint/config
         applyList = makeApplyResult(apply, columnCont, dataset.kind, dataset.id, groupedArray, dataset);
     }
     // build the final grouping
