@@ -986,27 +986,16 @@ describe("InsightFacade Add/Remove Dataset from Linh's d0", function () {
     it("Test Apply", function () {
         let obj =  {
             WHERE: {
-                GT: {
-                    courses_avg: 70
+                LT: {
+                    courses_avg: 40
                 }
             },
             OPTIONS: {
                 COLUMNS: [
-                    "courses_title",
-                    "overallAvg"
-                ]
-            },
-            TRANSFORMATIONS: {
-                GROUP: [
-                    "courses_title"
+                    "courses_dept",
+                    "courses_year"
                 ],
-                APPLY: [
-                    {
-                        overallAvg: {
-                            AVG: "courses_avg"
-                        }
-                    }
-                ]
+                ORDER: "courses_year"
             }
         };
         return insightFacade.addDataset("courses", datasets["courses"], InsightDatasetKind.Courses)

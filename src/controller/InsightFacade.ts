@@ -115,7 +115,7 @@ export default class InsightFacade implements IInsightFacade {
                     return;
                 }
                 let order: string = "";
-                if (!query.hasOwnProperty("ORDER")) {
+                if (!optionCont.hasOwnProperty("ORDER")) {
                     finalArray = formatResults(dataset, result, columnCont, "");
                 } else { // has ORDER
                     if (typeof optionCont["ORDER"] === "string") {
@@ -165,8 +165,8 @@ export default class InsightFacade implements IInsightFacade {
                     reject(new ResultTooLargeError());
                     return;
                 }
-                if (query.hasOwnProperty("ORDER")) {
-                    if (typeof columnCont("ORDER") === "string") {
+                if (optionCont.hasOwnProperty("ORDER")) {
+                    if (typeof optionCont["ORDER"] === "string") {
                         finalArray = sortResultHelper(finalArray, [optionCont["ORDER"]], "UP");
                     } else {
                         // eslint-disable-next-line @typescript-eslint/tslint/config
