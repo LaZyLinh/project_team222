@@ -294,6 +294,6 @@ export function addRoomsToDataset(rooms: IRoom[], dataset: IRoomDataset) {
         dataset.type.push({courseIndex: index, sKey: room.type});
         dataset.furniture.push({courseIndex: index, sKey: room.furniture});
         dataset.href.push({courseIndex: index, sKey: room.href});
+        dataset.numRows ++;
     }
-    dataset.numRows += rooms.length;
 }
