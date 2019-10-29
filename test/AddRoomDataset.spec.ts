@@ -2,7 +2,7 @@ import InsightFacade from "../src/controller/InsightFacade";
 import Log from "../src/Util";
 import * as fs from "fs-extra";
 import {deleteAllFromDisk} from "../src/controller/AddDatasetHelpers";
-import {InsightDatasetKind, InsightError} from "../src/controller/IInsightFacade";
+import {InsightDataset, InsightDatasetKind, InsightError} from "../src/controller/IInsightFacade";
 import {expect} from "chai";
 
 describe("Add room dataset", function () {
@@ -11,7 +11,8 @@ describe("Add room dataset", function () {
     const datasetsToLoad: { [id: string]: string } = {
         rooms: "./test/data/rooms.zip",
         baddirRooms: "./test/data/baddirRooms.zip",
-        noIndexRooms: "./test/data/noIndexRoom.zip"
+        noIndexRooms: "./test/data/noIndexRoom.zip",
+        roomsbadgeo: "./test/data/roomsbadgeo.zip"
     };
     let datasets: { [id: string]: string } = {};
     let insightFacade: InsightFacade;
@@ -54,6 +55,22 @@ describe("Add room dataset", function () {
         const expected: string[] = [id];
         return insightFacade.addDataset(id, datasets[id], InsightDatasetKind.Rooms).then((result: string[]) => {
             expect(result).to.deep.equal(expected);
+        }).catch((err: any) => {
+            Log.error(err);
+            expect.fail(err, expected, "Should not have rejected");
+        });
+
+    });
+
+    it("Should add a valid dataset and skip buildings with invalid geolocation results", function () {
+        const id: string = "roomsbadgeo";
+        const expected: string[] = [id];
+        const expected2: string[] = [];
+        return insightFacade.addDataset(id, datasets[id], InsightDatasetKind.Rooms).then((result: string[]) => {
+            expect(result).to.deep.equal(expected);
+            return insightFacade.listDatasets();
+        }).then((res: InsightDataset[]) => {
+            expect(res).to.deep.equal(expected2);
         }).catch((err: any) => {
             Log.error(err);
             expect.fail(err, expected, "Should not have rejected");

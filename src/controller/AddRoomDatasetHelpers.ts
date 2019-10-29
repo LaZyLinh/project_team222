@@ -206,7 +206,7 @@ function parseBuildingTable(table: any, building: IIndexBuildingInfo): IRoom[] {
     }
     return res;
 }
-export function makeGeolocationPromise(room: IRoom): Promise<IRoom> {
+export function makeGeolocationPromise(room: IRoom): Promise<IRoom | null> {
     return new Promise((resolve, reject) => {
         const http = require("http");
         let getURL = GEO_URL + TEAM_NUMBER + "/" + encodeURI(room.address);
@@ -230,7 +230,11 @@ export function makeGeolocationPromise(room: IRoom): Promise<IRoom> {
         }
         room.lat = geo.lat;
         room.lon = geo.lon;
-        return room;
+        return Promise.resolve(room);
+    }).catch((err: any) => {
+        // caught any kind of error? that means that (we can assume that) this building doesn't have a valid geolocation
+        // so we'll skip it (return null!)
+        return Promise.resolve(null);
     });
 }
 
@@ -241,8 +245,7 @@ function makeRoomPromises(file: string, building: IIndexBuildingInfo):  Array<Pr
     let rooms: IRoom[] = [];
     for (let table of tableBodies) {
         rooms = parseBuildingTable(table, building);
-        if (rooms.length !== 0) {
-            // assume there will be only one table with relevant room info in the document
+        if (rooms.length !== 0) { // assume there will be only one table with relevant room info in the document
             break;
         }
     }
@@ -276,6 +279,9 @@ export function newRoomDatasetHelper(newID: string, newKind: InsightDatasetKind)
 
 export function addRoomsToDataset(rooms: IRoom[], dataset: IRoomDataset) {
     for (let room of rooms) {
+        if (room === null) {
+            continue;
+        }
         let index = dataset.rooms.push(room) - 1;
         dataset.fullname.push({courseIndex: index, sKey: room.fullname});
         dataset.shortname.push({courseIndex: index, sKey: room.shortname});
