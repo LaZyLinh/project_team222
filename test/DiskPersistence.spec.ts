@@ -10,6 +10,7 @@ describe("InsightFacade test disk persistence", function () {
     // automatically be loaded in the 'before' hook.
     const datasetsToLoad: { [id: string]: string } = {
         courses: "./test/data/courses.zip",
+        rooms: "./test/data/rooms.zip"
     };
     let datasets: { [id: string]: string } = {};
     let insightFacade: InsightFacade;
@@ -46,7 +47,7 @@ describe("InsightFacade test disk persistence", function () {
         Log.test(`AfterTest: ${this.currentTest.title}`);
     });
 
-    it("Added datasets should be accessible from other instances of InsightFacade", function () {
+    it("Added course datasets should be accessible from other instances of InsightFacade", function () {
         const id: string = "courses";
         const expected: string[] = [id];
         const expected2: InsightDataset[] = [{
@@ -55,6 +56,27 @@ describe("InsightFacade test disk persistence", function () {
             numRows: 64612,
         }];
         return insightFacade.addDataset(id, datasets[id], InsightDatasetKind.Courses).then((result: string[]) => {
+            expect(result).to.deep.equal(expected);
+            let insightFacade2: InsightFacade = new InsightFacade();
+            return insightFacade2.listDatasets();
+        }).then((result: InsightDataset[]) => {
+            expect(result).to.deep.equal(expected2);
+        }).catch((err: any) => {
+            Log.error(err);
+            expect.fail(err, expected, "Should not have rejected");
+        });
+
+    });
+
+    it("Added room datasets should be accessible from other instances of InsightFacade", function () {
+        const id: string = "rooms";
+        const expected: string[] = [id];
+        const expected2: InsightDataset[] = [{
+            id: id,
+            kind: InsightDatasetKind.Rooms,
+            numRows: 364,
+        }];
+        return insightFacade.addDataset(id, datasets[id], InsightDatasetKind.Rooms).then((result: string[]) => {
             expect(result).to.deep.equal(expected);
             let insightFacade2: InsightFacade = new InsightFacade();
             return insightFacade2.listDatasets();

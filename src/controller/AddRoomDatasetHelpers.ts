@@ -93,17 +93,13 @@ function parseIndexTableEntry(entry: any): IIndexBuildingInfo {
                 newAddress = child.childNodes[0].value.trim();
             }
         }
-        // TODO: is it necessarily true that all three of these fields MUST be non-empty strings?
-        if (newCode !== "" && newTitle !== "" && newAddress !== "" && newPath !== "") {
-            return {
-                code: newCode,
-                title: newTitle,
-                address: newAddress,
-                path: newPath,
-            };
-        } else {
-            return null;
-        }
+
+        return {
+            code: newCode,
+            title: newTitle,
+            address: newAddress,
+            path: newPath,
+        };
     } catch {
         return null;
     }
