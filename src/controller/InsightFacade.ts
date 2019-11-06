@@ -135,6 +135,9 @@ export default class InsightFacade implements IInsightFacade {
             if (this.database.datasets === []) {
                 return reject(new InsightError("No Dataset added"));
             }
+            if (query === null || typeof query !== "object") {
+                return reject(new InsightError("Invalid Query"));
+            }
             const datasetID: string = getFirstQueryId(query);
             if (datasetID === null) {
                 return reject(new InsightError("Invalid Query"));
@@ -145,8 +148,8 @@ export default class InsightFacade implements IInsightFacade {
             }
             let dataset: InsightDataset = findDatasetById(this.database, datasetID);
             let kind: InsightDatasetKind = dataset.kind;
-            let temp = validateQuery(query, kind);
-            if (temp === null || temp !== datasetID) {
+            let temp = validateQuery(query, datasetID, kind);
+            if (temp === null) {
                 return reject(new InsightError("Invalid Query"));
             }
             const whereCont = query["WHERE"];   // make sure where only takes 1 FILTER and is the right type

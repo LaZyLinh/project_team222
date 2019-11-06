@@ -14,14 +14,34 @@ export function getFirstQueryId(query: any): null | string {
         return null;
     }
     let idFinder = typeMatchValidID(firstKey, null);
-    if (idFinder === null) {
-        return null;
-    } else {
+    if (idFinder !== null) {
         return idFinder[1];
     }
+    if (!query.hasOwnProperty("TRANSFORMATIONS") || !query["TRANSFORMATIONS"].hasOwnProperty("APPLY") ||
+        query["TRANSFORMATIONS"]["APPLY"] === null || typeof query["TRANSFORMATIONS"]["APPLY"] !== "object") {
+        return null;
+    }
+    const apply = query["TRANSFORMATIONS"]["APPLY"];
+    for (const obj of apply) {
+        for (const [appKey, entry] of Object.entries(obj)) {
+            if (appKey !== firstKey) {
+                continue;
+            }
+            if (typeof entry !== "object" || Object.keys(entry).length > 1) {
+                return null;
+            }
+            for (const [token, key] of Object.entries(entry)) {
+                if (typeof key !== "string" || typeMatchValidID(key, null) === null) {
+                    return null;
+                }
+                return typeMatchValidID(key, null)[1];
+            }
+        }
+    }
+    return null;
 }
 
-export function validateQuery(query: any, kind: InsightDatasetKind): string | null {
+export function validateQuery(query: any, id: string, kind: InsightDatasetKind): string | null {
     let dataID: string;
     if (!query.hasOwnProperty("WHERE")) {
         return null;
@@ -38,7 +58,7 @@ export function validateQuery(query: any, kind: InsightDatasetKind): string | nu
         return null;
     }
     // dealing with OPTION section
-    let test = correctOption(optionCont, kind);
+    let test = correctOption(optionCont, id, kind);
     if (test === null) {
         return null;
     } else {
@@ -67,13 +87,12 @@ export function validateQuery(query: any, kind: InsightDatasetKind): string | nu
     return dataID;
 }
 
-export function correctOption(option: any, kind: InsightDatasetKind): [string, boolean] | null {
+export function correctOption(option: any, dataId: string, kind: InsightDatasetKind): [string, boolean] | null {
     const column = option["COLUMNS"];
     let hasApplykey = false;
     if (!Array.isArray(column) || column.length === 0) {
         return null;
     }
-    let id = null;
     for (const value of column) {
         if (value === null) {
             return null;
@@ -85,9 +104,7 @@ export function correctOption(option: any, kind: InsightDatasetKind): [string, b
                 hasApplykey = true;
             }
         } else {
-            if (id === null) {
-                id = typeMatchValidID(value, kind)[1];
-            } else if (typeMatchValidID(value, kind)[1] !== id) {
+            if (typeMatchValidID(value, kind)[1] !== dataId) {
                 return null;
             }
         }
@@ -103,9 +120,8 @@ export function correctOption(option: any, kind: InsightDatasetKind): [string, b
             return null;
         }
     }
-    return [id, hasApplykey];
+    return [dataId, hasApplykey];
 }
-
 function orderValidation(order: any, columnCont: string[]): number {
     if (order === null) {
         return 1;
@@ -139,7 +155,6 @@ function orderValidation(order: any, columnCont: string[]): number {
     }
     return 0;
 }
-
 export function whereValidation(item: any, dataID: string, kind: InsightDatasetKind): number {
     const mult = ["AND", "OR"];
     const mSingle = ["GT", "LT", "EQ"];
@@ -187,7 +202,6 @@ export function whereValidation(item: any, dataID: string, kind: InsightDatasetK
     }
     return anyFalse;
 }
-
 export function anyFalseSingle(item: any, key: string, dataID: string, kind: InsightDatasetKind): number {
     const mSingle = ["GT", "LT", "EQ"];
 
@@ -222,7 +236,6 @@ export function validateIS(value: string): boolean {
         return /^[*]?[^*]*[*]?$/.test(value);
     }
 }
-
 export function valueMatchKey([key, value]: [string, any], kind: InsightDatasetKind = InsightDatasetKind.Courses) {
     let typeValid = typeMatchValidID(key, kind);
     if (typeValid === null) {
@@ -242,7 +255,6 @@ export function valueMatchKey([key, value]: [string, any], kind: InsightDatasetK
     }
     return false;
 }
-
 // returns [type, datasetID, field ie year/etc]
 export function typeMatchValidID(key: string, kind: InsightDatasetKind | null): string[] | null {
     const coursesMRegex = [/_year$/, /_avg$/, /_pass$/, /_fail$/, /_audit$/];

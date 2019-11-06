@@ -963,7 +963,7 @@ describe("InsightFacade Add/Remove Dataset from Linh's d0", function () {
             }
         };
         const expected = "courses";
-        const actual = validateQuery(obj, InsightDatasetKind.Courses);
+        const actual = validateQuery(obj, "courses", InsightDatasetKind.Courses);
         expect(actual).to.equal(expected);
     });
 
@@ -986,25 +986,35 @@ describe("InsightFacade Add/Remove Dataset from Linh's d0", function () {
     it("Test Apply", function () {
         let obj =  {
             WHERE: {
-                LT: {
-                    courses_avg: 40
+                GT: {
+                    courses_avg: 70
                 }
             },
             OPTIONS: {
                 COLUMNS: [
-                    "courses_dept",
-                    "courses_year"
+                    "overallAvg"
+                ]
+            },
+            TRANSFORMATIONS: {
+                GROUP: [
+                    "courses_title"
                 ],
-                ORDER: "courses_year"
+                APPLY: [
+                    {
+                        overallAvg: {
+                            AVG: "courses_avg"
+                        }
+                    }
+                ]
             }
         };
         return insightFacade.addDataset("courses", datasets["courses"], InsightDatasetKind.Courses)
             .then((result: any[]) => {
                 return insightFacade.performQuery(obj);
             }).then((result2: any[]) => {
-                expect(result2.length).to.deep.equal(143);
+                expect(result2.length).to.deep.equal(3742);
             }).catch((err: any) => {
-                expect(err).to.be.instanceOf(InsightError);
+                expect.fail();
             });
     });
 
@@ -1027,7 +1037,7 @@ describe("InsightFacade Add/Remove Dataset from Linh's d0", function () {
         };
 
         let expected = "courses";
-        const actual = validateQuery(obj, InsightDatasetKind.Courses);
+        const actual = validateQuery(obj, "courses", InsightDatasetKind.Courses);
         expect(actual).to.deep.equal(expected);
     });
 
