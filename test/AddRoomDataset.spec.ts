@@ -65,7 +65,7 @@ describe("Add room dataset", function () {
     it("Should add a valid dataset and skip buildings with invalid geolocation results", function () {
         const id: string = "roomsbadgeo";
         const expected: string[] = [id];
-        const expected2: string[] = [];
+        const expected2: any[] = [ { id: "roomsbadgeo", kind: "rooms", numRows: 358 } ];
         return insightFacade.addDataset(id, datasets[id], InsightDatasetKind.Rooms).then((result: string[]) => {
             expect(result).to.deep.equal(expected);
             return insightFacade.listDatasets();

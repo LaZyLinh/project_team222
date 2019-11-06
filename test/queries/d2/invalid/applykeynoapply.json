@@ -1,0 +1,17 @@
+{
+    "title": "SELECT dept, avg WHERE avg < 40",
+    "query": {
+        "WHERE": {
+            "GT": {
+                "courses_avg": 70
+            }
+        },
+        "OPTIONS": {
+            "COLUMNS": [
+                "overallAvg"
+            ]
+        }
+    },
+    "isQueryValid": false,
+    "result": "InsightError"
+}
