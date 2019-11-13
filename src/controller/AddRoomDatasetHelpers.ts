@@ -57,7 +57,8 @@ function findTableBodies(htmlObj: any): any[] {
         return [htmlObj];
     } else if (htmlObj.hasOwnProperty("nodeName") &&
         htmlObj.hasOwnProperty("childNodes") &&
-        htmlObj.childNodes !== null) {
+        htmlObj.childNodes !== null &&
+        Array.isArray(htmlObj.childNodes)) {
         let resultAcc: any[] = [];
         for (let node of htmlObj.childNodes) {
             resultAcc = [...resultAcc, ...findTableBodies(node)];
@@ -104,9 +105,8 @@ function parseIndexTableEntry(entry: any): IIndexBuildingInfo {
         return null;
     }
 }
-
 function parseIndexTable(table: any): IIndexBuildingInfo[] {
-    if (!table.hasOwnProperty("childNodes")) {
+    if (!table.hasOwnProperty("childNodes") || !Array.isArray(table.childNodes)) {
         return [];
     }
     let tableEntries: any[] = table.childNodes;
@@ -116,11 +116,7 @@ function parseIndexTable(table: any): IIndexBuildingInfo[] {
             // this is just one of the 'spacing' elements, they just contain newlines
             continue;
         }
-        // otherwise, it should be either "odd views-row-first",
-        //                                "odd",
-        //                                "even",
-        //                                "odd views-row-last",
-        //                                "even views-row-last"
+        // otherwise, it should be either "odd views-row-first","odd","even","odd views-row-last","even views-row-last"
         let newRes = parseIndexTableEntry(entry);
         if (newRes !== null) {
             res.push(newRes);
@@ -136,60 +132,60 @@ function parseIndexHTML(res: string): IIndexBuildingInfo[] {
     for (let table of tableBodies) {
         let result: IIndexBuildingInfo[] = parseIndexTable(table);
         if (result.length !== 0) {
-            // we can assume that only one table will have building info
-            // so, the rest of the tables must be irrelevant; we can skip them.
             return result;
         }
     }
 }
-
 function parseBuildingTableEntry(entry: any, building: IIndexBuildingInfo): IRoom {
-    let newNumber: string;
-    let newSeats: string;
-    let newType: string;
-    let newFurniture: string;
-    let newHref: string;
-    for (let child of entry.childNodes) {
-        if (child.nodeName !== "td") {
-            continue;
+    try {
+        let newNumber: string;
+        let newSeats: string;
+        let newType: string;
+        let newFurniture: string;
+        let newHref: string;
+        for (let child of entry.childNodes) {
+            if (child.nodeName !== "td") {
+                continue;
+            }
+            switch (child.attrs[0].value) {
+                case "views-field views-field-field-room-number": {
+                    newNumber = child.childNodes[1].childNodes[0].value;
+                    newHref = child.childNodes[1].attrs[0].value;
+                    break;
+                }
+                case "views-field views-field-field-room-capacity": {
+                    newSeats = child.childNodes[0].value.trim();
+                    break;
+                }
+                case "views-field views-field-field-room-furniture": {
+                    newFurniture = child.childNodes[0].value.trim();
+                    break;
+                }
+                case "views-field views-field-field-room-type": {
+                    newType = child.childNodes[0].value.trim();
+                    break;
+                }
+            }
         }
-        switch (child.attrs[0].value) {
-            case "views-field views-field-field-room-number": {
-                newNumber = child.childNodes[1].childNodes[0].value;
-                newHref = child.childNodes[1].attrs[0].value;
-                break;
-            }
-            case "views-field views-field-field-room-capacity": {
-                newSeats = child.childNodes[0].value.trim();
-                break;
-            }
-            case "views-field views-field-field-room-furniture": {
-                newFurniture = child.childNodes[0].value.trim();
-                break;
-            }
-            case "views-field views-field-field-room-type": {
-                newType = child.childNodes[0].value.trim();
-                break;
-            }
-        }
+        return {
+            address: building.address,
+            fullname: building.title,
+            furniture: newFurniture,
+            href: newHref,
+            lat: undefined,
+            lon: undefined,
+            name: building.code + "_" + newNumber,
+            number: newNumber,
+            seats: parseInt(newSeats, 10),
+            shortname: building.code,
+            type: newType,
+        };
+    } catch {
+        return null;
     }
-
-    return {
-        address: building.address,
-        fullname: building.title,
-        furniture: newFurniture,
-        href: newHref,
-        lat: undefined,
-        lon: undefined,
-        name: building.code + "_" + newNumber,
-        number: newNumber,
-        seats: parseInt(newSeats, 10),
-        shortname: building.code,
-        type: newType,
-    };
 }
 function parseBuildingTable(table: any, building: IIndexBuildingInfo): IRoom[] {
-    if (!table.hasOwnProperty("childNodes")) {
+    if (!table.hasOwnProperty("childNodes") || !Array.isArray(table.childNodes)) {
         return [];
     }
     let tableEntries: any[] = table.childNodes;
