@@ -5,6 +5,8 @@
 import fs = require("fs");
 import restify = require("restify");
 import Log from "../Util";
+import InsightFacade from "../controller/InsightFacade";
+import {InsightDataset} from "../controller/IInsightFacade";
 
 /**
  * This configures the REST endpoints for the server.
@@ -63,6 +65,8 @@ export default class Server {
                 // http://localhost:4321/echo/hello
                 that.rest.get("/echo/:msg", Server.echo);
 
+               // that.rest.get("/datasets", Server.getDatasets);
+
                 // NOTE: your endpoints should go here
 
                 // This must be the last endpoint!
@@ -114,7 +118,7 @@ export default class Server {
     private static getStatic(req: restify.Request, res: restify.Response, next: restify.Next) {
         const publicDir = "frontend/public/";
         Log.trace("RoutHandler::getStatic::" + req.url);
-        let path = publicDir + "index.html";
+        let path = publicDir + "datasets";
         if (req.url !== "/") {
             path = publicDir + req.url.split("/").pop();
         }
@@ -129,5 +133,19 @@ export default class Server {
             return next();
         });
     }
+
+    /* private static getDatasets(req: restify.Request, res: restify.Response, next: restify.Next) {
+        Log.trace("Server::getDatasets(..) - params: ");
+        try {
+            InsightFacade.getInstance().listDatasets().then((arr: InsightDataset[]) => {
+                Log.info("Server::getDatasets(..) - responding " + 200);
+                res.json(200, {result: arr});
+                });
+        } catch (err) {
+            Log.error("Server::getDatasets(..) - responding 400 - new");
+            res.json(400, {error: err});
+        }
+        return next();
+    } */
 
 }
