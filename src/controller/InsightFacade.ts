@@ -87,8 +87,17 @@ export default class InsightFacade implements IInsightFacade {
         datasets: [],
     };
 
-    constructor() {
+     constructor() {
         Log.trace("InsightFacadeImpl::init()");
+    }
+
+    private static instance: InsightFacade;
+
+    public static getInstance(): InsightFacade {
+        if (this.instance === undefined) {
+            this.instance = new InsightFacade();
+        }
+        return this.instance;
     }
 
     public addDataset(id: string, content: string, kind: InsightDatasetKind): Promise<string[]> {
