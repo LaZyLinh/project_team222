@@ -72,7 +72,7 @@ export default class Server {
                 // This is an example endpoint that you can invoke by accessing this URL in your browser:
                 // http://localhost:4321/echo/hello
                 that.rest.get("/echo/:msg", Server.echo);
-                that.rest.put("/address/:id", Server.addDatasets);
+                that.rest.put("/dataset/:id/:kind", Server.addDatasets);
                 that.rest.del("/dataset/:id", Server.rmvDatasets);
                 that.rest.get("/datasets", Server.getDatasets);
                 that.rest.post("/query", Server.postQuery);
