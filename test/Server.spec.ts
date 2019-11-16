@@ -25,8 +25,7 @@ describe("Facade D3", function () {
         server.start().then((result: boolean) => {
             return;
         }).catch(function (err) {
-            // eslint-disable-next-line no-console
-            console.log(err.toString());
+            Log.error(err);
         });
     });
 
@@ -114,13 +113,11 @@ describe("Facade D3", function () {
                 })
                 .catch(function (err) {
                     // some logging here please!
-                    // eslint-disable-next-line no-console
                     Log.error(err);
                     expect.fail();
                 });
         } catch (err) {
-            // eslint-disable-next-line no-console
-            console.log("Server::getDatasets(..) - responding 400 - new");
+            Log.error(err);
         }
     });
 
@@ -136,8 +133,7 @@ describe("Facade D3", function () {
                     expect.fail();
                 });
         } catch (err) {
-            // eslint-disable-next-line no-console
-            console.log("Server::getDatasets(..) - responding 400 - new");
+            Log.error(err);
         }
     });
 
@@ -151,13 +147,11 @@ describe("Facade D3", function () {
                 })
                 .catch(function (err) {
                     // some logging here please!
-                    // eslint-disable-next-line no-console
                     Log.error(err);
                     expect.fail();
                 });
         } catch (err) {
-            // eslint-disable-next-line no-console
-            console.log("Server::getDatasets(..) - responding 400 - new");
+            Log.error(err);
         }
     });
 
