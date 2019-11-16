@@ -6,6 +6,7 @@ import chaiHttp = require("chai-http");
 import Response = ChaiHttp.Response;
 import {expect} from "chai";
 import * as fs from "fs-extra";
+import Log from "../src/Util";
 
 describe("Facade D3", function () {
     let facade: InsightFacade = null;
@@ -14,20 +15,29 @@ describe("Facade D3", function () {
     chai.use(chaiHttp);
 
     before(function () {
-        facade = new InsightFacade();
-        server = new Server(4321);
-        server.start();
         // TODO: start server here once and handle errors properly
-    });
-
-    after(function () {
-         server.stop();
-    });
-
-    beforeEach(function () {
+        facade = new InsightFacade();
         for (const id of Object.keys(datasetsToLoad)) {
             datasets[id] = fs.readFileSync(datasetsToLoad[id]);
         }
+        server = new Server(21);
+        // server.stop();
+        server.start().then((result: boolean) => {
+            return;
+        }).catch(function (err) {
+            // eslint-disable-next-line no-console
+            console.log(err.toString());
+        });
+    });
+
+    after(function () {
+        server.stop().then().catch( function (err) {
+            // eslint-disable-next-line no-console
+            Log.error(err);
+        });
+    });
+
+    beforeEach(function () {
         // might want to add some process logging here to keep track of what"s going on
     });
 
@@ -56,15 +66,16 @@ describe("Facade D3", function () {
 
     it("PUT test for courses dataset", function () {
         try {
-            return chai.request("localhost:4321")
+            return chai.request("localhost:21")
                 .put("/dataset/courses/courses")
                 .send(datasets["courses"])
                 .set("Content-Type", "application/x-zip-compressed")
                 .then(function (res: Response) {
-                    // some logging here please!
                     expect(res.status).to.be.equal(200);
                 })
                 .catch(function (err) {
+                    // eslint-disable-next-line no-console
+                    console.log(err.toString());
                     // some logging here please!
                     expect.fail();
                 });
@@ -76,17 +87,73 @@ describe("Facade D3", function () {
 
     it("PUT test for meow dataset", function () {
         try {
-            return chai.request("localhost:4321")
+            return chai.request("localhost:21")
                 .put("/dataset/courses/meow")
-                .send(datasets["courses"])
+                .send(datasets["minidata"])
                 .set("Content-Type", "application/x-zip-compressed")
                 .then(function (res: Response) {
-                    // some logging here please!
-                    expect(res.status).to.be.equal(400);
+                    expect.fail();
                 })
                 .catch(function (err) {
                     // some logging here please!
-                    expect.fail(err);
+                    expect(err.status).to.be.equal(400);
+                });
+        } catch (err) {
+            // eslint-disable-next-line no-console
+            console.log("Server::getDatasets(..) - responding 400 - new");
+        }
+    });
+
+    it("GET test for list", function () {
+        try {
+            return chai.request("localhost:21")
+                .get("/datasets")
+                .then(function (res: Response) {
+                    expect(res.status).to.equal(200);
+                    expect(res.body.result[0].id).to.equal("courses");
+                })
+                .catch(function (err) {
+                    // some logging here please!
+                    // eslint-disable-next-line no-console
+                    Log.error(err);
+                    expect.fail();
+                });
+        } catch (err) {
+            // eslint-disable-next-line no-console
+            console.log("Server::getDatasets(..) - responding 400 - new");
+        }
+    });
+
+    it("DELETE test", function () {
+        try {
+            return chai.request("localhost:21")
+                .del("/dataset/courses")
+                .then(function (res: Response) {
+                    expect(res.body.result).to.equal("courses");
+                })
+                .catch(function (err) {
+                    // some logging here please!
+                    expect.fail();
+                });
+        } catch (err) {
+            // eslint-disable-next-line no-console
+            console.log("Server::getDatasets(..) - responding 400 - new");
+        }
+    });
+
+    it("GET test for list after del", function () {
+        try {
+            return chai.request("localhost:21")
+                .get("/datasets")
+                .then(function (res: Response) {
+                    expect(res.status).to.equal(200);
+                    expect(res.body.result).to.deep.equal([]);
+                })
+                .catch(function (err) {
+                    // some logging here please!
+                    // eslint-disable-next-line no-console
+                    Log.error(err);
+                    expect.fail();
                 });
         } catch (err) {
             // eslint-disable-next-line no-console

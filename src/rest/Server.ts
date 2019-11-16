@@ -164,7 +164,7 @@ export default class Server {
             });
         } catch (err) {
             Log.error("Server::addDataset(..) - ");
-            res.json(400, {error: err});
+            res.json(400, {error: err.toString()});
         }
         return next();
     }
