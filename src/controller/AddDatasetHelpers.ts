@@ -1,5 +1,5 @@
 import {InsightDataset, InsightDatasetKind, InsightError} from "./IInsightFacade";
-import {ICourse, ICourseDataset, IDatabase, IRoom, IRoomDataset} from "./IDataset";
+import {ICourse, ICourseDataset, IDatabase} from "./IDataset";
 import InsightFacade from "./InsightFacade";
 import * as fs from "fs";
 import * as JSZip from "jszip";
@@ -12,8 +12,10 @@ export function getAddDatasetPromise(kind: InsightDatasetKind,
                                      datasets: InsightDataset[]) {
     if (kind === InsightDatasetKind.Courses) {
         return getAddCourseDatasetPromise(content, id, datasets);
-    } else {
+    } else if (kind === InsightDatasetKind.Rooms) {
         return getAddRoomDatasetPromise(content, id, datasets);
+    } else {
+        return Promise.reject("Wrong Kind");
     }
 }
 

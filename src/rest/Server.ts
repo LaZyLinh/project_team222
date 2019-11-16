@@ -6,7 +6,7 @@ import fs = require("fs");
 import restify = require("restify");
 import Log from "../Util";
 import InsightFacade from "../controller/InsightFacade";
-import {InsightDataset, InsightError, NotFoundError} from "../controller/IInsightFacade";
+import {InsightDataset, InsightDatasetKind, InsightError, NotFoundError} from "../controller/IInsightFacade";
 import {type} from "os";
 
 /**
@@ -154,7 +154,7 @@ export default class Server {
     private static addDatasets(req: restify.Request, res: restify.Response, next: restify.Next) {
         Log.trace("Server::addDataset(..) - params: " + JSON.stringify(req.params));
         try {
-            InsightFacade.getInstance().addDataset(req.params.id, req.params.body.toString("base64"),
+            InsightFacade.getInstance().addDataset(req.params.id, req.body.toString("base64"),
                 req.params.kind).then((IdList: string[]) => {
                 Log.info("Server::addDataset(..) - responding " + 200);
                 res.send(200, {result: IdList});
@@ -164,7 +164,7 @@ export default class Server {
             });
         } catch (err) {
             Log.error("Server::addDataset(..) - ");
-            res.json(100, {error: err.toString()});
+            res.json(400, {error: err});
         }
         return next();
     }
