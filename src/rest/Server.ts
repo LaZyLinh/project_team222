@@ -12,17 +12,10 @@ import {type} from "os";
 /**
  * This configures the REST endpoints for the server.
  */
-
-interface Address {
-    id: number;
-    address: string;
-}
-
 export default class Server {
 
     private port: number;
     private rest: restify.Server;
-    private addresses: {[key: number]: Address};
 
     constructor(port: number) {
         Log.info("Server::<init>( " + port + " )");
@@ -171,11 +164,10 @@ export default class Server {
 
     private static postQuery(req: restify.Request, res: restify.Response, next: restify.Next) {
         Log.trace("Server::performQuery(..) - params: " + JSON.stringify(req.params));
-        // Log.trace("Server::performQuery(..) - body: " + req.body.toString());
         try {
-            InsightFacade.getInstance().performQuery(JSON.parse(req.body.toString())).then((queryRes: any[]) => {
+            InsightFacade.getInstance().performQuery(JSON.parse(req.body.toString)).then((queryRes: any[]) => {
                 Log.info("Server::performQuery - responding " + 200);
-                res.send(200, {result: JSON.stringify(queryRes)});
+                res.send(200, {result: queryRes});
             }).catch ((err) => {
                 Log.error("Server::performQuery - responding 400");
                 res.json(400, {error: err.toString()});
