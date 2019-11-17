@@ -49,6 +49,9 @@ function applyValidation(apply: any[], kind: InsightDatasetKind, dataID: string)
             return null;
         }
         for (const [appKey, entry] of Object.entries(obj)) {
+            if (appKey === null || entry === null) {
+                return null;
+            }
             if (!/^[^_]+$/.test(appKey) || applyKeys.includes(appKey)) {
                 return null;
             }
