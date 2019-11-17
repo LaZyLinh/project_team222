@@ -146,6 +146,7 @@ export default class Server {
 
     private static addDatasets(req: restify.Request, res: restify.Response, next: restify.Next) {
         Log.trace("Server::addDataset(..) - params: " + JSON.stringify(req.params));
+        // Log.trace("Server::addDataset(..) - body: " + req.body.toString("base64"));
         try {
             InsightFacade.getInstance().addDataset(req.params.id, req.body.toString("base64"),
                 req.params.kind).then((IdList: string[]) => {
