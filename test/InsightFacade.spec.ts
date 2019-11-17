@@ -14,6 +14,7 @@ import {
     whereValidation
 } from "../src/controller/ValidateQuery";
 import {getApplyList} from "../src/controller/FormatTransformation";
+import "./Server.spec";
 // import {transformationValidation} from "../src/controller/transValidation";
 
 // This should match the schema given to TestUtil.validate(..) in TestUtil.readTestQueries(..)
