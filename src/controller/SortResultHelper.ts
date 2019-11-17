@@ -4,9 +4,8 @@ export interface IndexableObject {
     [key: string]: any;
 }
 
-export function getComparison(keyToSortBy: string,
-                              typeOfKey: string,
-                              dir: string): (a: IndexableObject, b: IndexableObject) => number {
+export function getComparison(keyToSortBy: string, typeOfKey: string, dir: string): (a: IndexableObject,
+                                                                                     b: IndexableObject) => number {
     let directionVal = 1;
     if (dir === "DOWN") {
         directionVal = -1;
@@ -72,9 +71,8 @@ export function mergeSort(arr: IndexableObject[],
     return merge(mergeSort(left, cm), mergeSort(right, cm), cm);
 }
 
-function merge(left: IndexableObject[],
-               right: IndexableObject[],
-               cm: (a: IndexableObject, b: IndexableObject) => number): IndexableObject[] {
+export function merge(left: IndexableObject[], right: IndexableObject[],
+                      cm: (a: IndexableObject, b: IndexableObject) => number): IndexableObject[] {
     let result: IndexableObject[] = [];
 
     while (left.length && right.length) {

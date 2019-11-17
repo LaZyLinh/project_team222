@@ -53,6 +53,9 @@ export function getAddRoomDatasetPromise(content: string, id: string, datasets: 
         });
 }
 function findTableBodies(htmlObj: any): any[] {
+    if (htmlObj === null) {
+        return [];
+    }
     if (htmlObj.hasOwnProperty("nodeName") && htmlObj.nodeName === "tbody") {
         return [htmlObj];
     } else if (htmlObj.hasOwnProperty("nodeName") &&
@@ -124,7 +127,6 @@ function parseIndexTable(table: any): IIndexBuildingInfo[] {
     }
     return res;
 }
-
 function parseIndexHTML(res: string): IIndexBuildingInfo[] {
     const parse5 = require("parse5");
     let parsed: object = parse5.parse(res);
@@ -132,6 +134,8 @@ function parseIndexHTML(res: string): IIndexBuildingInfo[] {
     for (let table of tableBodies) {
         let result: IIndexBuildingInfo[] = parseIndexTable(table);
         if (result.length !== 0) {
+            // we can assume that only one table will have building info
+            // so, the rest of the tables must be irrelevant; we can skip them.
             return result;
         }
     }
@@ -233,7 +237,6 @@ export function makeGeolocationPromise(room: IRoom): Promise<IRoom | null> {
         return Promise.resolve(null);
     });
 }
-
 function makeRoomPromises(file: string, building: IIndexBuildingInfo):  Array<Promise<IRoom>> {
     const parse5 = require("parse5");
     let parsed: object = parse5.parse(file);
@@ -252,7 +255,6 @@ function makeRoomPromises(file: string, building: IIndexBuildingInfo):  Array<Pr
     }
     return promises;
 }
-
 export function newRoomDatasetHelper(newID: string, newKind: InsightDatasetKind): IRoomDataset {
     return {
         rooms: [],
@@ -272,7 +274,6 @@ export function newRoomDatasetHelper(newID: string, newKind: InsightDatasetKind)
         numRows: 0,
     };
 }
-
 export function addRoomsToDataset(rooms: IRoom[], dataset: IRoomDataset) {
     for (let room of rooms) {
         if (room === null) {

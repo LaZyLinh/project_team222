@@ -215,7 +215,6 @@ export function deleteAllFromDisk() {
         return;
     }
 }
-
 // returns list of id strings corresponding to datasets currently in memory
 export function idsInMemory(database: IDatabase): string[] {
     let res: string[] = [];
@@ -224,7 +223,6 @@ export function idsInMemory(database: IDatabase): string[] {
     }
     return res;
 }
-
 // returns list of id strings corresponding to datasets currently on the disk
 export function idsInDisk(): string[] {
     try {
@@ -234,7 +232,6 @@ export function idsInDisk(): string[] {
         return [];
     }
 }
-
 // return the array tha
 function arrayUnion(a: string[], b: string[]): string[] {
     let res: string[] = [];
@@ -246,7 +243,6 @@ function arrayUnion(a: string[], b: string[]): string[] {
     res = res.concat(b);
     return res;
 }
-
 // return the validated string if it's valid, return an InsightError otherwise.
 export function validateIDString(id: string): string | InsightError {
     if (id === null) {
