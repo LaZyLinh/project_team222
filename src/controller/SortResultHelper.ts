@@ -3,7 +3,7 @@ import {ICourseDataset, IResultObj} from "./IDataset";
 interface IndexableObject {
     [key: string]: any;
 }
-
+/*
 function sortByOneThing(resultArray: IndexableObject[], keyToSortBy: string, typeOfKey: string, dir: string) {
     let directionVal = 1;
     if (dir === "DOWN") {
@@ -29,6 +29,7 @@ function sortByOneThing(resultArray: IndexableObject[], keyToSortBy: string, typ
         });
     }
 }
+ */
 
 function getComparison(keyToSortBy: string,
                        typeOfKey: string,
