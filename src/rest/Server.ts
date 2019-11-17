@@ -5,14 +5,24 @@
 import fs = require("fs");
 import restify = require("restify");
 import Log from "../Util";
+import InsightFacade from "../controller/InsightFacade";
+import {InsightDataset, InsightError, NotFoundError} from "../controller/IInsightFacade";
+import {type} from "os";
 
 /**
  * This configures the REST endpoints for the server.
  */
+
+interface Address {
+    id: number;
+    address: string;
+}
+
 export default class Server {
 
     private port: number;
     private rest: restify.Server;
+    private addresses: {[key: number]: Address};
 
     constructor(port: number) {
         Log.info("Server::<init>( " + port + " )");
@@ -62,24 +72,37 @@ export default class Server {
                 // This is an example endpoint that you can invoke by accessing this URL in your browser:
                 // http://localhost:4321/echo/hello
                 that.rest.get("/echo/:msg", Server.echo);
+                that.rest.get("/datasets", Server.getDatasets);
+                that.rest.del("/dataset/:id", Server.removeDatasets);
 
-                // NOTE: your endpoints should go here
-
-                // This must be the last endpoint!
+                that.rest.put("/address/:id", (req: restify.Request, res: restify.Response, next:
+                    restify.Next) => {
+                    if (req.params.id in that.addresses) {
+                        res.json(400, {
+                            error: `Address with id = ${req.params.id} exists.`,
+                            address: that.addresses[req.params.id]
+                        });
+                    } else {
+                        let address = {
+                            id: req.params.id,
+                            address: req.params.body
+                        };
+                        that.addresses[req.params.id] = address;
+                        res.send(204);
+                    }
+                    return next();
+                });
                 that.rest.get("/.*", Server.getStatic);
-
                 that.rest.listen(that.port, function () {
                     Log.info("Server::start() - restify listening: " + that.rest.url);
                     fulfill(true);
                 });
-
                 that.rest.on("error", function (err: string) {
                     // catches errors in restify start; unusual syntax due to internal
                     // node not using normal exceptions here
                     Log.info("Server::start() - restify ERROR: " + err);
                     reject(err);
                 });
-
             } catch (err) {
                 Log.error("Server::start() - ERROR: " + err);
                 reject(err);
@@ -129,4 +152,44 @@ export default class Server {
             return next();
         });
     }
+
+    private static getDatasets(req: restify.Request, res: restify.Response, next: restify.Next) {
+        Log.trace("Server::getDatasets(..) - params: ");
+        try {
+            InsightFacade.getInstance().listDatasets().then((arr: InsightDataset[]) => {
+                Log.info("Server::getDatasets(..) - responding " + 200);
+                res.json(200, {result: arr});
+                });
+        } catch (err) {
+            Log.error("Server::getDatasets(..) - responding 400 - new");
+            res.json(400, {error: err});
+        }
+        return next();
+    }
+
+    private static removeDatasets(req: restify.Request, res: restify.Response, next: restify.Next) {
+        Log.trace("Server::removeDataset(..) - params: " + JSON.stringify(req.params));
+        try {
+            InsightFacade.getInstance().removeDataset(req.params.id).then((delId: string) => {
+                Log.info("Server::removeDataset(..) - responding " + 200);
+                res.send(200, {result: delId});
+            }).catch ((err) => {
+                if (err instanceof InsightError) {
+                    Log.error("Server::removeDataset(..) - responding 400");
+                    res.send(204);
+                    res.json(400, {error: err});
+                } else if (err instanceof NotFoundError) {
+                    Log.error("Server::removeDataset(..) - responding 404");
+                    res.send(204);
+                    res.json(404, {error: err.toString()});
+                }
+            });
+        } catch (err) {
+                Log.error("Server::removeDataset(..) - ");
+                res.send(204);
+                res.json(100, {error: err.toString()});
+        }
+        return next();
+    }
+
 }
