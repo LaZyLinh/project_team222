@@ -147,7 +147,7 @@ export default class InsightFacade implements IInsightFacade {
             if (query === null || typeof query !== "object") {
                 return reject(new InsightError("Invalid Query"));
             }
-            const datasetID: string = getFirstQueryId(query);
+            const datasetID: string | null = getFirstQueryId(query);
             if (datasetID === null) {
                 return reject(new InsightError("Invalid Query"));
             }

@@ -6,7 +6,7 @@ import fs = require("fs");
 import restify = require("restify");
 import Log from "../Util";
 import InsightFacade from "../controller/InsightFacade";
-import {InsightDataset, InsightError, NotFoundError} from "../controller/IInsightFacade";
+import {InsightDataset, InsightDatasetKind, InsightError, NotFoundError} from "../controller/IInsightFacade";
 import {type} from "os";
 
 /**
@@ -72,26 +72,10 @@ export default class Server {
                 // This is an example endpoint that you can invoke by accessing this URL in your browser:
                 // http://localhost:4321/echo/hello
                 that.rest.get("/echo/:msg", Server.echo);
+                that.rest.put("/dataset/:id/:kind", Server.addDatasets);
+                that.rest.del("/dataset/:id", Server.rmvDatasets);
                 that.rest.get("/datasets", Server.getDatasets);
-                that.rest.del("/dataset/:id", Server.removeDatasets);
-
-                that.rest.put("/address/:id", (req: restify.Request, res: restify.Response, next:
-                    restify.Next) => {
-                    if (req.params.id in that.addresses) {
-                        res.json(400, {
-                            error: `Address with id = ${req.params.id} exists.`,
-                            address: that.addresses[req.params.id]
-                        });
-                    } else {
-                        let address = {
-                            id: req.params.id,
-                            address: req.params.body
-                        };
-                        that.addresses[req.params.id] = address;
-                        res.send(204);
-                    }
-                    return next();
-                });
+                that.rest.post("/query", Server.postQuery);
                 that.rest.get("/.*", Server.getStatic);
                 that.rest.listen(that.port, function () {
                     Log.info("Server::start() - restify listening: " + that.rest.url);
@@ -167,7 +151,43 @@ export default class Server {
         return next();
     }
 
-    private static removeDatasets(req: restify.Request, res: restify.Response, next: restify.Next) {
+    private static addDatasets(req: restify.Request, res: restify.Response, next: restify.Next) {
+        Log.trace("Server::addDataset(..) - params: " + JSON.stringify(req.params));
+        try {
+            InsightFacade.getInstance().addDataset(req.params.id, req.body.toString("base64"),
+                req.params.kind).then((IdList: string[]) => {
+                Log.info("Server::addDataset(..) - responding " + 200);
+                res.send(200, {result: IdList});
+            }).catch ((err) => {
+                Log.error("Server::addDataset(..) - responding 400");
+                res.json(400, {error: err.toString()});
+            });
+        } catch (err) {
+            Log.error("Server::addDataset(..) - ");
+            res.json(400, {error: err.toString()});
+        }
+        return next();
+    }
+
+    private static postQuery(req: restify.Request, res: restify.Response, next: restify.Next) {
+        Log.trace("Server::performQuery(..) - params: " + JSON.stringify(req.params));
+        try {
+            InsightFacade.getInstance().performQuery(JSON.parse(req.body.toString)).then((queryRes: any[]) => {
+                Log.info("Server::performQuery - responding " + 200);
+                res.send(200, {result: queryRes});
+            }).catch ((err) => {
+                Log.error("Server::performQuery - responding 400");
+                res.json(400, {error: err.toString()});
+            });
+        } catch (err) {
+            Log.error("Server::performQuery - ");
+            res.json(100, {error: err.toString()});
+        }
+        return next();
+    }
+
+
+    private static rmvDatasets(req: restify.Request, res: restify.Response, next: restify.Next) {
         Log.trace("Server::removeDataset(..) - params: " + JSON.stringify(req.params));
         try {
             InsightFacade.getInstance().removeDataset(req.params.id).then((delId: string) => {
@@ -176,17 +196,17 @@ export default class Server {
             }).catch ((err) => {
                 if (err instanceof InsightError) {
                     Log.error("Server::removeDataset(..) - responding 400");
-                    res.send(204);
-                    res.json(400, {error: err});
+                    // res.send(204);
+                    res.json(400, {error: err.toString()});
                 } else if (err instanceof NotFoundError) {
                     Log.error("Server::removeDataset(..) - responding 404");
-                    res.send(204);
+                    // res.send(204);
                     res.json(404, {error: err.toString()});
                 }
             });
         } catch (err) {
                 Log.error("Server::removeDataset(..) - ");
-                res.send(204);
+                // res.send(204);
                 res.json(100, {error: err.toString()});
         }
         return next();
