@@ -13,16 +13,11 @@ import {type} from "os";
  * This configures the REST endpoints for the server.
  */
 
-interface Address {
-    id: number;
-    address: string;
-}
 
 export default class Server {
 
     private port: number;
     private rest: restify.Server;
-    private addresses: {[key: number]: Address};
 
     constructor(port: number) {
         Log.info("Server::<init>( " + port + " )");
