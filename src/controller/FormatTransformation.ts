@@ -13,7 +13,7 @@ export function groupResults(dataset: InsightDataset, result: number[], group: s
         dataList = (dataset as IRoomDataset).rooms;
     }
     for (const courseIndex of result) {
-        if (unique === []) {
+        if (unique.length === 0) {
             let newUnique = [];
             for (const key of group) {
                 newUnique.push(dataList[courseIndex][key]);
