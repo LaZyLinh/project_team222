@@ -172,15 +172,15 @@ export default class Server {
     private static postQuery(req: restify.Request, res: restify.Response, next: restify.Next) {
         Log.trace("Server::performQuery(..) - params: " + JSON.stringify(req.params));
         try {
-            InsightFacade.getInstance().performQuery(JSON.parse(req.params.body.toString)).then((queryRes: any[]) => {
-                Log.info("Server::addDataset(..) - responding " + 200);
+            InsightFacade.getInstance().performQuery(JSON.parse(req.body.toString)).then((queryRes: any[]) => {
+                Log.info("Server::performQuery - responding " + 200);
                 res.send(200, {result: queryRes});
             }).catch ((err) => {
-                Log.error("Server::addDataset(..) - responding 400");
+                Log.error("Server::performQuery - responding 400");
                 res.json(400, {error: err.toString()});
             });
         } catch (err) {
-            Log.error("Server::addDataset(..) - ");
+            Log.error("Server::performQuery - ");
             res.json(100, {error: err.toString()});
         }
         return next();
