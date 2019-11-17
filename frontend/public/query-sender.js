@@ -11,16 +11,16 @@ CampusExplorer.sendQuery = function (query) {
         let baseURL = window.location.origin; // the URL of the server. probably http://localhost:4321
         let sendURL = baseURL + "/query";
         xhr.open("POST", sendURL);
-        xhr.addEventListener("load", () => {
+        xhr.onload = () => {
             // responded with success!
             let response = JSON.parse(xhr.responseText);
             fulfill(response);
-        });
+        };
         xhr.addEventListener("error", () => {
             // responded with error
             // TODO: type of error?
             reject();
         });
-        xhr.send(query);
+        xhr.send(JSON.stringify(query));
     });
 };

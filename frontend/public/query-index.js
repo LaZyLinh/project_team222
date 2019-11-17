@@ -15,5 +15,7 @@ submitButton.addEventListener("click", (event) => {
     let query = CampusExplorer.buildQuery();
     CampusExplorer.sendQuery(query).then((response) => {
         CampusExplorer.renderResult(response);
+    }).catch( (err) => {
+        // TODO: what to do here?
     });
 });
