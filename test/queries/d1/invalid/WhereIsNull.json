@@ -1,0 +1,15 @@
+{
+    "title": "SELECT * on minidata (EMPTY 'WHERE')",
+    "query": {
+        "WHERE": null,
+        "OPTIONS": {
+            "COLUMNS": [
+                "minidata_dept",
+                "minidata_avg"
+            ],
+            "ORDER": "minidata_avg"
+        }
+    },
+    "isQueryValid": false,
+    "result": "InsightError"
+}

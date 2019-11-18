@@ -3,7 +3,7 @@ import {typeMatchValidID} from "./ValidateQuery";
 
 export function transformationValidation(trans: any, column: string[], dataID: string,
                                          kind: InsightDatasetKind): number {
-    if (trans === null) {
+    if (trans === null || typeof trans !== "object") {
         return 1;
     }
 
@@ -55,7 +55,7 @@ function applyValidation(apply: any[], kind: InsightDatasetKind, dataID: string)
             if (!/^[^_]+$/.test(appKey) || applyKeys.includes(appKey)) {
                 return null;
             }
-            if (typeof entry !== "object" || Object.keys(entry).length > 1) {
+            if (typeof entry !== "object" || Array.isArray(entry) || Object.keys(entry).length > 1) {
                 return null;
             }
             for (const [token, key] of Object.entries(entry)) {

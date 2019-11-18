@@ -1,0 +1,32 @@
+{
+    "title": "SELECT dept, avg WHERE avg < 40",
+    "query": {
+        "WHERE": {
+            "GT": {
+                "courses_avg": 94
+            }
+        },
+        "OPTIONS": {
+            "COLUMNS": [
+                "courses_dept",
+                "courses_id"
+            ],
+            "ORDER": [{
+                "dir": "DOWN",
+                "keys": [
+                    "courses_dept",
+                    "courses_id"
+                ]
+            }]
+        },
+        "TRANSFORMATIONS": {
+            "GROUP": [
+                "courses_dept",
+                "courses_id"
+            ],
+            "APPLY": []
+        }
+    },
+    "isQueryValid": false,
+    "result": "InsightError"
+}

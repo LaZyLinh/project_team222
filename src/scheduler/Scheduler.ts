@@ -162,9 +162,9 @@ function multSecRoom(originSecs: SchedSection[], originRooms: SchedRoom[], secs:
         courseTime = courses[secName];
         let fitFreeRooms = findFitFreeRoom(secObj, rooms);
         let checkedFitRooms: IRoomSchedObj[] = [];
-        let keepRoom = false;
         let commonTS: IndexableObject = {};
         for (const potential of fitFreeRooms) {
+            let keepRoom = false; // after
             for (let i = 0; i < 15; i++) {
                 keepRoom = hasOverlap(potential, i, courseTime, keepRoom, commonTS);
                 if (!keepRoom) {

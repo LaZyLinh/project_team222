@@ -31,7 +31,7 @@ export function getFirstQueryId(query: any): null | string {
             if (appKey !== firstKey) {
                 continue;
             }
-            if (typeof entry !== "object" || Object.keys(entry).length > 1) {
+            if (entry === null || typeof entry !== "object" || Object.keys(entry).length > 1) {
                 return null;
             }
             for (const [token, key] of Object.entries(entry)) {
@@ -42,7 +42,7 @@ export function getFirstQueryId(query: any): null | string {
             }
         }
     }
-    return null;
+    // return null;
 }
 
 export function validateQuery(query: any, id: string, kind: InsightDatasetKind): string | null {
@@ -159,7 +159,7 @@ export function whereValidation(item: any, dataID: string, kind: InsightDatasetK
     const sSingle = ["IS"];
     const neg = "NOT";
     let anyFalse = 0;
-    if (item == null || typeof item !== "object") {
+    if (item == null || typeof item !== "object" || Array.isArray(item)) {
         return 1;
     }
     if (Array.isArray(Object.keys(item))) {
