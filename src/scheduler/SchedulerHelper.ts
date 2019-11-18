@@ -97,6 +97,21 @@ function clamp(input: number, low: number, high: number) {
     return Math.min(high, Math.max(low, input));
 }
 
+// given an array of scheduled rooms and an array of rooms to pick from, pick the room which has the lowest maxDistance
+// from the already scheduled rooms.
+export function findClosestRoom(schedRooms: IRoomSchedObj[], potentialRooms: IRoomSchedObj[]) {
+    let minDistance: number = Number.POSITIVE_INFINITY;
+    let minRoom: IRoomSchedObj;
+    for (let potentialRoom of potentialRooms) {
+        let thisDistance = maxDistance(potentialRoom, schedRooms);
+        if (thisDistance < minDistance) {
+            minDistance = thisDistance;
+            minRoom = potentialRoom;
+        }
+    }
+    return minRoom;
+}
+
 export function maxDistance(room: IRoomSchedObj, schedRooms: IRoomSchedObj[]): number {
     let max = 0;
     for (const comparedRoom of schedRooms) {
