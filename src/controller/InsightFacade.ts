@@ -91,7 +91,7 @@ export default class InsightFacade implements IInsightFacade {
         Log.trace("InsightFacadeImpl::init()");
     }
 
-    private static instance: InsightFacade;
+    public static instance: InsightFacade;
 
     public static getInstance(): InsightFacade {
         if (this.instance === undefined) {
@@ -149,7 +149,7 @@ export default class InsightFacade implements IInsightFacade {
             }
             const datasetID: string | null = getFirstQueryId(query);
             if (datasetID === null) {
-                return reject(new InsightError("Invalid Query"));
+                return reject(new InsightError("Can't find first ID"));
             }
             loadFromDiskIfNecessary(this, datasetID);
             if (!idsInMemory(this.database).includes(datasetID)) {

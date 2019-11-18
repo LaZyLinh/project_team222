@@ -96,6 +96,20 @@ export function calculateDistance(room1: IRoomSchedObj, room2: IRoomSchedObj): n
 
     return R * c;
 }
+
+export function findFitFreeRoom(sec: ISectionObj, rooms: IRoomSchedObj[]): IRoomSchedObj[] {
+    let fitFreeRooms = [];
+    for (const roomObj of rooms) {
+        if (fit(sec, roomObj)) {
+            if (hasFreeSlot(roomObj)) {
+                fitFreeRooms.push(roomObj);
+            }
+        } else {
+            break;
+        }
+    }
+    return fitFreeRooms;
+}
 /*
 var R = 6371e3; // metres                                       // calculate great-circle distance. need to /1372
 var φ1 = lat1.toRadians();

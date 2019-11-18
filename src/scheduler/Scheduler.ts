@@ -1,5 +1,15 @@
 import {IScheduler, SchedRoom, SchedSection, TimeSlot} from "./IScheduler";
-import {fit, hasFreeSlot, makeRoomObjects, makeSectionObjects, sortRoomObj, sortSectionObjs} from "./SchedulerHelper";
+import {
+    findFitFreeRoom,
+    fit,
+    hasFreeSlot,
+    makeRoomObjects,
+    makeSectionObjects,
+    sortRoomObj,
+    sortSectionObjs
+} from "./SchedulerHelper";
+import {IRoomSchedObj, ISectionObj} from "./ISchedObj";
+import {IndexableObject} from "../controller/SortResultHelper";
 
 export default class Scheduler implements IScheduler {
     private TSCode: TimeSlot[] = [
@@ -47,19 +57,65 @@ export default class Scheduler implements IScheduler {
             }
             return result;
         }
-        /*for (const secObj of secObjList) {
-            let fitFreeRooms = [];
-            for (const roomObj of roomObjList) {
-                if (fit(secObj, roomObj)) {
-                    if (hasFreeSlot(roomObj)) {
-                        fitFreeRooms.push(roomObj);
-                    }
-                } else {
-                    break;
-                }
-            }
-        }*/
+        result = multSecRoom(sections, rooms, sSecObjs, sRoomObjs);
         return result;
     }
 }
 
+function multSecRoom(originSecs: SchedSection[], originRooms: SchedRoom[], secs: ISectionObj[], rooms: IRoomSchedObj[]):
+                     Array<[SchedRoom, SchedSection, TimeSlot]> {
+    let result: Array<[SchedRoom, SchedSection, TimeSlot]> = [];
+    let courses: IndexableObject = {};
+    let courseTime: boolean[];
+
+    let scheduledRooms: IRoomSchedObj[] = [];
+    let scheduledSecs: ISectionObj[] = [];
+
+    for (const secObj of secs) {
+        if (addedCourse(secObj, courses)) {
+            courseTime = courses[secObj.dept + secObj.id];
+        } else {
+            let newTime: boolean[] = [];
+            for (let i = 0; i < 15; i++) {
+                newTime.push(true);
+            }
+            courses[secObj.dept + secObj.id] = newTime;
+        }
+        let fitFreeRooms = findFitFreeRoom(secObj, rooms);
+        let checkedFitRooms = [];
+        let keepRoom = false;
+        let commonTS: IndexableObject = {};
+        for (const potential of fitFreeRooms) {
+            for (let i = 0; i < 15; i++) {
+                if (potential.timeSlot[i] && courseTime[i]) {
+                    keepRoom = true;
+                    if (commonTS[potential.index] === undefined) {
+                        commonTS[potential.index] = [i];
+                    } else {
+                    commonTS[potential.index].push(i);
+                    }
+                }
+            }
+            if (keepRoom) {
+                checkedFitRooms.push(potential);
+            }
+        }
+        if (scheduledRooms.length === 0) {
+            let timeSlot = this.TSCode[commonTS[checkedFitRooms[0].index][0]];
+            result.push([originRooms[checkedFitRooms[0].index], originSecs[secObj.index], timeSlot]);
+            scheduledRooms.push(checkedFitRooms[0]);
+            scheduledSecs.push(secObj);
+            continue;
+        }
+    }
+    return result;
+}
+
+function addedCourse(secObj: ISectionObj, course: IndexableObject): boolean {
+    for (const current of Object.keys(course)) {
+        if (current === (secObj.dept + secObj.id)) {
+            return true;
+        }
+    }
+    return false;
+}

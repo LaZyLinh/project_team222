@@ -84,7 +84,7 @@ describe("Facade D3", function () {
     it("PUT test for meow dataset", function () {
         try {
             return chai.request("localhost:21")
-                .put("/dataset/courses/meow")
+                .put("/dataset/courses")
                 .send(datasets["minidata"])
                 .set("Content-Type", "application/x-zip-compressed")
                 .then(function (res: Response) {
