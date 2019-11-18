@@ -1,4 +1,4 @@
-import {SchedRoom, SchedSection} from "./IScheduler";
+import {SchedRoom, SchedSection, TimeSlot} from "./IScheduler";
 import {IRoomSchedObj, ISectionObj} from "./ISchedObj";
 import {getComparison, IndexableObject, mergeSort} from "../controller/SortResultHelper";
 
@@ -64,6 +64,37 @@ export function hasFreeSlot(room: IRoomSchedObj): boolean {
         }
     }
     return result;
+}
+
+export function calculateScore(rooms: IRoomSchedObj[], secs: ISectionObj[], totalEnrollment: number) {
+    let maxDistanceSoFar: number = 0;
+    let schedEnrollment: number = 0;
+
+    let buildLatLons: number[] = [];
+    let buildingsOnly: IRoomSchedObj[] = [];
+    for (let room of rooms) {
+        if (!buildLatLons.includes(room.lat + room.lon)) {
+            buildLatLons.push(room.lat + room.lon);
+            buildingsOnly.push(room);
+        }
+    }
+    for (let building of buildingsOnly) {
+        maxDistanceSoFar = Math.max(maxDistanceSoFar, maxDistance(building, buildingsOnly));
+    }
+    if (rooms.length === 0) {
+        maxDistanceSoFar = Number.POSITIVE_INFINITY;
+    }
+    for (let section of secs) {
+        schedEnrollment += section.enroll;
+    }
+    let d = clamp((1 - (maxDistanceSoFar / 1372)), 0, 1);
+    let e = clamp(schedEnrollment / totalEnrollment, 0, 1);
+
+    return 0.7 * d + 0.3 * e;
+}
+
+function clamp(input: number, low: number, high: number) {
+    return Math.min(high, Math.max(low, input));
 }
 
 export function maxDistance(room: IRoomSchedObj, schedRooms: IRoomSchedObj[]): number {
