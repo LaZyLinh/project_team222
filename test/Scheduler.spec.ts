@@ -1,4 +1,4 @@
-import {SchedRoom, SchedSection} from "../src/scheduler/IScheduler";
+import {SchedRoom, SchedSection, TimeSlot} from "../src/scheduler/IScheduler";
 import Scheduler from "../src/scheduler/Scheduler";
 import {expect} from "chai";
 
@@ -183,7 +183,7 @@ describe("Schedule Test", function () {
         rooms_number: "314"
     };
     let room1: SchedRoom = {
-        rooms_seats: 120,
+        rooms_seats: 200,
         rooms_lon: 10,
         rooms_lat: 10,
         rooms_shortname: "ICICS",
@@ -268,7 +268,8 @@ describe("Schedule Test", function () {
         const actual = scheduler.schedule([section0, section1, section2, section3, section4, section5,
             section6, section7, section8, section9, section10, section11,
             section12, section13, section14, section15, section16, section17, section18], [room, room1]);
-        const expected = 15;
+        // const expected: Array<[SchedRoom, SchedSection, TimeSlot]> = [];
+        const expected = 18;
         expect(actual.length).to.deep.equal(expected);
     });
 });

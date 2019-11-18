@@ -164,7 +164,6 @@ export default class Server {
     }
 
     private static postQuery(req: restify.Request, res: restify.Response, next: restify.Next) {
-
         try {
             InsightFacade.getInstance().performQuery(req.body).then((queryRes: any[]) => {
                 Log.info("Server::performQuery - responding " + 200);

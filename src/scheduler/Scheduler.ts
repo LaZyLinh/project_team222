@@ -99,18 +99,17 @@ function multRoom(scheduledRooms: IRoomSchedObj[], checkedFitRooms: IRoomSchedOb
     let roomChosen = findClosestRoom(scheduledRooms, checkedFitRooms);
     let time = TSCode[commonTS[roomChosen.index][0]];
 
-    let testR = scheduledRooms;
-    let testS = scheduledSecs;
-    testR.push(roomChosen);
-    testS.push(secObj);
     let currentScore = calculateScore(scheduledRooms, scheduledSecs, total);
-    let newScore = calculateScore(testR, testS, total);
+    scheduledRooms.push(roomChosen);
+    scheduledSecs.push(secObj);
+    let newScore = calculateScore(scheduledRooms, scheduledSecs, total);
     if (newScore > currentScore) {
         result.push([originRooms[roomChosen.index], originSecs[secObj.index], time]);
-        scheduledRooms = testR;
-        scheduledSecs = testS;
         courses[secName][commonTS[roomChosen.index][0]] = false;
         roomChosen.timeSlot[commonTS[roomChosen.index][0]] = false;
+    } else {
+        scheduledRooms.pop();
+        scheduledSecs.pop();
     }
     return {scheduledRooms, scheduledSecs};
 }
@@ -129,15 +128,14 @@ function multSecRoom(originSecs: SchedSection[], originRooms: SchedRoom[], secs:
 
     for (const secObj of secs) {
         let secName: string = secObj.dept + secObj.id;
-        if (addedCourse(secObj, courses)) {
-            courseTime = courses[secName];
-        } else {
+        if (!addedCourse(secObj, courses)) {
             let newTime: boolean[] = [];
             for (let i = 0; i < 15; i++) {
                 newTime.push(true);
             }
             courses[secName] = newTime;
         }
+        courseTime = courses[secName];
         let fitFreeRooms = findFitFreeRoom(secObj, rooms);
         let checkedFitRooms = [];
         let keepRoom = false;
@@ -145,9 +143,10 @@ function multSecRoom(originSecs: SchedSection[], originRooms: SchedRoom[], secs:
         for (const potential of fitFreeRooms) {
             for (let i = 0; i < 15; i++) {
                 keepRoom = hasOverlap(potential, i, courseTime, keepRoom, commonTS);
-            }
-            if (keepRoom) {
-                checkedFitRooms.push(potential);
+                if (keepRoom) {
+                    checkedFitRooms.push(potential);
+                    break;
+                }
             }
         }
         if (checkedFitRooms.length === 0) {
@@ -156,6 +155,7 @@ function multSecRoom(originSecs: SchedSection[], originRooms: SchedRoom[], secs:
         if (scheduledRooms.length === 0) {
             firstRoom.call(this, commonTS, checkedFitRooms, result, originRooms, originSecs, secObj,
                            scheduledRooms, scheduledSecs, courses, secName);
+            continue;
         }
         const ret = multRoom.call(this, scheduledRooms, checkedFitRooms, commonTS, scheduledSecs, secObj, total,
             result, originRooms, originSecs, courses, secName);
