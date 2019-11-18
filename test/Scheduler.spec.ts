@@ -148,8 +148,42 @@ describe("Schedule Test", function () {
         courses_pass: 10,
         courses_uuid: "43134",
     };
+    let section16: SchedSection = {
+        courses_audit: 90,
+        courses_avg: 10,
+        courses_dept: "cpsc",
+        courses_fail: 10,
+        courses_id: "210",
+        courses_pass: 10,
+        courses_uuid: "43134",
+    };
+    let section17: SchedSection = {
+        courses_audit: 150,
+        courses_avg: 10,
+        courses_dept: "cpsc",
+        courses_fail: 10,
+        courses_id: "210",
+        courses_pass: 10,
+        courses_uuid: "43134",
+    };
+    let section18: SchedSection = {
+        courses_audit: 100,
+        courses_avg: 10,
+        courses_dept: "cpsc",
+        courses_fail: 10,
+        courses_id: "210",
+        courses_pass: 10,
+        courses_uuid: "43134",
+    };
     let room: SchedRoom = {
         rooms_seats: 100,
+        rooms_lon: 10,
+        rooms_lat: 10,
+        rooms_shortname: "ICICS",
+        rooms_number: "314"
+    };
+    let room1: SchedRoom = {
+        rooms_seats: 120,
         rooms_lon: 10,
         rooms_lat: 10,
         rooms_shortname: "ICICS",
@@ -221,10 +255,19 @@ describe("Schedule Test", function () {
             [roomMeh, section1, "MWF 1000-1100"], [roomMeh, section0, "MWF 1100-1200"]];
         expect(actual).to.deep.equal(expected);
     });
+
     it("Should pass with multiple sections properly ordered", function () {
         const actual = scheduler.schedule([section0, section1, section2, section3, section4, section5,
             section6, section7, section8, section9, section10, section11,
             section12, section13, section14, section15], [room]);
+        const expected = 9;
+        expect(actual.length).to.deep.equal(expected);
+    });
+
+    it("Multiple courses, multiple rooms", function () {
+        const actual = scheduler.schedule([section0, section1, section2, section3, section4, section5,
+            section6, section7, section8, section9, section10, section11,
+            section12, section13, section14, section15, section16, section17, section18], [room, room1]);
         const expected = 15;
         expect(actual.length).to.deep.equal(expected);
     });

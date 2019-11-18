@@ -13,8 +13,7 @@ import {
 import {IRoomSchedObj, ISectionObj} from "./ISchedObj";
 import {IndexableObject} from "../controller/SortResultHelper";
 
-export default class Scheduler implements IScheduler {
-    private TSCode: TimeSlot[] = [
+const TSCode: TimeSlot[] = [
     "MWF 0800-0900",
     "MWF 0900-1000",
     "MWF 1000-1100",
@@ -30,7 +29,10 @@ export default class Scheduler implements IScheduler {
     "TR  1230-1400",
     "TR  1400-1530",
     "TR  1530-1700"
-    ];
+];
+
+export default class Scheduler implements IScheduler {
+
 
     public schedule(sections: SchedSection[], rooms: SchedRoom[]): Array<[SchedRoom, SchedSection, TimeSlot]> {
         let result: Array<[SchedRoom, SchedSection, TimeSlot]> = [];
@@ -42,7 +44,7 @@ export default class Scheduler implements IScheduler {
 
         if (sSecObjs.length === 1) {
             if (fit(sSecObjs[0], sRoomObjs[0])) {
-                result.push([rooms[sRoomObjs[0].index], sections[0], this.TSCode[0]]);
+                result.push([rooms[sRoomObjs[0].index], sections[0], TSCode[0]]);
                 return result;
             }
         }
@@ -50,7 +52,7 @@ export default class Scheduler implements IScheduler {
             let counter: number = 0;
             for (const section of sSecObjs) {
                 if (fit(section, sRoomObjs[0])) {
-                    result.push([rooms[0], sections[section.index], this.TSCode[counter]]);
+                    result.push([rooms[0], sections[section.index], TSCode[counter]]);
                     counter++;
                     if (counter > 14) {
                         break;
@@ -81,11 +83,12 @@ function firstRoom(commonTS: IndexableObject, checkedFitRooms: IRoomSchedObj[],
                    result: Array<[SchedRoom, SchedSection, TimeSlot]>, originRooms: SchedRoom[],
                    originSecs: SchedSection[], secObj: ISectionObj, scheduledRooms: IRoomSchedObj[],
                    scheduledSecs: ISectionObj[], courses: IndexableObject, secName: string) {
-    let timeSlot = this.TSCode[commonTS[checkedFitRooms[0].index][0]];
+    let timeSlot = TSCode[commonTS[checkedFitRooms[0].index][0]];
     result.push([originRooms[checkedFitRooms[0].index], originSecs[secObj.index], timeSlot]);
     scheduledRooms.push(checkedFitRooms[0]);
     scheduledSecs.push(secObj);
     courses[secName][commonTS[checkedFitRooms[0].index][0]] = false;
+    checkedFitRooms[0].timeSlot[commonTS[checkedFitRooms[0].index][0]] = false;
     return;
 }
 
@@ -94,7 +97,7 @@ function multRoom(scheduledRooms: IRoomSchedObj[], checkedFitRooms: IRoomSchedOb
                   result: Array<[SchedRoom, SchedSection, TimeSlot]>, originRooms: SchedRoom[],
                   originSecs: SchedSection[], courses: IndexableObject, secName: string) {
     let roomChosen = findClosestRoom(scheduledRooms, checkedFitRooms);
-    let time = this.TSCode[commonTS[roomChosen.index][0]];
+    let time = TSCode[commonTS[roomChosen.index][0]];
 
     let testR = scheduledRooms;
     let testS = scheduledSecs;
@@ -107,6 +110,7 @@ function multRoom(scheduledRooms: IRoomSchedObj[], checkedFitRooms: IRoomSchedOb
         scheduledRooms = testR;
         scheduledSecs = testS;
         courses[secName][commonTS[roomChosen.index][0]] = false;
+        roomChosen.timeSlot[commonTS[roomChosen.index][0]] = false;
     }
     return {scheduledRooms, scheduledSecs};
 }
