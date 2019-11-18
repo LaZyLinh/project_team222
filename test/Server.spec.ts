@@ -166,6 +166,26 @@ describe("Facade D3", function () {
         }
     });
 
+    it("PUT test after del", function () {
+        try {
+            return chai.request("localhost:21")
+                .put("/dataset/courses/courses")
+                .send(datasets["courses"])
+                .set("Content-Type", "application/x-zip-compressed")
+                .then(function (res: Response) {
+                    expect(res.status).to.be.equal(200);
+                })
+                .catch(function (err) {
+                    Log.error(err);
+                    // some logging here please!
+                    expect.fail();
+                });
+        } catch (err) {
+            Log.error(err);
+        }
+    });
+
+
     it("POST test for courses dataset", function () {
         try {
             return chai.request("localhost:21")

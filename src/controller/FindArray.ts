@@ -113,7 +113,7 @@ function isHelper(comparedArray: IsKeyEntry[], value: string): number[] {
     let regex: RegExp;
     // if value is just string
     if (value.replace("*", "") === value) {
-        regex = RegExp(value);
+        regex = RegExp("^" + value + "$");
     } else {
         regex = RegExp("^" + value.replace(RegExp("[*]", "g"), ".*") + "$");
     }

@@ -69,6 +69,9 @@ export function validateQuery(query: any, id: string, kind: InsightDatasetKind):
         return null;
     }
     // dealing with WHERE section
+    if (Array.isArray(whereCont) || typeof whereCont !== "object") {
+        return null;
+    }
     if (Object.keys(whereCont).length !== 0) {            // if WHERE: {}, all good!
         if (this.whereValidation(whereCont, dataID, kind) > 0) {
             return null;
@@ -122,9 +125,6 @@ export function correctOption(option: any, dataId: string, kind: InsightDatasetK
     return [dataId, hasApplykey];
 }
 function orderValidation(order: any, columnCont: string[]): number {
-    if (order === null) {
-        return 1;
-    }
     if (Array.isArray(order)) {
         return 1;
     }
@@ -159,9 +159,7 @@ export function whereValidation(item: any, dataID: string, kind: InsightDatasetK
     const sSingle = ["IS"];
     const neg = "NOT";
     let anyFalse = 0;
-    if (item == null || typeof item !== "object" || Array.isArray(item)) {
-        return 1;
-    }
+
     if (Array.isArray(Object.keys(item))) {
         if (Object.keys(item).length > 1) {
             return 1;
