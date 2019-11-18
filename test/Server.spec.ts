@@ -60,6 +60,21 @@ describe("Facade D3", function () {
     };
     let datasets: { [id: string]: any } = {};
 
+    let testQuery = {
+        WHERE: {
+            GT: {
+                courses_avg: 97
+            }
+        },
+        OPTIONS: {
+            COLUMNS: [
+                "courses_dept",
+                "courses_avg"
+            ],
+            ORDER: "courses_avg"
+        }
+    };
+
     // Sample on how to format PUT requests
 
     it("PUT test for courses dataset", function () {
@@ -140,6 +155,60 @@ describe("Facade D3", function () {
                 .then(function (res: Response) {
                     expect(res.status).to.equal(200);
                     expect(res.body.result).to.deep.equal([]);
+                })
+                .catch(function (err) {
+                    // some logging here please!
+                    Log.error(err);
+                    expect.fail();
+                });
+        } catch (err) {
+            Log.error(err);
+        }
+    });
+
+    it("POST test for courses dataset", function () {
+        try {
+            return chai.request("localhost:21")
+                .post("/query")
+                .send(JSON.stringify(testQuery))
+                .set("Content-Type", "application/json")
+                .then(function (res: Response) {
+                    expect(res.status).to.be.equal(200);
+                    expect(res.body.result.length).to.equal(49);
+                })
+                .catch(function (err) {
+                    Log.error(err);
+                    // some logging here please!
+                    expect.fail();
+                });
+        } catch (err) {
+            Log.error(err);
+        }
+    });
+
+    it("test for getStatic", function () {
+        try {
+            return chai.request("localhost:21")
+                .get("/index.html")
+                .then(function (res: Response) {
+                    expect(res.status).to.equal(200);
+                })
+                .catch(function (err) {
+                    // some logging here please!
+                    Log.error(err);
+                    expect.fail();
+                });
+        } catch (err) {
+            Log.error(err);
+        }
+    });
+
+    it("test for echo", function () {
+        try {
+            return chai.request("localhost:21")
+                .get("/echo/aloha")
+                .then(function (res: Response) {
+                    expect(res.status).to.equal(200);
                 })
                 .catch(function (err) {
                     // some logging here please!

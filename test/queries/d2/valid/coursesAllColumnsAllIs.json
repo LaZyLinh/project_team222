@@ -1,0 +1,97 @@
+{
+    "title": "SELECT dept, avg WHERE avg < 40",
+    "query": {
+        "WHERE": {
+            "OR": [
+                {
+                    "AND": [
+                        {
+                            "EQ": {
+                                "courses_audit": 99999
+                            }
+                        },
+                        {
+                            "EQ": {
+                                "courses_avg": 99999
+                            }
+                        },
+                        {
+                            "IS": {
+                                "courses_dept": "xxxxxx"
+                            }
+                        },
+                        {
+                            "EQ": {
+                                "courses_fail": 99999
+                            }
+                        },
+                        {
+                            "IS": {
+                                "courses_id": "xxxxxx"
+                            }
+                        },
+                        {
+                            "IS": {
+                                "courses_instructor": "xxxxxx"
+                            }
+                        },
+                        {
+                            "EQ": {
+                                "courses_pass": 99999
+                            }
+                        },
+                        {
+                            "IS": {
+                                "courses_title": "xxxxxx"
+                            }
+                        },
+                        {
+                            "IS": {
+                                "courses_uuid": "xxxxxx"
+                            }
+                        },
+                        {
+                            "EQ": {
+                                "courses_year": 99999
+                            }
+                        }
+                    ]
+                },
+                {
+                    "IS": {
+                        "courses_uuid": "100"
+                    }
+                }
+            ]
+        },
+        "OPTIONS": {
+            "COLUMNS": [
+                "courses_audit",
+                "courses_avg",
+                "courses_dept",
+                "courses_fail",
+                "courses_id",
+                "courses_instructor",
+                "courses_pass",
+                "courses_title",
+                "courses_uuid",
+                "courses_year"
+            ]
+        }
+    },
+    "isQueryValid": true,
+    "result": [
+        {
+            "courses_audit": 0,
+            "courses_avg": 76.1,
+            "courses_dept": "japn",
+            "courses_fail": 0,
+            "courses_id": "302",
+            "courses_instructor": "",
+            "courses_pass": 42,
+            "courses_title": "adv conv&comp i",
+            "courses_uuid": "100",
+            "courses_year": 1900
+        }
+    ]
+}

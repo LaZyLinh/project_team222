@@ -1,0 +1,104 @@
+{
+    "title": "SELECT dept, avg WHERE avg < 40",
+    "query": {
+        "WHERE": {
+            "OR": [
+                {
+                    "AND": [
+                        {
+                            "IS": {
+                                "rooms_address": "test"
+                            }
+                        },
+                        {
+                            "IS": {
+                                "rooms_fullname": "test"
+                            }
+                        },
+                        {
+                            "IS": {
+                                "rooms_furniture": "test"
+                            }
+                        },
+                        {
+                            "IS": {
+                                "rooms_href": "test"
+                            }
+                        },
+                        {
+                            "EQ": {
+                                "rooms_lat": 99999
+                            }
+                        },
+                        {
+                            "EQ": {
+                                "rooms_lon": 99999
+                            }
+                        },
+                        {
+                            "IS": {
+                                "rooms_name": "test"
+                            }
+                        },
+                        {
+                            "IS": {
+                                "rooms_number": "test"
+                            }
+                        },
+                        {
+                            "EQ": {
+                                "rooms_seats": 99999
+                            }
+                        },
+                        {
+                            "IS": {
+                                "rooms_shortname": "test"
+                            }
+                        },
+                        {
+                            "IS": {
+                                "rooms_type": "test"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "IS": {
+                        "rooms_number": "1"
+                    }
+                }
+            ]
+        },
+        "OPTIONS": {
+            "COLUMNS": [
+                "rooms_address",
+                "rooms_fullname",
+                "rooms_furniture",
+                "rooms_href",
+                "rooms_lat",
+                "rooms_lon",
+                "rooms_name",
+                "rooms_number",
+                "rooms_seats",
+                "rooms_shortname",
+                "rooms_type"
+            ]
+        }
+    },
+    "isQueryValid": true,
+    "result": [
+        {
+            "rooms_address": "2194 Health Sciences Mall",
+            "rooms_fullname": "Woodward (Instructional Resources Centre-IRC)",
+            "rooms_furniture": "Classroom-Fixed Tables/Movable Chairs",
+            "rooms_href": "http://students.ubc.ca/campus/discover/buildings-and-classrooms/room/WOOD-1",
+            "rooms_lat": 49.26478,
+            "rooms_lon": -123.24673,
+            "rooms_name": "WOOD_1",
+            "rooms_number": "1",
+            "rooms_seats": 120,
+            "rooms_shortname": "WOOD",
+            "rooms_type": "Tiered Large Group"
+        }
+    ]
+}
