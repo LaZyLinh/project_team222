@@ -271,11 +271,12 @@ describe("Schedule Test", function () {
         expect(actual).to.deep.equal(expected);
     });
 
-    it("Should pass with multiple sections properly ordered", function () {
+    it("Should pass with multiple sections properly ordered, more sections", function () {
         const actual = scheduler.schedule([section0, section1, section2, section3, section4, section5,
             section6, section7, section8, section9, section10, section11,
-            section12, section13, section14, section15], [room]);
-        const expected = 9;
+            section12, section13, section14, section15, section0, section0, section0, section0, section0, section0],
+            [room]);
+        const expected = 15;
         expect(actual.length).to.deep.equal(expected);
     });
 
