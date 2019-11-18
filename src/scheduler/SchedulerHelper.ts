@@ -93,6 +93,17 @@ export function calculateScore(rooms: IRoomSchedObj[], secs: ISectionObj[], tota
     return 0.7 * d + 0.3 * e;
 }
 
+export function calculateScoreResult(result: Array<[SchedRoom, SchedSection, TimeSlot]>, totalEnrollment: number) {
+    let scheduledRoom: SchedRoom[] = [];
+    let scheduledSec: SchedSection[] = [];
+    for (const item of result) {
+        scheduledRoom.push(item[0]);
+        scheduledSec.push(item[1]);
+    }
+    const rooms = makeRoomObjects(scheduledRoom);
+    const secs = makeSectionObjects(scheduledSec);
+    return calculateScore(rooms, secs, totalEnrollment);
+}
 function clamp(input: number, low: number, high: number) {
     return Math.min(high, Math.max(low, input));
 }
