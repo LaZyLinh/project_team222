@@ -62,7 +62,7 @@ export default class Scheduler implements IScheduler {
             }
             return result;
         }
-        const attempts = Math.ceil(5000 * Math.exp(-0.0020 * sections.length) + 10);
+        const attempts = Math.ceil(1000 * Math.exp(-0.0020 * sections.length) + 10);
         let currentMax = 0;
         let currentMaxRes: Array<[SchedRoom, SchedSection, TimeSlot]>;
         let total = totalEnrollment(sSecObjs);
