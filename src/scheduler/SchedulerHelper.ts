@@ -151,7 +151,7 @@ export function findFitFreeRoom(sec: ISectionObj, rooms: IRoomSchedObj[]): IRoom
                 fitFreeRooms.push(roomObj);
             }
         } else {
-            break;
+            continue;
         }
     }
     return fitFreeRooms;
