@@ -21,6 +21,7 @@ CampusExplorer.sendQuery = function (query) {
             // TODO: type of error?
             reject();
         });
+        xhr.setRequestHeader("Content-Type", "application/json");
         xhr.send(JSON.stringify(query));
     });
 };
