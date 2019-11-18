@@ -1,0 +1,3274 @@
+[
+    {
+        "courses_audit": 0,
+        "courses_dept": "adhe",
+        "courses_fail": 1,
+        "courses_id": "327",
+        "courses_pass": 32,
+        "courses_uuid": "68529"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "adhe",
+        "courses_fail": 1,
+        "courses_id": "327",
+        "courses_pass": 28,
+        "courses_uuid": "78864"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "adhe",
+        "courses_fail": 1,
+        "courses_id": "329",
+        "courses_pass": 145,
+        "courses_uuid": "36017"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "adhe",
+        "courses_fail": 1,
+        "courses_id": "329",
+        "courses_pass": 179,
+        "courses_uuid": "68544"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "adhe",
+        "courses_fail": 1,
+        "courses_id": "329",
+        "courses_pass": 51,
+        "courses_uuid": "78871"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "adhe",
+        "courses_fail": 1,
+        "courses_id": "329",
+        "courses_pass": 35,
+        "courses_uuid": "85073"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "adhe",
+        "courses_fail": 3,
+        "courses_id": "330",
+        "courses_pass": 22,
+        "courses_uuid": "17262"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "adhe",
+        "courses_fail": 3,
+        "courses_id": "330",
+        "courses_pass": 50,
+        "courses_uuid": "17263"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "adhe",
+        "courses_fail": 1,
+        "courses_id": "330",
+        "courses_pass": 30,
+        "courses_uuid": "36021"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "adhe",
+        "courses_fail": 1,
+        "courses_id": "330",
+        "courses_pass": 32,
+        "courses_uuid": "68545"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "adhe",
+        "courses_fail": 3,
+        "courses_id": "330",
+        "courses_pass": 185,
+        "courses_uuid": "68551"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "adhe",
+        "courses_fail": 1,
+        "courses_id": "330",
+        "courses_pass": 35,
+        "courses_uuid": "79481"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "adhe",
+        "courses_fail": 1,
+        "courses_id": "330",
+        "courses_pass": 111,
+        "courses_uuid": "79483"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "adhe",
+        "courses_fail": 1,
+        "courses_id": "412",
+        "courses_pass": 28,
+        "courses_uuid": "17266"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "anat",
+        "courses_fail": 1,
+        "courses_id": "392",
+        "courses_pass": 79,
+        "courses_uuid": "32976"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "anat",
+        "courses_fail": 1,
+        "courses_id": "392",
+        "courses_pass": 79,
+        "courses_uuid": "32977"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "anth",
+        "courses_fail": 1,
+        "courses_id": "472",
+        "courses_pass": 22,
+        "courses_uuid": "25228"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "anth",
+        "courses_fail": 1,
+        "courses_id": "472",
+        "courses_pass": 22,
+        "courses_uuid": "25229"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "apbi",
+        "courses_fail": 1,
+        "courses_id": "200",
+        "courses_pass": 23,
+        "courses_uuid": "48034"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "apbi",
+        "courses_fail": 1,
+        "courses_id": "200",
+        "courses_pass": 23,
+        "courses_uuid": "48035"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "apbi",
+        "courses_fail": 1,
+        "courses_id": "314",
+        "courses_pass": 70,
+        "courses_uuid": "32439"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "apbi",
+        "courses_fail": 1,
+        "courses_id": "314",
+        "courses_pass": 104,
+        "courses_uuid": "32441"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "apbi",
+        "courses_fail": 1,
+        "courses_id": "490",
+        "courses_pass": 43,
+        "courses_uuid": "87377"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "apsc",
+        "courses_fail": 4,
+        "courses_id": "279",
+        "courses_pass": 276,
+        "courses_uuid": "18729"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "apsc",
+        "courses_fail": 2,
+        "courses_id": "279",
+        "courses_pass": 310,
+        "courses_uuid": "19866"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "apsc",
+        "courses_fail": 3,
+        "courses_id": "279",
+        "courses_pass": 282,
+        "courses_uuid": "97926"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "apsc",
+        "courses_fail": 1,
+        "courses_id": "450",
+        "courses_pass": 596,
+        "courses_uuid": "19877"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "arch",
+        "courses_fail": 1,
+        "courses_id": "512",
+        "courses_pass": 34,
+        "courses_uuid": "77509"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "arch",
+        "courses_fail": 1,
+        "courses_id": "512",
+        "courses_pass": 34,
+        "courses_uuid": "77510"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "asia",
+        "courses_fail": 1,
+        "courses_id": "348",
+        "courses_pass": 75,
+        "courses_uuid": "4458"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "asia",
+        "courses_fail": 1,
+        "courses_id": "348",
+        "courses_pass": 75,
+        "courses_uuid": "4459"
+    },
+    {
+        "courses_audit": 1,
+        "courses_dept": "asia",
+        "courses_fail": 1,
+        "courses_id": "370",
+        "courses_pass": 57,
+        "courses_uuid": "4486"
+    },
+    {
+        "courses_audit": 1,
+        "courses_dept": "asia",
+        "courses_fail": 1,
+        "courses_id": "370",
+        "courses_pass": 57,
+        "courses_uuid": "4487"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "atsc",
+        "courses_fail": 2,
+        "courses_id": "201",
+        "courses_pass": 82,
+        "courses_uuid": "36738"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "atsc",
+        "courses_fail": 2,
+        "courses_id": "201",
+        "courses_pass": 82,
+        "courses_uuid": "36739"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "atsc",
+        "courses_fail": 2,
+        "courses_id": "201",
+        "courses_pass": 70,
+        "courses_uuid": "60455"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "atsc",
+        "courses_fail": 2,
+        "courses_id": "201",
+        "courses_pass": 70,
+        "courses_uuid": "60456"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "bafi",
+        "courses_fail": 1,
+        "courses_id": "500",
+        "courses_pass": 55,
+        "courses_uuid": "48095"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "bafi",
+        "courses_fail": 1,
+        "courses_id": "500",
+        "courses_pass": 169,
+        "courses_uuid": "48099"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "bafi",
+        "courses_fail": 1,
+        "courses_id": "541",
+        "courses_pass": 38,
+        "courses_uuid": "13103"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "bafi",
+        "courses_fail": 1,
+        "courses_id": "541",
+        "courses_pass": 94,
+        "courses_uuid": "13104"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "bams",
+        "courses_fail": 1,
+        "courses_id": "500",
+        "courses_pass": 29,
+        "courses_uuid": "7451"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "bams",
+        "courses_fail": 1,
+        "courses_id": "500",
+        "courses_pass": 29,
+        "courses_uuid": "7452"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "biol",
+        "courses_fail": 4,
+        "courses_id": "112",
+        "courses_pass": 306,
+        "courses_uuid": "24719"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "biol",
+        "courses_fail": 1,
+        "courses_id": "331",
+        "courses_pass": 84,
+        "courses_uuid": "55122"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "biol",
+        "courses_fail": 1,
+        "courses_id": "331",
+        "courses_pass": 84,
+        "courses_uuid": "55123"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "biol",
+        "courses_fail": 1,
+        "courses_id": "413",
+        "courses_pass": 55,
+        "courses_uuid": "55174"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "biol",
+        "courses_fail": 1,
+        "courses_id": "413",
+        "courses_pass": 55,
+        "courses_uuid": "55175"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "biol",
+        "courses_fail": 1,
+        "courses_id": "445",
+        "courses_pass": 28,
+        "courses_uuid": "18221"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "biol",
+        "courses_fail": 1,
+        "courses_id": "445",
+        "courses_pass": 28,
+        "courses_uuid": "18222"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "biol",
+        "courses_fail": 1,
+        "courses_id": "456",
+        "courses_pass": 68,
+        "courses_uuid": "18239"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "biol",
+        "courses_fail": 1,
+        "courses_id": "456",
+        "courses_pass": 106,
+        "courses_uuid": "18240"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "bmeg",
+        "courses_fail": 1,
+        "courses_id": "456",
+        "courses_pass": 25,
+        "courses_uuid": "73453"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "bmeg",
+        "courses_fail": 1,
+        "courses_id": "456",
+        "courses_pass": 25,
+        "courses_uuid": "73454"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "busi",
+        "courses_fail": 1,
+        "courses_id": "335",
+        "courses_pass": 87,
+        "courses_uuid": "16856"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "busi",
+        "courses_fail": 1,
+        "courses_id": "452",
+        "courses_pass": 30,
+        "courses_uuid": "2257"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "busi",
+        "courses_fail": 1,
+        "courses_id": "452",
+        "courses_pass": 30,
+        "courses_uuid": "2258"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "busi",
+        "courses_fail": 1,
+        "courses_id": "452",
+        "courses_pass": 58,
+        "courses_uuid": "50693"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "busi",
+        "courses_fail": 3,
+        "courses_id": "452",
+        "courses_pass": 59,
+        "courses_uuid": "50694"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "busi",
+        "courses_fail": 4,
+        "courses_id": "452",
+        "courses_pass": 117,
+        "courses_uuid": "50695"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "busi",
+        "courses_fail": 1,
+        "courses_id": "452",
+        "courses_pass": 57,
+        "courses_uuid": "95616"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "caps",
+        "courses_fail": 1,
+        "courses_id": "421",
+        "courses_pass": 33,
+        "courses_uuid": "11373"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "caps",
+        "courses_fail": 1,
+        "courses_id": "421",
+        "courses_pass": 33,
+        "courses_uuid": "11374"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "caps",
+        "courses_fail": 1,
+        "courses_id": "421",
+        "courses_pass": 28,
+        "courses_uuid": "88785"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "caps",
+        "courses_fail": 1,
+        "courses_id": "421",
+        "courses_pass": 28,
+        "courses_uuid": "88786"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "cens",
+        "courses_fail": 1,
+        "courses_id": "307",
+        "courses_pass": 60,
+        "courses_uuid": "30982"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "cens",
+        "courses_fail": 1,
+        "courses_id": "307",
+        "courses_pass": 60,
+        "courses_uuid": "30983"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "cens",
+        "courses_fail": 2,
+        "courses_id": "307",
+        "courses_pass": 61,
+        "courses_uuid": "51477"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "cens",
+        "courses_fail": 2,
+        "courses_id": "307",
+        "courses_pass": 61,
+        "courses_uuid": "51478"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "chbe",
+        "courses_fail": 2,
+        "courses_id": "230",
+        "courses_pass": 86,
+        "courses_uuid": "58531"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "chbe",
+        "courses_fail": 2,
+        "courses_id": "230",
+        "courses_pass": 86,
+        "courses_uuid": "58532"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "chbe",
+        "courses_fail": 2,
+        "courses_id": "243",
+        "courses_pass": 90,
+        "courses_uuid": "7861"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "chbe",
+        "courses_fail": 2,
+        "courses_id": "243",
+        "courses_pass": 90,
+        "courses_uuid": "7862"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "chbe",
+        "courses_fail": 1,
+        "courses_id": "243",
+        "courses_pass": 123,
+        "courses_uuid": "45639"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "chbe",
+        "courses_fail": 1,
+        "courses_id": "243",
+        "courses_pass": 123,
+        "courses_uuid": "45640"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "chbe",
+        "courses_fail": 2,
+        "courses_id": "366",
+        "courses_pass": 56,
+        "courses_uuid": "7887"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "chbe",
+        "courses_fail": 2,
+        "courses_id": "366",
+        "courses_pass": 56,
+        "courses_uuid": "7888"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "chbe",
+        "courses_fail": 3,
+        "courses_id": "366",
+        "courses_pass": 72,
+        "courses_uuid": "45666"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "chbe",
+        "courses_fail": 3,
+        "courses_id": "366",
+        "courses_pass": 72,
+        "courses_uuid": "45667"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "chbe",
+        "courses_fail": 2,
+        "courses_id": "366",
+        "courses_pass": 59,
+        "courses_uuid": "49079"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "chbe",
+        "courses_fail": 2,
+        "courses_id": "366",
+        "courses_pass": 59,
+        "courses_uuid": "49080"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "chbe",
+        "courses_fail": 1,
+        "courses_id": "453",
+        "courses_pass": 21,
+        "courses_uuid": "7899"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "chbe",
+        "courses_fail": 1,
+        "courses_id": "453",
+        "courses_pass": 21,
+        "courses_uuid": "7900"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "civl",
+        "courses_fail": 1,
+        "courses_id": "202",
+        "courses_pass": 126,
+        "courses_uuid": "10728"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "civl",
+        "courses_fail": 1,
+        "courses_id": "202",
+        "courses_pass": 126,
+        "courses_uuid": "10729"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "civl",
+        "courses_fail": 1,
+        "courses_id": "202",
+        "courses_pass": 125,
+        "courses_uuid": "84797"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "civl",
+        "courses_fail": 1,
+        "courses_id": "202",
+        "courses_pass": 125,
+        "courses_uuid": "84798"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "civl",
+        "courses_fail": 1,
+        "courses_id": "301",
+        "courses_pass": 131,
+        "courses_uuid": "37584"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "civl",
+        "courses_fail": 1,
+        "courses_id": "301",
+        "courses_pass": 131,
+        "courses_uuid": "37585"
+    },
+    {
+        "courses_audit": 1,
+        "courses_dept": "civl",
+        "courses_fail": 1,
+        "courses_id": "418",
+        "courses_pass": 73,
+        "courses_uuid": "2792"
+    },
+    {
+        "courses_audit": 1,
+        "courses_dept": "civl",
+        "courses_fail": 1,
+        "courses_id": "418",
+        "courses_pass": 73,
+        "courses_uuid": "2793"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "civl",
+        "courses_fail": 1,
+        "courses_id": "441",
+        "courses_pass": 25,
+        "courses_uuid": "79597"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "civl",
+        "courses_fail": 1,
+        "courses_id": "441",
+        "courses_pass": 25,
+        "courses_uuid": "79598"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "civl",
+        "courses_fail": 1,
+        "courses_id": "445",
+        "courses_pass": 122,
+        "courses_uuid": "37647"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "civl",
+        "courses_fail": 1,
+        "courses_id": "445",
+        "courses_pass": 122,
+        "courses_uuid": "37648"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "civl",
+        "courses_fail": 3,
+        "courses_id": "446",
+        "courses_pass": 142,
+        "courses_uuid": "84872"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "civl",
+        "courses_fail": 3,
+        "courses_id": "446",
+        "courses_pass": 142,
+        "courses_uuid": "84873"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "civl",
+        "courses_fail": 1,
+        "courses_id": "507",
+        "courses_pass": 37,
+        "courses_uuid": "45102"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "civl",
+        "courses_fail": 1,
+        "courses_id": "507",
+        "courses_pass": 37,
+        "courses_uuid": "45103"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "civl",
+        "courses_fail": 1,
+        "courses_id": "523",
+        "courses_pass": 47,
+        "courses_uuid": "47983"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "civl",
+        "courses_fail": 1,
+        "courses_id": "523",
+        "courses_pass": 47,
+        "courses_uuid": "47984"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "cnps",
+        "courses_fail": 1,
+        "courses_id": "363",
+        "courses_pass": 94,
+        "courses_uuid": "14117"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "cnps",
+        "courses_fail": 1,
+        "courses_id": "363",
+        "courses_pass": 46,
+        "courses_uuid": "33348"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "cnps",
+        "courses_fail": 2,
+        "courses_id": "363",
+        "courses_pass": 65,
+        "courses_uuid": "33349"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "cnps",
+        "courses_fail": 2,
+        "courses_id": "363",
+        "courses_pass": 55,
+        "courses_uuid": "69200"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "cnps",
+        "courses_fail": 4,
+        "courses_id": "363",
+        "courses_pass": 164,
+        "courses_uuid": "69202"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "cnps",
+        "courses_fail": 3,
+        "courses_id": "363",
+        "courses_pass": 54,
+        "courses_uuid": "80710"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "cnps",
+        "courses_fail": 2,
+        "courses_id": "363",
+        "courses_pass": 54,
+        "courses_uuid": "80711"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "cnps",
+        "courses_fail": 5,
+        "courses_id": "363",
+        "courses_pass": 171,
+        "courses_uuid": "80712"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "cnps",
+        "courses_fail": 1,
+        "courses_id": "363",
+        "courses_pass": 46,
+        "courses_uuid": "87759"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "cnps",
+        "courses_fail": 1,
+        "courses_id": "364",
+        "courses_pass": 47,
+        "courses_uuid": "26759"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "cnps",
+        "courses_fail": 1,
+        "courses_id": "364",
+        "courses_pass": 47,
+        "courses_uuid": "26760"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "cnps",
+        "courses_fail": 1,
+        "courses_id": "364",
+        "courses_pass": 46,
+        "courses_uuid": "33350"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "cnps",
+        "courses_fail": 1,
+        "courses_id": "364",
+        "courses_pass": 46,
+        "courses_uuid": "33351"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "cnps",
+        "courses_fail": 2,
+        "courses_id": "364",
+        "courses_pass": 54,
+        "courses_uuid": "50962"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "cnps",
+        "courses_fail": 1,
+        "courses_id": "364",
+        "courses_pass": 28,
+        "courses_uuid": "50963"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "cnps",
+        "courses_fail": 3,
+        "courses_id": "364",
+        "courses_pass": 109,
+        "courses_uuid": "50964"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "cnps",
+        "courses_fail": 1,
+        "courses_id": "364",
+        "courses_pass": 54,
+        "courses_uuid": "69205"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "cnps",
+        "courses_fail": 1,
+        "courses_id": "364",
+        "courses_pass": 134,
+        "courses_uuid": "69206"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "cnps",
+        "courses_fail": 1,
+        "courses_id": "364",
+        "courses_pass": 56,
+        "courses_uuid": "80714"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "cnps",
+        "courses_fail": 1,
+        "courses_id": "364",
+        "courses_pass": 53,
+        "courses_uuid": "80715"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "cnps",
+        "courses_fail": 2,
+        "courses_id": "364",
+        "courses_pass": 134,
+        "courses_uuid": "80716"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "cnps",
+        "courses_fail": 1,
+        "courses_id": "365",
+        "courses_pass": 30,
+        "courses_uuid": "28341"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "cnps",
+        "courses_fail": 1,
+        "courses_id": "365",
+        "courses_pass": 30,
+        "courses_uuid": "28342"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "cnps",
+        "courses_fail": 1,
+        "courses_id": "426",
+        "courses_pass": 34,
+        "courses_uuid": "15575"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "cnps",
+        "courses_fail": 1,
+        "courses_id": "426",
+        "courses_pass": 68,
+        "courses_uuid": "15576"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "cnps",
+        "courses_fail": 3,
+        "courses_id": "426",
+        "courses_pass": 56,
+        "courses_uuid": "69214"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "cnps",
+        "courses_fail": 2,
+        "courses_id": "426",
+        "courses_pass": 47,
+        "courses_uuid": "80725"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "cnps",
+        "courses_fail": 1,
+        "courses_id": "426",
+        "courses_pass": 24,
+        "courses_uuid": "82345"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "cnps",
+        "courses_fail": 1,
+        "courses_id": "426",
+        "courses_pass": 52,
+        "courses_uuid": "82346"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "cnps",
+        "courses_fail": 1,
+        "courses_id": "433",
+        "courses_pass": 24,
+        "courses_uuid": "25317"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "cnps",
+        "courses_fail": 1,
+        "courses_id": "433",
+        "courses_pass": 42,
+        "courses_uuid": "25319"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "cnps",
+        "courses_fail": 1,
+        "courses_id": "433",
+        "courses_pass": 57,
+        "courses_uuid": "70442"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "cnps",
+        "courses_fail": 1,
+        "courses_id": "433",
+        "courses_pass": 110,
+        "courses_uuid": "70443"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "cnps",
+        "courses_fail": 1,
+        "courses_id": "433",
+        "courses_pass": 58,
+        "courses_uuid": "80730"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "cnps",
+        "courses_fail": 1,
+        "courses_id": "433",
+        "courses_pass": 126,
+        "courses_uuid": "80732"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "comm",
+        "courses_fail": 1,
+        "courses_id": "298",
+        "courses_pass": 100,
+        "courses_uuid": "83678"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "comm",
+        "courses_fail": 1,
+        "courses_id": "335",
+        "courses_pass": 69,
+        "courses_uuid": "47800"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "comm",
+        "courses_fail": 1,
+        "courses_id": "431",
+        "courses_pass": 25,
+        "courses_uuid": "965"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "comm",
+        "courses_fail": 1,
+        "courses_id": "453",
+        "courses_pass": 46,
+        "courses_uuid": "81799"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "comm",
+        "courses_fail": 1,
+        "courses_id": "453",
+        "courses_pass": 45,
+        "courses_uuid": "96583"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "comm",
+        "courses_fail": 1,
+        "courses_id": "477",
+        "courses_pass": 38,
+        "courses_uuid": "81867"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "comm",
+        "courses_fail": 1,
+        "courses_id": "477",
+        "courses_pass": 75,
+        "courses_uuid": "81869"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "cons",
+        "courses_fail": 2,
+        "courses_id": "101",
+        "courses_pass": 219,
+        "courses_uuid": "20294"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "cons",
+        "courses_fail": 2,
+        "courses_id": "101",
+        "courses_pass": 219,
+        "courses_uuid": "20295"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "cons",
+        "courses_fail": 5,
+        "courses_id": "101",
+        "courses_pass": 84,
+        "courses_uuid": "68829"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "cons",
+        "courses_fail": 5,
+        "courses_id": "101",
+        "courses_pass": 84,
+        "courses_uuid": "68830"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "cpen",
+        "courses_fail": 1,
+        "courses_id": "333",
+        "courses_pass": 47,
+        "courses_uuid": "81222"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "cpen",
+        "courses_fail": 1,
+        "courses_id": "333",
+        "courses_pass": 47,
+        "courses_uuid": "81223"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "cpsc",
+        "courses_fail": 1,
+        "courses_id": "110",
+        "courses_pass": 60,
+        "courses_uuid": "1254"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "cpsc",
+        "courses_fail": 1,
+        "courses_id": "110",
+        "courses_pass": 27,
+        "courses_uuid": "61086"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "cpsc",
+        "courses_fail": 1,
+        "courses_id": "110",
+        "courses_pass": 69,
+        "courses_uuid": "62346"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "cpsc",
+        "courses_fail": 1,
+        "courses_id": "121",
+        "courses_pass": 106,
+        "courses_uuid": "67302"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "cpsc",
+        "courses_fail": 1,
+        "courses_id": "121",
+        "courses_pass": 106,
+        "courses_uuid": "67303"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "cpsc",
+        "courses_fail": 2,
+        "courses_id": "311",
+        "courses_pass": 105,
+        "courses_uuid": "62388"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "cpsc",
+        "courses_fail": 2,
+        "courses_id": "311",
+        "courses_pass": 105,
+        "courses_uuid": "62389"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "cpsc",
+        "courses_fail": 2,
+        "courses_id": "312",
+        "courses_pass": 116,
+        "courses_uuid": "49897"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "cpsc",
+        "courses_fail": 2,
+        "courses_id": "312",
+        "courses_pass": 116,
+        "courses_uuid": "49898"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "cpsc",
+        "courses_fail": 1,
+        "courses_id": "319",
+        "courses_pass": 68,
+        "courses_uuid": "1309"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "cpsc",
+        "courses_fail": 1,
+        "courses_id": "319",
+        "courses_pass": 68,
+        "courses_uuid": "1310"
+    },
+    {
+        "courses_audit": 1,
+        "courses_dept": "cpsc",
+        "courses_fail": 1,
+        "courses_id": "500",
+        "courses_pass": 22,
+        "courses_uuid": "46760"
+    },
+    {
+        "courses_audit": 1,
+        "courses_dept": "cpsc",
+        "courses_fail": 1,
+        "courses_id": "500",
+        "courses_pass": 22,
+        "courses_uuid": "46761"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "crwr",
+        "courses_fail": 1,
+        "courses_id": "203",
+        "courses_pass": 103,
+        "courses_uuid": "26133"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "crwr",
+        "courses_fail": 1,
+        "courses_id": "206",
+        "courses_pass": 78,
+        "courses_uuid": "26140"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "crwr",
+        "courses_fail": 1,
+        "courses_id": "209",
+        "courses_pass": 178,
+        "courses_uuid": "46306"
+    },
+    {
+        "courses_audit": 1,
+        "courses_dept": "crwr",
+        "courses_fail": 2,
+        "courses_id": "213",
+        "courses_pass": 172,
+        "courses_uuid": "50519"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "crwr",
+        "courses_fail": 1,
+        "courses_id": "213",
+        "courses_pass": 79,
+        "courses_uuid": "50520"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "crwr",
+        "courses_fail": 1,
+        "courses_id": "213",
+        "courses_pass": 99,
+        "courses_uuid": "50521"
+    },
+    {
+        "courses_audit": 1,
+        "courses_dept": "crwr",
+        "courses_fail": 4,
+        "courses_id": "213",
+        "courses_pass": 350,
+        "courses_uuid": "50522"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "dent",
+        "courses_fail": 1,
+        "courses_id": "420",
+        "courses_pass": 40,
+        "courses_uuid": "12444"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "dent",
+        "courses_fail": 1,
+        "courses_id": "420",
+        "courses_pass": 41,
+        "courses_uuid": "12445"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "dhyg",
+        "courses_fail": 1,
+        "courses_id": "106",
+        "courses_pass": 26,
+        "courses_uuid": "36658"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "dhyg",
+        "courses_fail": 1,
+        "courses_id": "106",
+        "courses_pass": 26,
+        "courses_uuid": "36659"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "dhyg",
+        "courses_fail": 1,
+        "courses_id": "400",
+        "courses_pass": 41,
+        "courses_uuid": "32782"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "dhyg",
+        "courses_fail": 1,
+        "courses_id": "400",
+        "courses_pass": 35,
+        "courses_uuid": "40769"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "dhyg",
+        "courses_fail": 1,
+        "courses_id": "405",
+        "courses_pass": 42,
+        "courses_uuid": "3311"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "dhyg",
+        "courses_fail": 1,
+        "courses_id": "405",
+        "courses_pass": 47,
+        "courses_uuid": "4895"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "dhyg",
+        "courses_fail": 1,
+        "courses_id": "461",
+        "courses_pass": 40,
+        "courses_uuid": "32811"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "dhyg",
+        "courses_fail": 1,
+        "courses_id": "462",
+        "courses_pass": 46,
+        "courses_uuid": "3330"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "eced",
+        "courses_fail": 1,
+        "courses_id": "416",
+        "courses_pass": 21,
+        "courses_uuid": "4385"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "eced",
+        "courses_fail": 1,
+        "courses_id": "416",
+        "courses_pass": 21,
+        "courses_uuid": "4386"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "eced",
+        "courses_fail": 1,
+        "courses_id": "416",
+        "courses_pass": 50,
+        "courses_uuid": "31888"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "eced",
+        "courses_fail": 1,
+        "courses_id": "416",
+        "courses_pass": 29,
+        "courses_uuid": "42455"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "eced",
+        "courses_fail": 1,
+        "courses_id": "416",
+        "courses_pass": 29,
+        "courses_uuid": "42456"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "eced",
+        "courses_fail": 1,
+        "courses_id": "438",
+        "courses_pass": 30,
+        "courses_uuid": "18408"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "eced",
+        "courses_fail": 1,
+        "courses_id": "439",
+        "courses_pass": 32,
+        "courses_uuid": "1164"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "eced",
+        "courses_fail": 2,
+        "courses_id": "439",
+        "courses_pass": 66,
+        "courses_uuid": "1165"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "eced",
+        "courses_fail": 1,
+        "courses_id": "439",
+        "courses_pass": 45,
+        "courses_uuid": "31900"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "econ",
+        "courses_fail": 3,
+        "courses_id": "325",
+        "courses_pass": 86,
+        "courses_uuid": "74345"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "econ",
+        "courses_fail": 1,
+        "courses_id": "325",
+        "courses_pass": 88,
+        "courses_uuid": "74346"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "econ",
+        "courses_fail": 1,
+        "courses_id": "326",
+        "courses_pass": 69,
+        "courses_uuid": "52298"
+    },
+    {
+        "courses_audit": 1,
+        "courses_dept": "econ",
+        "courses_fail": 1,
+        "courses_id": "374",
+        "courses_pass": 97,
+        "courses_uuid": "11536"
+    },
+    {
+        "courses_audit": 1,
+        "courses_dept": "econ",
+        "courses_fail": 1,
+        "courses_id": "374",
+        "courses_pass": 97,
+        "courses_uuid": "11537"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "econ",
+        "courses_fail": 1,
+        "courses_id": "374",
+        "courses_pass": 114,
+        "courses_uuid": "69877"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "econ",
+        "courses_fail": 1,
+        "courses_id": "374",
+        "courses_pass": 114,
+        "courses_uuid": "69878"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "econ",
+        "courses_fail": 1,
+        "courses_id": "502",
+        "courses_pass": 48,
+        "courses_uuid": "10014"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "econ",
+        "courses_fail": 1,
+        "courses_id": "502",
+        "courses_pass": 48,
+        "courses_uuid": "10015"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "econ",
+        "courses_fail": 2,
+        "courses_id": "502",
+        "courses_pass": 53,
+        "courses_uuid": "11601"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "econ",
+        "courses_fail": 2,
+        "courses_id": "502",
+        "courses_pass": 53,
+        "courses_uuid": "11602"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "econ",
+        "courses_fail": 1,
+        "courses_id": "527",
+        "courses_pass": 55,
+        "courses_uuid": "10020"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "econ",
+        "courses_fail": 1,
+        "courses_id": "527",
+        "courses_pass": 55,
+        "courses_uuid": "10021"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "econ",
+        "courses_fail": 1,
+        "courses_id": "527",
+        "courses_pass": 72,
+        "courses_uuid": "21598"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "econ",
+        "courses_fail": 1,
+        "courses_id": "527",
+        "courses_pass": 72,
+        "courses_uuid": "21599"
+    },
+    {
+        "courses_audit": 1,
+        "courses_dept": "econ",
+        "courses_fail": 2,
+        "courses_id": "527",
+        "courses_pass": 55,
+        "courses_uuid": "22073"
+    },
+    {
+        "courses_audit": 1,
+        "courses_dept": "econ",
+        "courses_fail": 2,
+        "courses_id": "527",
+        "courses_pass": 55,
+        "courses_uuid": "22074"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "econ",
+        "courses_fail": 1,
+        "courses_id": "527",
+        "courses_pass": 53,
+        "courses_uuid": "78520"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "econ",
+        "courses_fail": 1,
+        "courses_id": "527",
+        "courses_pass": 53,
+        "courses_uuid": "78521"
+    },
+    {
+        "courses_audit": 1,
+        "courses_dept": "econ",
+        "courses_fail": 1,
+        "courses_id": "602",
+        "courses_pass": 21,
+        "courses_uuid": "22113"
+    },
+    {
+        "courses_audit": 1,
+        "courses_dept": "econ",
+        "courses_fail": 1,
+        "courses_id": "602",
+        "courses_pass": 21,
+        "courses_uuid": "22114"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "edcp",
+        "courses_fail": 1,
+        "courses_id": "492",
+        "courses_pass": 21,
+        "courses_uuid": "64696"
+    },
+    {
+        "courses_audit": 1,
+        "courses_dept": "eece",
+        "courses_fail": 1,
+        "courses_id": "592",
+        "courses_pass": 44,
+        "courses_uuid": "18502"
+    },
+    {
+        "courses_audit": 1,
+        "courses_dept": "eece",
+        "courses_fail": 1,
+        "courses_id": "592",
+        "courses_pass": 44,
+        "courses_uuid": "18503"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "elec",
+        "courses_fail": 1,
+        "courses_id": "391",
+        "courses_pass": 121,
+        "courses_uuid": "30904"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "elec",
+        "courses_fail": 1,
+        "courses_id": "391",
+        "courses_pass": 121,
+        "courses_uuid": "30905"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "engl",
+        "courses_fail": 1,
+        "courses_id": "301",
+        "courses_pass": 32,
+        "courses_uuid": "97466"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "engl",
+        "courses_fail": 1,
+        "courses_id": "310",
+        "courses_pass": 31,
+        "courses_uuid": "95305"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "engl",
+        "courses_fail": 1,
+        "courses_id": "310",
+        "courses_pass": 31,
+        "courses_uuid": "95306"
+    },
+    {
+        "courses_audit": 1,
+        "courses_dept": "engl",
+        "courses_fail": 1,
+        "courses_id": "321",
+        "courses_pass": 38,
+        "courses_uuid": "22572"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "engl",
+        "courses_fail": 1,
+        "courses_id": "489",
+        "courses_pass": 34,
+        "courses_uuid": "97580"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "envr",
+        "courses_fail": 1,
+        "courses_id": "300",
+        "courses_pass": 58,
+        "courses_uuid": "60030"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "envr",
+        "courses_fail": 1,
+        "courses_id": "300",
+        "courses_pass": 58,
+        "courses_uuid": "60031"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "eosc",
+        "courses_fail": 2,
+        "courses_id": "111",
+        "courses_pass": 178,
+        "courses_uuid": "38501"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "eosc",
+        "courses_fail": 4,
+        "courses_id": "111",
+        "courses_pass": 211,
+        "courses_uuid": "68871"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "eosc",
+        "courses_fail": 2,
+        "courses_id": "111",
+        "courses_pass": 218,
+        "courses_uuid": "70530"
+    },
+    {
+        "courses_audit": 1,
+        "courses_dept": "eosc",
+        "courses_fail": 1,
+        "courses_id": "111",
+        "courses_pass": 117,
+        "courses_uuid": "82290"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "eosc",
+        "courses_fail": 2,
+        "courses_id": "270",
+        "courses_pass": 58,
+        "courses_uuid": "2395"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "eosc",
+        "courses_fail": 2,
+        "courses_id": "270",
+        "courses_pass": 58,
+        "courses_uuid": "2396"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "eosc",
+        "courses_fail": 3,
+        "courses_id": "270",
+        "courses_pass": 47,
+        "courses_uuid": "38538"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "eosc",
+        "courses_fail": 3,
+        "courses_id": "270",
+        "courses_pass": 47,
+        "courses_uuid": "38539"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "eosc",
+        "courses_fail": 1,
+        "courses_id": "270",
+        "courses_pass": 55,
+        "courses_uuid": "86341"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "eosc",
+        "courses_fail": 1,
+        "courses_id": "270",
+        "courses_pass": 55,
+        "courses_uuid": "86342"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "epse",
+        "courses_fail": 1,
+        "courses_id": "312",
+        "courses_pass": 24,
+        "courses_uuid": "35852"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "epse",
+        "courses_fail": 1,
+        "courses_id": "312",
+        "courses_pass": 24,
+        "courses_uuid": "35853"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "epse",
+        "courses_fail": 1,
+        "courses_id": "316",
+        "courses_pass": 27,
+        "courses_uuid": "13110"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "epse",
+        "courses_fail": 1,
+        "courses_id": "316",
+        "courses_pass": 27,
+        "courses_uuid": "13111"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "epse",
+        "courses_fail": 1,
+        "courses_id": "320",
+        "courses_pass": 33,
+        "courses_uuid": "13112"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "epse",
+        "courses_fail": 1,
+        "courses_id": "320",
+        "courses_pass": 33,
+        "courses_uuid": "13113"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "epse",
+        "courses_fail": 1,
+        "courses_id": "403",
+        "courses_pass": 40,
+        "courses_uuid": "6297"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "epse",
+        "courses_fail": 1,
+        "courses_id": "403",
+        "courses_pass": 81,
+        "courses_uuid": "6299"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "epse",
+        "courses_fail": 1,
+        "courses_id": "403",
+        "courses_pass": 56,
+        "courses_uuid": "28924"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "epse",
+        "courses_fail": 2,
+        "courses_id": "403",
+        "courses_pass": 37,
+        "courses_uuid": "38133"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "epse",
+        "courses_fail": 1,
+        "courses_id": "403",
+        "courses_pass": 39,
+        "courses_uuid": "38135"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "epse",
+        "courses_fail": 3,
+        "courses_id": "403",
+        "courses_pass": 115,
+        "courses_uuid": "38136"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "epse",
+        "courses_fail": 1,
+        "courses_id": "403",
+        "courses_pass": 28,
+        "courses_uuid": "76244"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "epse",
+        "courses_fail": 1,
+        "courses_id": "403",
+        "courses_pass": 54,
+        "courses_uuid": "76245"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "epse",
+        "courses_fail": 1,
+        "courses_id": "406",
+        "courses_pass": 36,
+        "courses_uuid": "61382"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "epse",
+        "courses_fail": 1,
+        "courses_id": "406",
+        "courses_pass": 69,
+        "courses_uuid": "61383"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "epse",
+        "courses_fail": 1,
+        "courses_id": "406",
+        "courses_pass": 27,
+        "courses_uuid": "76246"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "epse",
+        "courses_fail": 1,
+        "courses_id": "406",
+        "courses_pass": 54,
+        "courses_uuid": "76248"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "epse",
+        "courses_fail": 2,
+        "courses_id": "406",
+        "courses_pass": 39,
+        "courses_uuid": "86875"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "epse",
+        "courses_fail": 1,
+        "courses_id": "449",
+        "courses_pass": 48,
+        "courses_uuid": "3183"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "epse",
+        "courses_fail": 1,
+        "courses_id": "449",
+        "courses_pass": 33,
+        "courses_uuid": "76270"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "epse",
+        "courses_fail": 1,
+        "courses_id": "449",
+        "courses_pass": 33,
+        "courses_uuid": "76271"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "epse",
+        "courses_fail": 1,
+        "courses_id": "595",
+        "courses_pass": 34,
+        "courses_uuid": "3271"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "etec",
+        "courses_fail": 1,
+        "courses_id": "500",
+        "courses_pass": 91,
+        "courses_uuid": "3701"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "etec",
+        "courses_fail": 1,
+        "courses_id": "500",
+        "courses_pass": 22,
+        "courses_uuid": "16377"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "etec",
+        "courses_fail": 1,
+        "courses_id": "500",
+        "courses_pass": 84,
+        "courses_uuid": "16381"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "etec",
+        "courses_fail": 1,
+        "courses_id": "500",
+        "courses_pass": 82,
+        "courses_uuid": "16951"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "etec",
+        "courses_fail": 1,
+        "courses_id": "500",
+        "courses_pass": 66,
+        "courses_uuid": "35008"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "etec",
+        "courses_fail": 1,
+        "courses_id": "500",
+        "courses_pass": 64,
+        "courses_uuid": "92105"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "etec",
+        "courses_fail": 2,
+        "courses_id": "511",
+        "courses_pass": 76,
+        "courses_uuid": "35018"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "etec",
+        "courses_fail": 3,
+        "courses_id": "511",
+        "courses_pass": 94,
+        "courses_uuid": "39838"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "etec",
+        "courses_fail": 1,
+        "courses_id": "511",
+        "courses_pass": 70,
+        "courses_uuid": "92115"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "etec",
+        "courses_fail": 1,
+        "courses_id": "512",
+        "courses_pass": 22,
+        "courses_uuid": "16966"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "etec",
+        "courses_fail": 1,
+        "courses_id": "512",
+        "courses_pass": 89,
+        "courses_uuid": "16968"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "etec",
+        "courses_fail": 1,
+        "courses_id": "512",
+        "courses_pass": 32,
+        "courses_uuid": "72280"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "etec",
+        "courses_fail": 1,
+        "courses_id": "522",
+        "courses_pass": 37,
+        "courses_uuid": "39851"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "etec",
+        "courses_fail": 1,
+        "courses_id": "530",
+        "courses_pass": 49,
+        "courses_uuid": "35035"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "etec",
+        "courses_fail": 1,
+        "courses_id": "531",
+        "courses_pass": 47,
+        "courses_uuid": "3727"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "etec",
+        "courses_fail": 1,
+        "courses_id": "540",
+        "courses_pass": 24,
+        "courses_uuid": "39864"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "fist",
+        "courses_fail": 1,
+        "courses_id": "300",
+        "courses_pass": 78,
+        "courses_uuid": "30027"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "fist",
+        "courses_fail": 1,
+        "courses_id": "300",
+        "courses_pass": 78,
+        "courses_uuid": "30028"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "fnh",
+        "courses_fail": 1,
+        "courses_id": "200",
+        "courses_pass": 116,
+        "courses_uuid": "26691"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "fnh",
+        "courses_fail": 1,
+        "courses_id": "200",
+        "courses_pass": 118,
+        "courses_uuid": "26692"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "fnh",
+        "courses_fail": 1,
+        "courses_id": "200",
+        "courses_pass": 121,
+        "courses_uuid": "78988"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "fnh",
+        "courses_fail": 1,
+        "courses_id": "200",
+        "courses_pass": 122,
+        "courses_uuid": "78989"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "fnh",
+        "courses_fail": 1,
+        "courses_id": "470",
+        "courses_pass": 35,
+        "courses_uuid": "65052"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "fnh",
+        "courses_fail": 1,
+        "courses_id": "470",
+        "courses_pass": 35,
+        "courses_uuid": "65053"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "fnh",
+        "courses_fail": 1,
+        "courses_id": "475",
+        "courses_pass": 33,
+        "courses_uuid": "23641"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "fnh",
+        "courses_fail": 1,
+        "courses_id": "475",
+        "courses_pass": 33,
+        "courses_uuid": "23642"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "fre",
+        "courses_fail": 1,
+        "courses_id": "420",
+        "courses_pass": 32,
+        "courses_uuid": "98956"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "fre",
+        "courses_fail": 1,
+        "courses_id": "420",
+        "courses_pass": 32,
+        "courses_uuid": "98957"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "fren",
+        "courses_fail": 1,
+        "courses_id": "215",
+        "courses_pass": 22,
+        "courses_uuid": "77674"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "fren",
+        "courses_fail": 1,
+        "courses_id": "215",
+        "courses_pass": 36,
+        "courses_uuid": "77676"
+    },
+    {
+        "courses_audit": 1,
+        "courses_dept": "frst",
+        "courses_fail": 5,
+        "courses_id": "100",
+        "courses_pass": 245,
+        "courses_uuid": "54896"
+    },
+    {
+        "courses_audit": 1,
+        "courses_dept": "frst",
+        "courses_fail": 5,
+        "courses_id": "100",
+        "courses_pass": 245,
+        "courses_uuid": "54897"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "frst",
+        "courses_fail": 3,
+        "courses_id": "201",
+        "courses_pass": 121,
+        "courses_uuid": "7318"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "frst",
+        "courses_fail": 3,
+        "courses_id": "201",
+        "courses_pass": 121,
+        "courses_uuid": "7319"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "frst",
+        "courses_fail": 2,
+        "courses_id": "303",
+        "courses_pass": 44,
+        "courses_uuid": "34889"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "frst",
+        "courses_fail": 2,
+        "courses_id": "303",
+        "courses_pass": 44,
+        "courses_uuid": "34890"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "geog",
+        "courses_fail": 1,
+        "courses_id": "374",
+        "courses_pass": 60,
+        "courses_uuid": "28277"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "germ",
+        "courses_fail": 1,
+        "courses_id": "100",
+        "courses_pass": 27,
+        "courses_uuid": "6990"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "germ",
+        "courses_fail": 1,
+        "courses_id": "100",
+        "courses_pass": 28,
+        "courses_uuid": "33408"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "germ",
+        "courses_fail": 1,
+        "courses_id": "100",
+        "courses_pass": 25,
+        "courses_uuid": "57677"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "germ",
+        "courses_fail": 2,
+        "courses_id": "100",
+        "courses_pass": 26,
+        "courses_uuid": "57680"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "germ",
+        "courses_fail": 1,
+        "courses_id": "100",
+        "courses_pass": 28,
+        "courses_uuid": "57681"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "germ",
+        "courses_fail": 1,
+        "courses_id": "100",
+        "courses_pass": 24,
+        "courses_uuid": "57683"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "germ",
+        "courses_fail": 1,
+        "courses_id": "100",
+        "courses_pass": 28,
+        "courses_uuid": "57684"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "germ",
+        "courses_fail": 1,
+        "courses_id": "100",
+        "courses_pass": 27,
+        "courses_uuid": "57685"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "germ",
+        "courses_fail": 1,
+        "courses_id": "100",
+        "courses_pass": 25,
+        "courses_uuid": "57686"
+    },
+    {
+        "courses_audit": 2,
+        "courses_dept": "germ",
+        "courses_fail": 8,
+        "courses_id": "100",
+        "courses_pass": 309,
+        "courses_uuid": "57689"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "germ",
+        "courses_fail": 1,
+        "courses_id": "100",
+        "courses_pass": 29,
+        "courses_uuid": "60564"
+    },
+    {
+        "courses_audit": 1,
+        "courses_dept": "germ",
+        "courses_fail": 1,
+        "courses_id": "110",
+        "courses_pass": 28,
+        "courses_uuid": "31806"
+    },
+    {
+        "courses_audit": 2,
+        "courses_dept": "germ",
+        "courses_fail": 1,
+        "courses_id": "200",
+        "courses_pass": 77,
+        "courses_uuid": "57695"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "germ",
+        "courses_fail": 1,
+        "courses_id": "302",
+        "courses_pass": 39,
+        "courses_uuid": "57702"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "germ",
+        "courses_fail": 1,
+        "courses_id": "302",
+        "courses_pass": 39,
+        "courses_uuid": "57703"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "grsj",
+        "courses_fail": 1,
+        "courses_id": "230",
+        "courses_pass": 31,
+        "courses_uuid": "8143"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "grsj",
+        "courses_fail": 1,
+        "courses_id": "230",
+        "courses_pass": 31,
+        "courses_uuid": "8144"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "japn",
+        "courses_fail": 1,
+        "courses_id": "100",
+        "courses_pass": 21,
+        "courses_uuid": "12270"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "jrnl",
+        "courses_fail": 1,
+        "courses_id": "533",
+        "courses_pass": 30,
+        "courses_uuid": "1211"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "jrnl",
+        "courses_fail": 1,
+        "courses_id": "533",
+        "courses_pass": 56,
+        "courses_uuid": "1212"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "jrnl",
+        "courses_fail": 1,
+        "courses_id": "533",
+        "courses_pass": 49,
+        "courses_uuid": "50112"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "kin",
+        "courses_fail": 1,
+        "courses_id": "161",
+        "courses_pass": 223,
+        "courses_uuid": "86693"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "kin",
+        "courses_fail": 1,
+        "courses_id": "366",
+        "courses_pass": 117,
+        "courses_uuid": "59467"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "kin",
+        "courses_fail": 1,
+        "courses_id": "366",
+        "courses_pass": 117,
+        "courses_uuid": "59468"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "kin",
+        "courses_fail": 1,
+        "courses_id": "367",
+        "courses_pass": 128,
+        "courses_uuid": "59469"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "kin",
+        "courses_fail": 1,
+        "courses_id": "367",
+        "courses_pass": 128,
+        "courses_uuid": "59470"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "kin",
+        "courses_fail": 2,
+        "courses_id": "371",
+        "courses_pass": 110,
+        "courses_uuid": "59475"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "kin",
+        "courses_fail": 2,
+        "courses_id": "400",
+        "courses_pass": 97,
+        "courses_uuid": "3086"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "kin",
+        "courses_fail": 2,
+        "courses_id": "400",
+        "courses_pass": 97,
+        "courses_uuid": "3087"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "kin",
+        "courses_fail": 1,
+        "courses_id": "461",
+        "courses_pass": 111,
+        "courses_uuid": "72684"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "kin",
+        "courses_fail": 1,
+        "courses_id": "461",
+        "courses_pass": 111,
+        "courses_uuid": "72685"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "lfs",
+        "courses_fail": 5,
+        "courses_id": "100",
+        "courses_pass": 262,
+        "courses_uuid": "57367"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "lfs",
+        "courses_fail": 5,
+        "courses_id": "100",
+        "courses_pass": 262,
+        "courses_uuid": "57368"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "lfs",
+        "courses_fail": 1,
+        "courses_id": "252",
+        "courses_pass": 192,
+        "courses_uuid": "33390"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "lfs",
+        "courses_fail": 1,
+        "courses_id": "252",
+        "courses_pass": 192,
+        "courses_uuid": "33391"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "lfs",
+        "courses_fail": 2,
+        "courses_id": "350",
+        "courses_pass": 250,
+        "courses_uuid": "33396"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "lfs",
+        "courses_fail": 1,
+        "courses_id": "350",
+        "courses_pass": 138,
+        "courses_uuid": "87878"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "libe",
+        "courses_fail": 1,
+        "courses_id": "461",
+        "courses_pass": 49,
+        "courses_uuid": "44622"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "libe",
+        "courses_fail": 1,
+        "courses_id": "461",
+        "courses_pass": 23,
+        "courses_uuid": "45369"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "libe",
+        "courses_fail": 1,
+        "courses_id": "461",
+        "courses_pass": 43,
+        "courses_uuid": "45371"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "libr",
+        "courses_fail": 1,
+        "courses_id": "504",
+        "courses_pass": 30,
+        "courses_uuid": "40383"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "libr",
+        "courses_fail": 1,
+        "courses_id": "504",
+        "courses_pass": 51,
+        "courses_uuid": "40384"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "ling",
+        "courses_fail": 3,
+        "courses_id": "100",
+        "courses_pass": 243,
+        "courses_uuid": "17536"
+    },
+    {
+        "courses_audit": 1,
+        "courses_dept": "ling",
+        "courses_fail": 2,
+        "courses_id": "100",
+        "courses_pass": 171,
+        "courses_uuid": "35456"
+    },
+    {
+        "courses_audit": 1,
+        "courses_dept": "lled",
+        "courses_fail": 1,
+        "courses_id": "441",
+        "courses_pass": 39,
+        "courses_uuid": "51811"
+    },
+    {
+        "courses_audit": 1,
+        "courses_dept": "lled",
+        "courses_fail": 1,
+        "courses_id": "441",
+        "courses_pass": 39,
+        "courses_uuid": "51812"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "math",
+        "courses_fail": 1,
+        "courses_id": "255",
+        "courses_pass": 49,
+        "courses_uuid": "27333"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "math",
+        "courses_fail": 1,
+        "courses_id": "255",
+        "courses_pass": 57,
+        "courses_uuid": "47129"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "math",
+        "courses_fail": 2,
+        "courses_id": "405",
+        "courses_pass": 23,
+        "courses_uuid": "29927"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "math",
+        "courses_fail": 2,
+        "courses_id": "405",
+        "courses_pass": 23,
+        "courses_uuid": "29928"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "math",
+        "courses_fail": 1,
+        "courses_id": "406",
+        "courses_pass": 31,
+        "courses_uuid": "90168"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "math",
+        "courses_fail": 1,
+        "courses_id": "406",
+        "courses_pass": 31,
+        "courses_uuid": "90169"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "mech",
+        "courses_fail": 1,
+        "courses_id": "392",
+        "courses_pass": 101,
+        "courses_uuid": "9084"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "mech",
+        "courses_fail": 1,
+        "courses_id": "392",
+        "courses_pass": 101,
+        "courses_uuid": "9085"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "mech",
+        "courses_fail": 1,
+        "courses_id": "421",
+        "courses_pass": 35,
+        "courses_uuid": "84192"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "mech",
+        "courses_fail": 1,
+        "courses_id": "421",
+        "courses_pass": 35,
+        "courses_uuid": "84193"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "mech",
+        "courses_fail": 2,
+        "courses_id": "431",
+        "courses_pass": 152,
+        "courses_uuid": "45250"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "mech",
+        "courses_fail": 2,
+        "courses_id": "431",
+        "courses_pass": 152,
+        "courses_uuid": "45251"
+    },
+    {
+        "courses_audit": 2,
+        "courses_dept": "medi",
+        "courses_fail": 1,
+        "courses_id": "501",
+        "courses_pass": 35,
+        "courses_uuid": "74947"
+    },
+    {
+        "courses_audit": 2,
+        "courses_dept": "medi",
+        "courses_fail": 1,
+        "courses_id": "501",
+        "courses_pass": 35,
+        "courses_uuid": "74948"
+    },
+    {
+        "courses_audit": 2,
+        "courses_dept": "mine",
+        "courses_fail": 1,
+        "courses_id": "350",
+        "courses_pass": 42,
+        "courses_uuid": "1448"
+    },
+    {
+        "courses_audit": 2,
+        "courses_dept": "mine",
+        "courses_fail": 1,
+        "courses_id": "350",
+        "courses_pass": 42,
+        "courses_uuid": "1449"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "mine",
+        "courses_fail": 1,
+        "courses_id": "350",
+        "courses_pass": 60,
+        "courses_uuid": "12570"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "mine",
+        "courses_fail": 1,
+        "courses_id": "350",
+        "courses_pass": 60,
+        "courses_uuid": "12571"
+    },
+    {
+        "courses_audit": 1,
+        "courses_dept": "mine",
+        "courses_fail": 1,
+        "courses_id": "480",
+        "courses_pass": 83,
+        "courses_uuid": "12588"
+    },
+    {
+        "courses_audit": 1,
+        "courses_dept": "mine",
+        "courses_fail": 1,
+        "courses_id": "480",
+        "courses_pass": 83,
+        "courses_uuid": "12589"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "mtrl",
+        "courses_fail": 1,
+        "courses_id": "350",
+        "courses_pass": 57,
+        "courses_uuid": "40062"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "mtrl",
+        "courses_fail": 1,
+        "courses_id": "350",
+        "courses_pass": 57,
+        "courses_uuid": "40063"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "mtrl",
+        "courses_fail": 1,
+        "courses_id": "359",
+        "courses_pass": 36,
+        "courses_uuid": "51889"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "mtrl",
+        "courses_fail": 1,
+        "courses_id": "489",
+        "courses_pass": 34,
+        "courses_uuid": "46206"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "musc",
+        "courses_fail": 2,
+        "courses_id": "323",
+        "courses_pass": 134,
+        "courses_uuid": "7203"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "musc",
+        "courses_fail": 2,
+        "courses_id": "323",
+        "courses_pass": 134,
+        "courses_uuid": "7204"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "nurs",
+        "courses_fail": 1,
+        "courses_id": "302",
+        "courses_pass": 118,
+        "courses_uuid": "78653"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "nurs",
+        "courses_fail": 1,
+        "courses_id": "302",
+        "courses_pass": 118,
+        "courses_uuid": "78654"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "nurs",
+        "courses_fail": 1,
+        "courses_id": "303",
+        "courses_pass": 119,
+        "courses_uuid": "78655"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "nurs",
+        "courses_fail": 1,
+        "courses_id": "303",
+        "courses_pass": 119,
+        "courses_uuid": "78656"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "phar",
+        "courses_fail": 1,
+        "courses_id": "315",
+        "courses_pass": 222,
+        "courses_uuid": "30424"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "phar",
+        "courses_fail": 1,
+        "courses_id": "315",
+        "courses_pass": 222,
+        "courses_uuid": "30425"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "phar",
+        "courses_fail": 1,
+        "courses_id": "315",
+        "courses_pass": 216,
+        "courses_uuid": "72747"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "phar",
+        "courses_fail": 1,
+        "courses_id": "315",
+        "courses_pass": 217,
+        "courses_uuid": "72748"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "phys",
+        "courses_fail": 1,
+        "courses_id": "109",
+        "courses_pass": 23,
+        "courses_uuid": "373"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "phys",
+        "courses_fail": 1,
+        "courses_id": "109",
+        "courses_pass": 26,
+        "courses_uuid": "98680"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "phys",
+        "courses_fail": 1,
+        "courses_id": "117",
+        "courses_pass": 41,
+        "courses_uuid": "378"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "phys",
+        "courses_fail": 1,
+        "courses_id": "119",
+        "courses_pass": 36,
+        "courses_uuid": "384"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "phys",
+        "courses_fail": 1,
+        "courses_id": "119",
+        "courses_pass": 27,
+        "courses_uuid": "386"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "phys",
+        "courses_fail": 1,
+        "courses_id": "119",
+        "courses_pass": 21,
+        "courses_uuid": "390"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "phys",
+        "courses_fail": 3,
+        "courses_id": "119",
+        "courses_pass": 302,
+        "courses_uuid": "393"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "phys",
+        "courses_fail": 3,
+        "courses_id": "170",
+        "courses_pass": 163,
+        "courses_uuid": "420"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "phys",
+        "courses_fail": 2,
+        "courses_id": "210",
+        "courses_pass": 61,
+        "courses_uuid": "98722"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "phys",
+        "courses_fail": 2,
+        "courses_id": "210",
+        "courses_pass": 61,
+        "courses_uuid": "98723"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "phys",
+        "courses_fail": 1,
+        "courses_id": "304",
+        "courses_pass": 67,
+        "courses_uuid": "80600"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "phys",
+        "courses_fail": 1,
+        "courses_id": "319",
+        "courses_pass": 25,
+        "courses_uuid": "33584"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "phys",
+        "courses_fail": 1,
+        "courses_id": "319",
+        "courses_pass": 25,
+        "courses_uuid": "33585"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "phys",
+        "courses_fail": 1,
+        "courses_id": "402",
+        "courses_pass": 29,
+        "courses_uuid": "50274"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "phys",
+        "courses_fail": 1,
+        "courses_id": "402",
+        "courses_pass": 29,
+        "courses_uuid": "50275"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "phys",
+        "courses_fail": 1,
+        "courses_id": "500",
+        "courses_pass": 31,
+        "courses_uuid": "33636"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "phys",
+        "courses_fail": 1,
+        "courses_id": "500",
+        "courses_pass": 31,
+        "courses_uuid": "33637"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "punj",
+        "courses_fail": 1,
+        "courses_id": "102",
+        "courses_pass": 27,
+        "courses_uuid": "6867"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "rhsc",
+        "courses_fail": 1,
+        "courses_id": "501",
+        "courses_pass": 27,
+        "courses_uuid": "60922"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "rhsc",
+        "courses_fail": 1,
+        "courses_id": "507",
+        "courses_pass": 27,
+        "courses_uuid": "60935"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "russ",
+        "courses_fail": 3,
+        "courses_id": "101",
+        "courses_pass": 105,
+        "courses_uuid": "91443"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "sowk",
+        "courses_fail": 1,
+        "courses_id": "320",
+        "courses_pass": 32,
+        "courses_uuid": "92896"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "sowk",
+        "courses_fail": 1,
+        "courses_id": "320",
+        "courses_pass": 32,
+        "courses_uuid": "92897"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "sowk",
+        "courses_fail": 1,
+        "courses_id": "337",
+        "courses_pass": 54,
+        "courses_uuid": "71647"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "sowk",
+        "courses_fail": 1,
+        "courses_id": "337",
+        "courses_pass": 54,
+        "courses_uuid": "71648"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "sowk",
+        "courses_fail": 1,
+        "courses_id": "425",
+        "courses_pass": 45,
+        "courses_uuid": "60977"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "spha",
+        "courses_fail": 1,
+        "courses_id": "510",
+        "courses_pass": 38,
+        "courses_uuid": "8628"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "spha",
+        "courses_fail": 1,
+        "courses_id": "510",
+        "courses_pass": 38,
+        "courses_uuid": "8629"
+    },
+    {
+        "courses_audit": 6,
+        "courses_dept": "spph",
+        "courses_fail": 1,
+        "courses_id": "400",
+        "courses_pass": 73,
+        "courses_uuid": "28084"
+    },
+    {
+        "courses_audit": 2,
+        "courses_dept": "spph",
+        "courses_fail": 1,
+        "courses_id": "400",
+        "courses_pass": 70,
+        "courses_uuid": "89870"
+    },
+    {
+        "courses_audit": 3,
+        "courses_dept": "spph",
+        "courses_fail": 1,
+        "courses_id": "400",
+        "courses_pass": 87,
+        "courses_uuid": "89872"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "spph",
+        "courses_fail": 1,
+        "courses_id": "502",
+        "courses_pass": 78,
+        "courses_uuid": "33015"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "spph",
+        "courses_fail": 1,
+        "courses_id": "502",
+        "courses_pass": 97,
+        "courses_uuid": "33017"
+    },
+    {
+        "courses_audit": 3,
+        "courses_dept": "spph",
+        "courses_fail": 1,
+        "courses_id": "502",
+        "courses_pass": 68,
+        "courses_uuid": "47729"
+    },
+    {
+        "courses_audit": 3,
+        "courses_dept": "spph",
+        "courses_fail": 1,
+        "courses_id": "502",
+        "courses_pass": 84,
+        "courses_uuid": "47731"
+    },
+    {
+        "courses_audit": 0,
+        "courses_dept": "spph",
+        "courses_fail": 1,
+        "courses_id": "525",
+        "courses_pass": 29,
+        "courses_uuid": "47759"
+    },
+    {
+        "courses_audit": 1,
+        "courses_dept": "stat",
+        "courses_fail": 1,
+        "courses_id": "404",
+        "courses_pass": 44,
+        "courses_uuid": "2945"
+    },
+    {
+        "courses_audit": 1,
+        "courses_dept": "stat",
+        "courses_fail": 1,
+        "courses_id": "404",
+        "courses_pass": 44,
+        "courses_uuid": "2946"
+    }
+]

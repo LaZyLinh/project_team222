@@ -1,6 +1,8 @@
 import {SchedRoom, SchedSection, TimeSlot} from "../src/scheduler/IScheduler";
 import Scheduler from "../src/scheduler/Scheduler";
 import {expect} from "chai";
+import * as fs from "fs-extra";
+import InsightFacade from "../src/controller/InsightFacade";
 
 describe("Schedule Test", function () {
     let scheduler: Scheduler;
@@ -189,6 +191,19 @@ describe("Schedule Test", function () {
         rooms_shortname: "ICICS",
         rooms_number: "314"
     };
+    let coursesSections: SchedSection[];
+    let coursesRooms: SchedRoom[];
+
+    before("load in large dataset", function () {
+        const toLoad: { [id: string]: string } = {
+            courses: "./test/scheduleTestCourses.json",
+            bigCourses: "./test/scheduleTestBigCourses.json",
+            rooms: "./test/scheduleTestRooms.json"
+        };
+        coursesRooms = JSON.parse(fs.readFileSync(toLoad.rooms).toString());
+        coursesSections = JSON.parse(fs.readFileSync(toLoad.courses).toString());
+    });
+
     beforeEach("set up Scheduler", function () {
         scheduler = new Scheduler();
     });
@@ -268,6 +283,13 @@ describe("Schedule Test", function () {
         const actual = scheduler.schedule([section0, section1, section2, section3, section4, section5,
             section6, section7, section8, section9, section10, section11,
             section12, section13, section14, section15, section16, section17, section18], [room, room1]);
+        // const expected: Array<[SchedRoom, SchedSection, TimeSlot]> = [];
+        const expected = 18;
+        expect(actual.length).to.deep.equal(expected);
+    });
+
+    it("Test of schedule with big inputs!", function () {
+        const actual = scheduler.schedule(coursesSections, coursesRooms);
         // const expected: Array<[SchedRoom, SchedSection, TimeSlot]> = [];
         const expected = 18;
         expect(actual.length).to.deep.equal(expected);

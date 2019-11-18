@@ -12,6 +12,7 @@ import {
 } from "./SchedulerHelper";
 import {IRoomSchedObj, ISectionObj} from "./ISchedObj";
 import {IndexableObject} from "../controller/SortResultHelper";
+import Log from "../Util";
 
 const TSCode: TimeSlot[] = [
     "MWF 0800-0900",
@@ -97,6 +98,7 @@ function multRoom(scheduledRooms: IRoomSchedObj[], checkedFitRooms: IRoomSchedOb
                   result: Array<[SchedRoom, SchedSection, TimeSlot]>, originRooms: SchedRoom[],
                   originSecs: SchedSection[], courses: IndexableObject, secName: string) {
     let roomChosen = findClosestRoom(scheduledRooms, checkedFitRooms);
+    Log.test(scheduledRooms.length);
     let time = TSCode[commonTS[roomChosen.index][0]];
 
     let currentScore = calculateScore(scheduledRooms, scheduledSecs, total);
