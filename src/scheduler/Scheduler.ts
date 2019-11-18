@@ -150,6 +150,9 @@ function multSecRoom(originSecs: SchedSection[], originRooms: SchedRoom[], secs:
                 checkedFitRooms.push(potential);
             }
         }
+        if (checkedFitRooms.length === 0) {
+            continue;
+        }
         if (scheduledRooms.length === 0) {
             firstRoom.call(this, commonTS, checkedFitRooms, result, originRooms, originSecs, secObj,
                            scheduledRooms, scheduledSecs, courses, secName);
