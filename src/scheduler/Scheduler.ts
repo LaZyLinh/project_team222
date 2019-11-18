@@ -62,7 +62,7 @@ export default class Scheduler implements IScheduler {
             }
             return result;
         }
-        const attempts = 1e5;
+        const attempts = Math.ceil(13000 * Math.exp(-0.0014 * sections.length));
         let currentMax = 0;
         let currentMaxRes: Array<[SchedRoom, SchedSection, TimeSlot]>;
         let total = totalEnrollment(sSecObjs);
@@ -74,6 +74,7 @@ export default class Scheduler implements IScheduler {
                 currentMax = score;
             }
         }
+        Log.test("Score: " + currentMax.toString());
         // result = multSecRoom(sections, rooms, sSecObjs, sRoomObjs);
         return result;
     }
@@ -83,7 +84,7 @@ function hasOverlap(potential: IRoomSchedObj, i: number, courseTime: boolean[], 
                     commonTS: IndexableObject) {
     if (potential.timeSlot[i] && courseTime[i]) {
         keepRoom = true;
-        if (commonTS[potential.index] === undefined) {
+        if (!commonTS.hasOwnProperty(potential.index)) {
             commonTS[potential.index] = [i];
         } else {
             commonTS[potential.index].push(i);
@@ -112,6 +113,9 @@ function multRoom(scheduledRooms: IRoomSchedObj[], checkedFitRooms: IRoomSchedOb
                   result: Array<[SchedRoom, SchedSection, TimeSlot]>, originRooms: SchedRoom[],
                   originSecs: SchedSection[], courses: IndexableObject, secName: string) {
     let roomChosen = findClosestRoom(scheduledRooms, checkedFitRooms);
+    // Log.test("schedRooms: " + JSON.stringify(scheduledRooms));
+    // Log.test("checkedFitRooms: " + JSON.stringify(checkedFitRooms));
+    // Log.test("index: " + roomChosen.index.toString() + " | commonTS length" + JSON.stringify(commonTS));
     let random = commonTS[roomChosen.index][(Math.floor(Math.random() * commonTS[roomChosen.index].length))];
     let time = TSCode[random];
 
@@ -166,7 +170,7 @@ function multSecRoom(originSecs: SchedSection[], originRooms: SchedRoom[], secs:
                 if (!keepRoom) {
                     continue;
                 }
-                if (!checkedFitRooms.includes(potential)) {
+                if (!checkedFitRooms.includes(potential) && commonTS.hasOwnProperty(potential.index)) {
                     checkedFitRooms.push(potential);
                 }
             }

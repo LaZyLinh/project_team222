@@ -197,7 +197,7 @@ describe("Schedule Test", function () {
     before("load in large dataset", function () {
         const toLoad: { [id: string]: string } = {
             courses: "./test/scheduleTestCourses.json",
-            bigCourses: "./test/scheduleTestBigCourses.json",
+            bigCourses: "./test/scheduleTestCoursesBig.json",
             rooms: "./test/scheduleTestRooms.json"
         };
         coursesRooms = JSON.parse(fs.readFileSync(toLoad.rooms).toString());
