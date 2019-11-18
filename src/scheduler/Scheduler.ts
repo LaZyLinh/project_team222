@@ -1,6 +1,6 @@
 import {IScheduler, SchedRoom, SchedSection, TimeSlot} from "./IScheduler";
 import {
-    calculateScore,
+    calculateScore, calculateScoreResult,
     findClosestRoom,
     findFitFreeRoom,
     fit,
@@ -62,7 +62,19 @@ export default class Scheduler implements IScheduler {
             }
             return result;
         }
-        result = multSecRoom(sections, rooms, sSecObjs, sRoomObjs);
+        const attempts = 1e5;
+        let currentMax = 0;
+        let currentMaxRes: Array<[SchedRoom, SchedSection, TimeSlot]>;
+        let total = totalEnrollment(sSecObjs);
+        for (let i = 0; i < attempts; i++) {
+            currentMaxRes = multSecRoom(sections, rooms, sSecObjs, sRoomObjs);
+            let score = calculateScoreResult(currentMaxRes, total);
+            if (score > currentMax) {
+                result = currentMaxRes;
+                currentMax = score;
+            }
+        }
+        // result = multSecRoom(sections, rooms, sSecObjs, sRoomObjs);
         return result;
     }
 }
@@ -84,12 +96,14 @@ function firstRoom(commonTS: IndexableObject, checkedFitRooms: IRoomSchedObj[],
                    result: Array<[SchedRoom, SchedSection, TimeSlot]>, originRooms: SchedRoom[],
                    originSecs: SchedSection[], secObj: ISectionObj, scheduledRooms: IRoomSchedObj[],
                    scheduledSecs: ISectionObj[], courses: IndexableObject, secName: string) {
-    let timeSlot = TSCode[commonTS[checkedFitRooms[0].index][0]];
-    result.push([originRooms[checkedFitRooms[0].index], originSecs[secObj.index], timeSlot]);
-    scheduledRooms.push(checkedFitRooms[0]);
+    let randomRoom = checkedFitRooms[(Math.floor(Math.random() * checkedFitRooms.length))];
+    let randomSlot = commonTS[randomRoom.index][(Math.floor(Math.random() * commonTS[randomRoom.index].length))];
+    let timeSlot = TSCode[randomSlot];
+    result.push([originRooms[randomRoom.index], originSecs[secObj.index], timeSlot]);
+    scheduledRooms.push(randomRoom);
     scheduledSecs.push(secObj);
-    courses[secName][commonTS[checkedFitRooms[0].index][0]] = false;
-    checkedFitRooms[0].timeSlot[commonTS[checkedFitRooms[0].index][0]] = false;
+    courses[secName][randomSlot] = false;
+    randomRoom.timeSlot[randomSlot] = false;
     return;
 }
 
@@ -98,8 +112,8 @@ function multRoom(scheduledRooms: IRoomSchedObj[], checkedFitRooms: IRoomSchedOb
                   result: Array<[SchedRoom, SchedSection, TimeSlot]>, originRooms: SchedRoom[],
                   originSecs: SchedSection[], courses: IndexableObject, secName: string) {
     let roomChosen = findClosestRoom(scheduledRooms, checkedFitRooms);
-    Log.test(scheduledRooms.length);
-    let time = TSCode[commonTS[roomChosen.index][0]];
+    let random = commonTS[roomChosen.index][(Math.floor(Math.random() * commonTS[roomChosen.index].length))];
+    let time = TSCode[random];
 
     let currentScore = calculateScore(scheduledRooms, scheduledSecs, total);
     scheduledRooms.push(roomChosen);
@@ -107,8 +121,8 @@ function multRoom(scheduledRooms: IRoomSchedObj[], checkedFitRooms: IRoomSchedOb
     let newScore = calculateScore(scheduledRooms, scheduledSecs, total);
     if (newScore > currentScore) {
         result.push([originRooms[roomChosen.index], originSecs[secObj.index], time]);
-        courses[secName][commonTS[roomChosen.index][0]] = false;
-        roomChosen.timeSlot[commonTS[roomChosen.index][0]] = false;
+        courses[secName][random] = false;
+        roomChosen.timeSlot[random] = false;
     } else {
         scheduledRooms.pop();
         scheduledSecs.pop();
@@ -116,18 +130,22 @@ function multRoom(scheduledRooms: IRoomSchedObj[], checkedFitRooms: IRoomSchedOb
     return {scheduledRooms, scheduledSecs};
 }
 
+function totalEnrollment(secs: ISectionObj[]) {
+    let total: number = 0;
+    for (const sec of secs) {
+        total += sec.enroll;
+    }
+    return total;
+}
+
 function multSecRoom(originSecs: SchedSection[], originRooms: SchedRoom[], secs: ISectionObj[], rooms: IRoomSchedObj[]):
                      Array<[SchedRoom, SchedSection, TimeSlot]> {
     let result: Array<[SchedRoom, SchedSection, TimeSlot]> = [];
     let courses: IndexableObject = {};
     let courseTime: boolean[];
-    let total: number = 0;
-    for (const sec of secs) {
-        total += sec.enroll;
-    }
+    let total = totalEnrollment(secs);
     let scheduledRooms: IRoomSchedObj[] = [];
     let scheduledSecs: ISectionObj[] = [];
-
     for (const secObj of secs) {
         let secName: string = secObj.dept + secObj.id;
         if (!addedCourse(secObj, courses)) {
@@ -139,15 +157,17 @@ function multSecRoom(originSecs: SchedSection[], originRooms: SchedRoom[], secs:
         }
         courseTime = courses[secName];
         let fitFreeRooms = findFitFreeRoom(secObj, rooms);
-        let checkedFitRooms = [];
+        let checkedFitRooms: IRoomSchedObj[] = [];
         let keepRoom = false;
         let commonTS: IndexableObject = {};
         for (const potential of fitFreeRooms) {
             for (let i = 0; i < 15; i++) {
                 keepRoom = hasOverlap(potential, i, courseTime, keepRoom, commonTS);
-                if (keepRoom) {
+                if (!keepRoom) {
+                    continue;
+                }
+                if (!checkedFitRooms.includes(potential)) {
                     checkedFitRooms.push(potential);
-                    break;
                 }
             }
         }

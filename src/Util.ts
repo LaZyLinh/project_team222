@@ -24,3 +24,4 @@ export default class Log {
             console.log(`<X> ${new Date().toLocaleString()}:`, ...msg);
     }
 }
+
