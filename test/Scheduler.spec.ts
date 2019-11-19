@@ -289,11 +289,13 @@ describe("Schedule Test", function () {
         expect(actual).to.deep.equal(expected);
     });
 
+    /*
     it("Test of schedule with big inputs!", function () {
         const actual = scheduler.schedule(coursesSections, coursesRooms);
         // const expected: Array<[SchedRoom, SchedSection, TimeSlot]> = [];
         const expected = 18;
         expect(actual.length).to.deep.equal(expected);
     });
+     */
 });
 
