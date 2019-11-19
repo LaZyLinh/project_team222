@@ -97,7 +97,6 @@ export default class Server {
             Log.info("Server::echo(..) - responding " + 200);
             res.json(200, {result: response});
         } catch (err) {
-            Log.error("Server::echo(..) - responding 400");
             res.json(400, {error: err});
         }
         return next();
@@ -138,7 +137,6 @@ export default class Server {
                 res.json(200, {result: arr});
                 });
         } catch (err) {
-            Log.error("Server::getDatasets(..) - responding 400 - new");
             res.json(400, {error: err});
         }
         return next();
@@ -157,7 +155,6 @@ export default class Server {
                 res.json(400, {error: err.toString()});
             });
         } catch (err) {
-            Log.error("Server::addDataset(..) - ");
             res.json(400, {error: err.toString()});
         }
         return next();
@@ -173,7 +170,6 @@ export default class Server {
                 res.json(400, {error: err.toString()});
             });
         } catch (err) {
-            Log.error("Server::performQuery - ");
             res.json(100, {error: err.toString()});
         }
         return next();
@@ -198,7 +194,6 @@ export default class Server {
                 }
             });
         } catch (err) {
-                Log.error("Server::removeDataset(..) - ");
                 // res.send(204);
                 res.json(100, {error: err.toString()});
         }
