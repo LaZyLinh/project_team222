@@ -99,18 +99,13 @@ export function findArray(compared: string, comparison: string, value: any, data
             return lessHelper(datasetArray, value);
         } else if (comparison === "EQ") {
             return equalHelper(datasetArray, value);
-        } else {
-            throw new InsightError("bad 'comparison' in findArray");
         }
     } else {
         let datasetArray: IsKeyEntry[] = getIsKeyArray(dataset, compared);
         if (comparison === "IS") {
             return isHelper(datasetArray, value);
-        } else {
-            throw new InsightError("bad 'compared' in findArray");
         }
     }
-    return [];
 }
 
 function isHelper(comparedArray: IsKeyEntry[], value: string): number[] {
@@ -118,7 +113,7 @@ function isHelper(comparedArray: IsKeyEntry[], value: string): number[] {
     let regex: RegExp;
     // if value is just string
     if (value.replace("*", "") === value) {
-        regex = RegExp(value);
+        regex = RegExp("^" + value + "$");
     } else {
         regex = RegExp("^" + value.replace(RegExp("[*]", "g"), ".*") + "$");
     }

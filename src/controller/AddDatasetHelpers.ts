@@ -1,5 +1,5 @@
 import {InsightDataset, InsightDatasetKind, InsightError} from "./IInsightFacade";
-import {ICourse, ICourseDataset, IDatabase, IRoom, IRoomDataset} from "./IDataset";
+import {ICourse, ICourseDataset, IDatabase} from "./IDataset";
 import InsightFacade from "./InsightFacade";
 import * as fs from "fs";
 import * as JSZip from "jszip";
@@ -12,8 +12,10 @@ export function getAddDatasetPromise(kind: InsightDatasetKind,
                                      datasets: InsightDataset[]) {
     if (kind === InsightDatasetKind.Courses) {
         return getAddCourseDatasetPromise(content, id, datasets);
-    } else {
+    } else if (kind === InsightDatasetKind.Rooms) {
         return getAddRoomDatasetPromise(content, id, datasets);
+    } else {
+        return Promise.reject("Wrong Kind");
     }
 }
 
@@ -213,7 +215,6 @@ export function deleteAllFromDisk() {
         return;
     }
 }
-
 // returns list of id strings corresponding to datasets currently in memory
 export function idsInMemory(database: IDatabase): string[] {
     let res: string[] = [];
@@ -222,7 +223,6 @@ export function idsInMemory(database: IDatabase): string[] {
     }
     return res;
 }
-
 // returns list of id strings corresponding to datasets currently on the disk
 export function idsInDisk(): string[] {
     try {
@@ -232,7 +232,6 @@ export function idsInDisk(): string[] {
         return [];
     }
 }
-
 // return the array tha
 function arrayUnion(a: string[], b: string[]): string[] {
     let res: string[] = [];
@@ -244,7 +243,6 @@ function arrayUnion(a: string[], b: string[]): string[] {
     res = res.concat(b);
     return res;
 }
-
 // return the validated string if it's valid, return an InsightError otherwise.
 export function validateIDString(id: string): string | InsightError {
     if (id === null) {

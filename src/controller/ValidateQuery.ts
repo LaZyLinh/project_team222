@@ -4,11 +4,14 @@ import {transformationValidation} from "./transValidation";
 
 
 export function getFirstQueryId(query: any): null | string {
-    if (!query.hasOwnProperty("OPTIONS") || !query["OPTIONS"].hasOwnProperty("COLUMNS") ||
-        query["OPTIONS"]["COLUMNS"] === null) {
+    if (!query.hasOwnProperty("OPTIONS") || query["OPTIONS"] === null ||
+        !query["OPTIONS"].hasOwnProperty("COLUMNS") || query["OPTIONS"]["COLUMNS"] === null) {
         return null;
     }
     const columnCont = query["OPTIONS"]["COLUMNS"];
+    if (!Array.isArray(columnCont)) {
+        return null;
+    }
     const firstKey = columnCont[0];
     if (typeof firstKey !== "string") {
         return null;
@@ -17,7 +20,8 @@ export function getFirstQueryId(query: any): null | string {
     if (idFinder !== null) {
         return idFinder[1];
     }
-    if (!query.hasOwnProperty("TRANSFORMATIONS") || !query["TRANSFORMATIONS"].hasOwnProperty("APPLY") ||
+    if (!query.hasOwnProperty("TRANSFORMATIONS") || query["TRANSFORMATIONS"] === null ||
+        !query["TRANSFORMATIONS"].hasOwnProperty("APPLY") ||
         query["TRANSFORMATIONS"]["APPLY"] === null || typeof query["TRANSFORMATIONS"]["APPLY"] !== "object") {
         return null;
     }
@@ -27,7 +31,7 @@ export function getFirstQueryId(query: any): null | string {
             if (appKey !== firstKey) {
                 continue;
             }
-            if (typeof entry !== "object" || Object.keys(entry).length > 1) {
+            if (entry === null || typeof entry !== "object" || Object.keys(entry).length > 1) {
                 return null;
             }
             for (const [token, key] of Object.entries(entry)) {
@@ -38,25 +42,21 @@ export function getFirstQueryId(query: any): null | string {
             }
         }
     }
-    return null;
+    // return null;
 }
 
 export function validateQuery(query: any, id: string, kind: InsightDatasetKind): string | null {
     let dataID: string;
-    if (!query.hasOwnProperty("WHERE")) {
+    if (!query.hasOwnProperty("WHERE") || query["WHERE"] === null) {
         return null;
-    } else if (!query.hasOwnProperty("OPTIONS")) {
+    } else if (!query.hasOwnProperty("OPTIONS") || query["OPTIONS"] === null) {
         return null;
-    } else if (!query["OPTIONS"].hasOwnProperty("COLUMNS")) {
+    } else if (!query["OPTIONS"].hasOwnProperty("COLUMNS") || query["OPTIONS"]["COLUMNS"] === null) {
         return null;
     }
     const whereCont = query["WHERE"];   // make sure where only takes 1 FILTER and is the right type
     const optionCont = query["OPTIONS"];
     const columnCont = optionCont["COLUMNS"]; // should be string[]
-
-    if (whereCont === null || optionCont === null || columnCont === null) {
-        return null;
-    }
     // dealing with OPTION section
     let test = correctOption(optionCont, id, kind);
     if (test === null) {
@@ -65,10 +65,13 @@ export function validateQuery(query: any, id: string, kind: InsightDatasetKind):
         dataID = test[0];
     }
     let hasApplyKey = test[1];
-    if (hasApplyKey && !query.hasOwnProperty("TRANSFORMATIONS")) {
+    if (hasApplyKey && (!query.hasOwnProperty("TRANSFORMATIONS") || query["TRANSFORMATIONS"] === null)) {
         return null;
     }
     // dealing with WHERE section
+    if (Array.isArray(whereCont) || typeof whereCont !== "object") {
+        return null;
+    }
     if (Object.keys(whereCont).length !== 0) {            // if WHERE: {}, all good!
         if (this.whereValidation(whereCont, dataID, kind) > 0) {
             return null;
@@ -76,10 +79,9 @@ export function validateQuery(query: any, id: string, kind: InsightDatasetKind):
     }
     // deal with Transformation if it exists
     if (query.hasOwnProperty("TRANSFORMATIONS")) {
-
-       // if (!Array.isArray(group) || !Array.isArray(apply)) {
-        //    return null;
-       // }
+        if (query["TRANSFORMATIONS"] === null) {
+            return null;
+        }
         if (transformationValidation(query.TRANSFORMATIONS, columnCont, dataID, kind) > 0) {
             return null;
         }
@@ -112,7 +114,7 @@ export function correctOption(option: any, dataId: string, kind: InsightDatasetK
     if (Object.entries(option).length > 2) {
         return null;
     } else if (Object.entries(option).length > 1) {
-        if (!option.hasOwnProperty("ORDER")) {
+        if (!option.hasOwnProperty("ORDER") || option["ORDER"] === null) {
             return null;
         }
         const order = option["ORDER"];
@@ -123,9 +125,6 @@ export function correctOption(option: any, dataId: string, kind: InsightDatasetK
     return [dataId, hasApplykey];
 }
 function orderValidation(order: any, columnCont: string[]): number {
-    if (order === null) {
-        return 1;
-    }
     if (Array.isArray(order)) {
         return 1;
     }
@@ -137,7 +136,6 @@ function orderValidation(order: any, columnCont: string[]): number {
             return 1;
         }
     } else {
-        // at this point should be Object
         if (!order.hasOwnProperty("dir") || !order.hasOwnProperty("keys")) {
             return 1;
         }
@@ -161,19 +159,19 @@ export function whereValidation(item: any, dataID: string, kind: InsightDatasetK
     const sSingle = ["IS"];
     const neg = "NOT";
     let anyFalse = 0;
-    if (item == null || typeof item !== "object") {
-        return 1;
-    }
 
     if (Array.isArray(Object.keys(item))) {
+        if (Object.keys(item).length > 1) {
+            return 1;
+        }
         for (const [key, more] of Object.entries(item)) {
-            if (Object.keys(item).length > 1) {
+            if (key === null || more === null) {
                 return 1;
             }
             if (!mSingle.includes(key) && !sSingle.includes(key) && !mult.includes(key) && key !== neg) {
                 return 1;
             }
-            if (more === null || Object.entries(more).length === 0) {
+            if (Object.entries(more).length === 0) {
                 return 1;
             }
             if (mult.includes(key)) {
@@ -206,6 +204,9 @@ export function anyFalseSingle(item: any, key: string, dataID: string, kind: Ins
     const mSingle = ["GT", "LT", "EQ"];
 
     for (const [field, value] of Object.entries(item[key])) {
+        if (field === null || value === null) {
+            return 1;
+        }
         let typeValid = typeMatchValidID(field, kind);
         if (typeValid === null) {
             return 1;
@@ -274,7 +275,6 @@ export function typeMatchValidID(key: string, kind: InsightDatasetKind | null): 
         mUsed = roomsMRegex;
         sUsed = roomsSRegex;
     }
-
     for (const rx of mUsed) {
         if (rx.test(key)) {
             let id = validateIDString(key.replace(rx, ""));

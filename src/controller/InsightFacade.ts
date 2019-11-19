@@ -87,8 +87,17 @@ export default class InsightFacade implements IInsightFacade {
         datasets: [],
     };
 
-    constructor() {
+     constructor() {
         Log.trace("InsightFacadeImpl::init()");
+    }
+
+    public static instance: InsightFacade;
+
+    public static getInstance(): InsightFacade {
+        if (this.instance === undefined) {
+            this.instance = new InsightFacade();
+        }
+        return this.instance;
     }
 
     public addDataset(id: string, content: string, kind: InsightDatasetKind): Promise<string[]> {
@@ -132,15 +141,12 @@ export default class InsightFacade implements IInsightFacade {
 
     public performQuery(query: any): Promise <any[]> {
         return new Promise((resolve, reject) => {
-            if (this.database.datasets === []) {
-                return reject(new InsightError("No Dataset added"));
-            }
             if (query === null || typeof query !== "object") {
                 return reject(new InsightError("Invalid Query"));
             }
-            const datasetID: string = getFirstQueryId(query);
+            const datasetID: string | null = getFirstQueryId(query);
             if (datasetID === null) {
-                return reject(new InsightError("Invalid Query"));
+                return reject(new InsightError("Can't find first ID"));
             }
             loadFromDiskIfNecessary(this, datasetID);
             if (!idsInMemory(this.database).includes(datasetID)) {

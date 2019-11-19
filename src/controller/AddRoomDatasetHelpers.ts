@@ -53,11 +53,15 @@ export function getAddRoomDatasetPromise(content: string, id: string, datasets: 
         });
 }
 function findTableBodies(htmlObj: any): any[] {
+    if (htmlObj === null) {
+        return [];
+    }
     if (htmlObj.hasOwnProperty("nodeName") && htmlObj.nodeName === "tbody") {
         return [htmlObj];
     } else if (htmlObj.hasOwnProperty("nodeName") &&
         htmlObj.hasOwnProperty("childNodes") &&
-        htmlObj.childNodes !== null) {
+        htmlObj.childNodes !== null &&
+        Array.isArray(htmlObj.childNodes)) {
         let resultAcc: any[] = [];
         for (let node of htmlObj.childNodes) {
             resultAcc = [...resultAcc, ...findTableBodies(node)];
@@ -104,9 +108,8 @@ function parseIndexTableEntry(entry: any): IIndexBuildingInfo {
         return null;
     }
 }
-
 function parseIndexTable(table: any): IIndexBuildingInfo[] {
-    if (!table.hasOwnProperty("childNodes")) {
+    if (!table.hasOwnProperty("childNodes") || !Array.isArray(table.childNodes)) {
         return [];
     }
     let tableEntries: any[] = table.childNodes;
@@ -116,11 +119,7 @@ function parseIndexTable(table: any): IIndexBuildingInfo[] {
             // this is just one of the 'spacing' elements, they just contain newlines
             continue;
         }
-        // otherwise, it should be either "odd views-row-first",
-        //                                "odd",
-        //                                "even",
-        //                                "odd views-row-last",
-        //                                "even views-row-last"
+        // otherwise, it should be either "odd views-row-first","odd","even","odd views-row-last","even views-row-last"
         let newRes = parseIndexTableEntry(entry);
         if (newRes !== null) {
             res.push(newRes);
@@ -128,7 +127,6 @@ function parseIndexTable(table: any): IIndexBuildingInfo[] {
     }
     return res;
 }
-
 function parseIndexHTML(res: string): IIndexBuildingInfo[] {
     const parse5 = require("parse5");
     let parsed: object = parse5.parse(res);
@@ -142,54 +140,56 @@ function parseIndexHTML(res: string): IIndexBuildingInfo[] {
         }
     }
 }
-
 function parseBuildingTableEntry(entry: any, building: IIndexBuildingInfo): IRoom {
-    let newNumber: string;
-    let newSeats: string;
-    let newType: string;
-    let newFurniture: string;
-    let newHref: string;
-    for (let child of entry.childNodes) {
-        if (child.nodeName !== "td") {
-            continue;
+    try {
+        let newNumber: string;
+        let newSeats: string;
+        let newType: string;
+        let newFurniture: string;
+        let newHref: string;
+        for (let child of entry.childNodes) {
+            if (child.nodeName !== "td") {
+                continue;
+            }
+            switch (child.attrs[0].value) {
+                case "views-field views-field-field-room-number": {
+                    newNumber = child.childNodes[1].childNodes[0].value;
+                    newHref = child.childNodes[1].attrs[0].value;
+                    break;
+                }
+                case "views-field views-field-field-room-capacity": {
+                    newSeats = child.childNodes[0].value.trim();
+                    break;
+                }
+                case "views-field views-field-field-room-furniture": {
+                    newFurniture = child.childNodes[0].value.trim();
+                    break;
+                }
+                case "views-field views-field-field-room-type": {
+                    newType = child.childNodes[0].value.trim();
+                    break;
+                }
+            }
         }
-        switch (child.attrs[0].value) {
-            case "views-field views-field-field-room-number": {
-                newNumber = child.childNodes[1].childNodes[0].value;
-                newHref = child.childNodes[1].attrs[0].value;
-                break;
-            }
-            case "views-field views-field-field-room-capacity": {
-                newSeats = child.childNodes[0].value.trim();
-                break;
-            }
-            case "views-field views-field-field-room-furniture": {
-                newFurniture = child.childNodes[0].value.trim();
-                break;
-            }
-            case "views-field views-field-field-room-type": {
-                newType = child.childNodes[0].value.trim();
-                break;
-            }
-        }
+        return {
+            address: building.address,
+            fullname: building.title,
+            furniture: newFurniture,
+            href: newHref,
+            lat: undefined,
+            lon: undefined,
+            name: building.code + "_" + newNumber,
+            number: newNumber,
+            seats: parseInt(newSeats, 10),
+            shortname: building.code,
+            type: newType,
+        };
+    } catch {
+        return null;
     }
-
-    return {
-        address: building.address,
-        fullname: building.title,
-        furniture: newFurniture,
-        href: newHref,
-        lat: undefined,
-        lon: undefined,
-        name: building.code + "_" + newNumber,
-        number: newNumber,
-        seats: parseInt(newSeats, 10),
-        shortname: building.code,
-        type: newType,
-    };
 }
 function parseBuildingTable(table: any, building: IIndexBuildingInfo): IRoom[] {
-    if (!table.hasOwnProperty("childNodes")) {
+    if (!table.hasOwnProperty("childNodes") || !Array.isArray(table.childNodes)) {
         return [];
     }
     let tableEntries: any[] = table.childNodes;
@@ -237,7 +237,6 @@ export function makeGeolocationPromise(room: IRoom): Promise<IRoom | null> {
         return Promise.resolve(null);
     });
 }
-
 function makeRoomPromises(file: string, building: IIndexBuildingInfo):  Array<Promise<IRoom>> {
     const parse5 = require("parse5");
     let parsed: object = parse5.parse(file);
@@ -256,7 +255,6 @@ function makeRoomPromises(file: string, building: IIndexBuildingInfo):  Array<Pr
     }
     return promises;
 }
-
 export function newRoomDatasetHelper(newID: string, newKind: InsightDatasetKind): IRoomDataset {
     return {
         rooms: [],
@@ -276,7 +274,6 @@ export function newRoomDatasetHelper(newID: string, newKind: InsightDatasetKind)
         numRows: 0,
     };
 }
-
 export function addRoomsToDataset(rooms: IRoom[], dataset: IRoomDataset) {
     for (let room of rooms) {
         if (room === null) {
