@@ -75,6 +75,20 @@ describe("Facade D3", function () {
         }
     };
 
+    let fakeQuery = {
+        WHERE: {
+            GT: {
+                courses_avg: 97
+            }
+        },
+        OPTIONS: {
+            COLUMNS: [
+                "courses_dept"
+            ],
+            ORDER: "courses_avg"
+        }
+    };
+
     // Sample on how to format PUT requests
 
     it("PUT test for courses dataset", function () {
@@ -148,6 +162,38 @@ describe("Facade D3", function () {
         }
     });
 
+    it("DELETE test", function () {
+        try {
+            return chai.request("localhost:21")
+                .del("/dataset/cou_blah")
+                .then(function (res: Response) {
+                    expect.fail();
+                })
+                .catch(function (err) {
+                    // some logging here please!
+                    expect(err.status).to.equal(400);
+                });
+        } catch (err) {
+            Log.error(err);
+        }
+    });
+
+    it("DELETE test", function () {
+        try {
+            return chai.request("localhost:21")
+                .del("/dataset/minordata")
+                .then(function (res: Response) {
+                    expect.fail();
+                })
+                .catch(function (err) {
+                    // some logging here please!
+                    expect(err.status).to.equal(404);
+                });
+        } catch (err) {
+            Log.error(err);
+        }
+    });
+
     it("GET test for list after del", function () {
         try {
             return chai.request("localhost:21")
@@ -200,6 +246,23 @@ describe("Facade D3", function () {
                     Log.error(err);
                     // some logging here please!
                     expect.fail();
+                });
+        } catch (err) {
+            Log.error(err);
+        }
+    });
+
+    it("POST test for failed dataset", function () {
+        try {
+            return chai.request("localhost:21")
+                .post("/query")
+                .send(JSON.stringify(fakeQuery))
+                .set("Content-Type", "application/json")
+                .then(function (res: Response) {
+                    expect.fail();
+                })
+                .catch(function (err) {
+                    expect(err.status).to.be.deep.equal(400);
                 });
         } catch (err) {
             Log.error(err);
