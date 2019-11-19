@@ -12,5 +12,4 @@ test/*.js
 test/*.map
 .DS_Store
 .env
-/data/
 /.nyc_output/
